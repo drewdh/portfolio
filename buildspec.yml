@@ -3,7 +3,7 @@ phases:
   pre_build:
     commands:
       - echo Installing NPM dependencies from package-lock.json...
-      - npm ci
+      - npm i
   build:
     commands:
       - echo Build started on `date`
