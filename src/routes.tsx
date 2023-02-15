@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import { Home } from './home/Home';
 import { Timer } from './widgets/timer/Timer';
 import { Handle } from './index';
@@ -17,9 +18,15 @@ export enum Pathname {
   Widgets = '/widgets',
   WidgetsOverview = '/widgets/overview',
   PomodoroTimer = '/widgets/pomodoro-timer',
+  Fallback = '*',
 }
 
 export const routeConfigs: { [routeKey: string]: RouteConfig } = {
+  fallback: {
+    href: Pathname.Fallback,
+    // TODO: Log 404s since it could be a broken link
+    element: <Navigate to={Pathname.Home} replace />,
+  },
   home: {
     href: Pathname.Home,
     element: <Home />,
