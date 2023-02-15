@@ -35,7 +35,7 @@ export function Overview() {
                 iconAlign="right"
                 iconName="external"
                 target="_blank"
-                href="#/"
+                href="https://github.com/drewdh/portfolio/tree/main/src/widgets"
               >
                 Browse code
               </Button>

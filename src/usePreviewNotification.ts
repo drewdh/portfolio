@@ -5,7 +5,6 @@ import { NotificationsContext } from './app-layout/useNotifications';
 import { Pathname } from './routes';
 
 export function usePreviewNotification() {
-  console.log('test from preview notification');
   const { addNotification, dismissNotification } = useContext(NotificationsContext);
   const { pathname } = useLocation();
 

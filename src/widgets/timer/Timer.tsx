@@ -45,6 +45,7 @@ export function Timer() {
           actions={
             <SpaceBetween size="xs" direction="horizontal">
               <Button
+                href="https://github.com/drewdh/portfolio/tree/main/src/widgets/timer"
                 target="_blank"
                 iconName="external"
                 iconAlign="right"
