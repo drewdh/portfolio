@@ -3,8 +3,6 @@ import Modal from '@cloudscape-design/components/modal';
 import Box from '@cloudscape-design/components/box';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Button from '@cloudscape-design/components/button';
-import Container from '@cloudscape-design/components/container';
-import Header from '@cloudscape-design/components/header';
 import FormField from '@cloudscape-design/components/form-field';
 import RadioGroup, { RadioGroupProps } from '@cloudscape-design/components/radio-group';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
