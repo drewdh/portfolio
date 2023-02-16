@@ -79,17 +79,13 @@ export function Settings({ onDismiss, visible }: Props) {
       onDismiss={onDismiss}
     >
       <SpaceBetween size="l">
-        <Container header={<Header variant="h3">Appearance</Header>}>
-          <SpaceBetween size="m">
-            <FormField label="Appearance">
-              <RadioGroup
-                onChange={handleAppearanceChange}
-                value={settings.appearance}
-                items={appearanceItems}
-              />
-            </FormField>
-          </SpaceBetween>
-        </Container>
+        <FormField label="Appearance">
+          <RadioGroup
+            onChange={handleAppearanceChange}
+            value={settings.appearance}
+            items={appearanceItems}
+          />
+        </FormField>
       </SpaceBetween>
     </Modal>
   );
