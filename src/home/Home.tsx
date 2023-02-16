@@ -1,16 +1,19 @@
 import Box from '@cloudscape-design/components/box';
 import Grid from '@cloudscape-design/components/grid';
 import SpaceBetween from '@cloudscape-design/components/space-between';
+import Flashbar from '@cloudscape-design/components/flashbar';
 
 import styles from './styles.module.scss';
-import { usePreviewNotification } from '../usePreviewNotification';
 
 export function Home() {
-  usePreviewNotification();
-
   return (
     <Box margin={{ bottom: 'l' }}>
       <div className={styles.customHeader}>
+        <Box padding={{ top: 'xs', horizontal: 's' }}>
+          <Grid gridDefinition={[{ colspan: { l: 8, xxs: 10 }, offset: { l: 2, xxs: 1 } }]}>
+            <Flashbar items={[ { content: 'This site is under development. Some features might not work as expected.' } ]} />
+          </Grid>
+        </Box>
         <Box padding={{ vertical: 'xxxl', horizontal: 's' }}>
           <Grid
             gridDefinition={[
@@ -31,20 +34,18 @@ export function Home() {
                 </span>
               </Box>
             </div>
-            {/*<div className={styles.cta}>*/}
-            {/*  <Container*/}
-            {/*    header={<Header>Create distribution</Header>}*/}
-            {/*  >*/}
-            {/*    <SpaceBetween size="xl">*/}
-            {/*      <FormField stretch label="Delivery method">*/}
-            {/*        <Select options={[]} selectedOption={null} />*/}
-            {/*      </FormField>*/}
-            {/*      <Button variant="primary">*/}
-            {/*        Next step*/}
-            {/*      </Button>*/}
-            {/*    </SpaceBetween>*/}
-            {/*  </Container>*/}
-            {/*</div>*/}
+            <div className={styles.cta}>
+              {/*<Container*/}
+              {/*  header={<Header>Create distribution</Header>}*/}
+              {/*>*/}
+              {/*  <SpaceBetween size="xl">*/}
+              {/*    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis doloremque doloribus ex illo mollitia nihil numquam pariatur quibusdam ullam vitae. Cumque dignissimos eligendi facere fuga libero maxime reprehenderit sunt, tenetur?*/}
+              {/*    <Button variant="primary">*/}
+              {/*      View widget portfolio*/}
+              {/*    </Button>*/}
+              {/*  </SpaceBetween>*/}
+              {/*</Container>*/}
+            </div>
           </Grid>
         </Box>
       </div>
