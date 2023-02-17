@@ -8,7 +8,7 @@ import RadioGroup, { RadioGroupProps } from '@cloudscape-design/components/radio
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { Appearance, SettingsValues } from './types';
-import { handleMatchChange, setAppearance } from './utilities';
+import { handleMatchChange, setDarkMode } from './utilities';
 import useLocalStorage, { LocalStorageKey } from '../useLocalStorage';
 import { defaultSettings } from './constants';
 
@@ -20,15 +20,22 @@ export default function Settings({ onDismiss, visible }: Props) {
   const [settings, setSettings] = useState<SettingsValues>(getItem());
   const [match] = useState(window.matchMedia('(prefers-color-scheme: dark)'));
 
+  const setAppearance = useCallback((appearance: Appearance): void => {
+    if (appearance === Appearance.Automatic) {
+      match.addEventListener('change', handleMatchChange);
+      setDarkMode(match.matches);
+    } else {
+      match.removeEventListener('change', handleMatchChange);
+      setDarkMode(appearance === Appearance.Dark);
+    }
+  }, [match]);
+
   useEffect(function initializeAppearance() {
     if (isInitialized) {
       return;
     }
-    if (settings.appearance === Appearance.Automatic) {
-      return setAppearance(match.matches ? Appearance.Dark : Appearance.Light);
-    }
     setAppearance(settings.appearance);
-  }, [match, settings]);
+  }, [setAppearance, settings]);
 
   useEffect(function syncToLocalStorage() {
     setItem(settings);
@@ -64,14 +71,8 @@ export default function Settings({ onDismiss, visible }: Props) {
       ...prevState,
       appearance,
     }));
-    if (appearance === Appearance.Automatic) {
-      match.addEventListener('change', handleMatchChange);
-      setAppearance(match.matches ? Appearance.Dark : Appearance.Light);
-    } else {
-      match.removeEventListener('change', handleMatchChange);
-      setAppearance(appearance);
-    }
-  }, [match]);
+    setAppearance(appearance);
+  }, [setAppearance]);
 
   return (
     <Modal

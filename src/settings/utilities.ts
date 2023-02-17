@@ -1,15 +1,12 @@
-import { Appearance } from './types';
-
-export function setAppearance(appearance: Exclude<Appearance, Appearance.Automatic>) {
-  if (appearance === Appearance.Dark) {
+export function setDarkMode(isEnabled: boolean) {
+  if (isEnabled) {
     document.body.classList.add('awsui-dark-mode');
-  } else if (appearance === Appearance.Light) {
+  } else {
     document.body.classList.remove('awsui-dark-mode');
   }
 }
 export function handleMatchChange(event: MediaQueryListEvent) {
-  const appearance = event.matches ? Appearance.Dark : Appearance.Light;
-  setAppearance(appearance);
+  setDarkMode(event.matches);
 }
 export function getLengthInMinutes(seconds: number): string {
   return String(seconds / 60);
