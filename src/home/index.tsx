@@ -30,7 +30,7 @@ export default function Home() {
               </Box>
               <Box variant="p" fontWeight="light">
                 <span className={styles.subtitle}>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium commodi distinctio dolores dolorum fugit illum impedit ipsum laboriosam natus, nostrum porro quasi qui quo repudiandae saepe sit ullam veniam voluptatum!
+                  {/*Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium commodi distinctio dolores dolorum fugit illum impedit ipsum laboriosam natus, nostrum porro quasi qui quo repudiandae saepe sit ullam veniam voluptatum!*/}
                 </span>
               </Box>
             </div>
