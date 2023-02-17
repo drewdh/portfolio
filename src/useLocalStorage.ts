@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 export enum LocalStorageKey {
   GlobalSettings = 'globalSettings',
   PomodoroSettings = 'pomodoroSettings',
+  IsPreviewNotificationDismissed = 'previewNotification',
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */
