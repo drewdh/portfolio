@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import Home from './home';
 import Timer from './widgets/timer';
 import { Handle } from './index';
 import WidgetsOverview from './widgets/overview';
@@ -15,9 +14,7 @@ export interface RouteConfig extends Handle {
 
 export enum Pathname {
   Home = '/',
-  Widgets = '/widgets',
-  WidgetsOverview = '/widgets/overview',
-  PomodoroTimer = '/widgets/pomodoro-timer',
+  PomodoroTimer = '/pomodoro-timer',
   Fallback = '*',
 }
 
@@ -29,23 +26,10 @@ export const routeConfigs: { [routeKey: string]: RouteConfig } = {
   },
   home: {
     href: Pathname.Home,
-    element: <Home />,
-    navigationHide: true,
-    disableContentPaddings: true,
-  },
-  widgets: {
-    href: Pathname.Widgets,
-    element: <Navigate to={Pathname.WidgetsOverview} replace />,
-  },
-  widgetsOverview: {
-    href: Pathname.WidgetsOverview,
-    title: 'Widgets portfolio overview',
+    title: 'Home',
     element: <WidgetsOverview />,
-    breadcrumbs: [
-      { text: 'Drew Hanberry', href: Pathname.Home },
-      { text: 'Widgets portfolio', href: Pathname.Widgets },
-      { text: 'Overview', href: Pathname.WidgetsOverview },
-    ],
+    disableContentPaddings: true,
+    contentType: 'dashboard',
   },
   pomodoroTimer: {
     href: Pathname.PomodoroTimer,
@@ -53,7 +37,6 @@ export const routeConfigs: { [routeKey: string]: RouteConfig } = {
     element: <Timer/>,
     breadcrumbs: [
       { text: 'Drew Hanberry', href: Pathname.Home },
-      { text: 'Widgets portfolio', href: Pathname.Widgets },
       { text: 'Pomodoro timer', href: Pathname.PomodoroTimer },
     ],
   },

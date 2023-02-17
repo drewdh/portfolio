@@ -55,22 +55,27 @@ export default function useAppLayout(): State {
 
   const navigationItems = useMemo((): SideNavigationProps.Item[] => ([
     {
-      type: 'section-group',
-      title: 'Widgets portfolio',
-      items: [
-        {
-          type: 'link',
-          text: 'Overview',
-          href: Pathname.WidgetsOverview,
-        },
-        {
-          type: 'link',
-          text: 'Pomodoro timer',
-          href: Pathname.PomodoroTimer,
-        },
-      ]
+      type: 'link',
+      text: 'Home',
+      href: Pathname.Home,
+    },
+    {
+      type: 'link',
+      text: 'Pomodoro timer',
+      href: Pathname.PomodoroTimer,
+    },
+    { type: 'divider' },
+    {
+      type: 'link',
+      text: 'LinkedIn',
+      external: true,
+      href: 'https://www.linkedin.com/in/drew-hanberry-b56264105/',
     },
   ]), []);
+
+  const contentType = useMemo((): AppLayoutProps.ContentType => {
+    return handle?.contentType ?? 'default';
+  }, [handle]);
 
   const renderBreadcrumbs = useCallback((): ReactNode => {
     if (!breadcrumbItems.length) {
@@ -84,6 +89,7 @@ export default function useAppLayout(): State {
   return {
     activeHref: pathname,
     appLayoutRef,
+    contentType,
     disableContentPaddings,
     handleFollow,
     navigationHide,
@@ -96,6 +102,7 @@ export default function useAppLayout(): State {
 interface State {
   activeHref: string;
   appLayoutRef: Ref<AppLayoutProps.Ref>;
+  contentType: AppLayoutProps.ContentType;
   disableContentPaddings: boolean;
   handleFollow: (event: CustomEvent<SideNavigationProps.FollowDetail>) => void;
   navigationHide: boolean;

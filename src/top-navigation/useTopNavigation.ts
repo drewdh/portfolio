@@ -33,27 +33,12 @@ export default function useTopNavigation(): State {
     return [
       {
         type: 'button',
-        text: 'Widgets portfolio',
-        href: Pathname.Widgets,
-        onClick: (event) => {
-          event.preventDefault();
-          navigate(Pathname.Widgets);
-        },
-      },
-      {
-        type: 'button',
-        text: 'LinkedIn',
-        href: 'https://www.linkedin.com/in/drew-hanberry-b56264105/',
-        external: true,
-      },
-      {
-        type: 'button',
         iconName: 'settings',
         title: 'Settings',
         onClick: handleSettingsClick,
       },
     ];
-  }, [navigate, handleSettingsClick]);
+  }, [handleSettingsClick]);
 
   return {
     handleSettingsDismiss,

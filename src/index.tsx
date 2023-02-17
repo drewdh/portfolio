@@ -8,9 +8,11 @@ import { RouteConfig, routeConfigs } from './routes';
 import './index.scss';
 import App from './app';
 import reportWebVitals from './reportWebVitals';
+import { AppLayoutProps } from '@cloudscape-design/components/app-layout';
 
 export interface Handle {
   breadcrumbs?: BreadcrumbGroupProps.Item[];
+  contentType?: AppLayoutProps.ContentType;
   disableContentPaddings?: boolean;
   navigationHide?: boolean;
   title?: string;
@@ -26,6 +28,7 @@ function routeMapper(routeObject: Record<string, RouteConfig>) {
       element: route.element,
       children: route.children ? routeMapper(route.children) : undefined,
       handle: {
+        contentType: route.contentType,
         disableContentPaddings: route.disableContentPaddings,
         breadcrumbs: route.breadcrumbs,
         navigationHide: route.navigationHide,

@@ -11,6 +11,7 @@ export default function AppLayout() {
   const {
     activeHref,
     appLayoutRef,
+    contentType,
     disableContentPaddings,
     handleFollow,
     navigationHide,
@@ -25,6 +26,7 @@ export default function AppLayout() {
       ref={appLayoutRef}
       breadcrumbs={renderBreadcrumbs()}
       content={<Outlet />}
+      contentType={contentType}
       disableContentPaddings={disableContentPaddings}
       headerSelector={topNavSelector}
       navigation={
