@@ -2,12 +2,21 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SegmentedControlProps } from '@cloudscape-design/components/segmented-control';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
-import { useSettings } from './settings-modal/useSettings';
 import { RunStatus, SegmentedControlChangeEvent, SetTimerOptions, TimerType } from './types';
 import { useUpdateTitle } from '../../useUpdateTitle';
+import { SettingsValues } from './settings-modal/types';
+import { LocalStorageKey, useLocalStorage } from '../../useLocalStorage';
+import { defaultSettings } from './settings-modal/constants';
 
 export function useTimer(): State {
-  const { settings } = useSettings();
+  const { getItem: getSavedSettings, setItem: saveSettings } = useLocalStorage<SettingsValues>({
+    defaultValue: defaultSettings,
+    key: LocalStorageKey.PomodoroSettings,
+  });
+  const initialSettings = useMemo((): SettingsValues => {
+    return getSavedSettings();
+  }, [getSavedSettings]);
+  const [settings, setSettings] = useState<SettingsValues>(initialSettings);
   const updateTitle = useUpdateTitle();
   const [pomodorosCompletedCount, setPomodorosCompletedCount] = useState<number>(0);
   const [selectedTypeId, setSelectedTypeId] = useState<TimerType>(TimerType.Pomodoro);
@@ -179,6 +188,11 @@ export function useTimer(): State {
     setIsSettingsModalVisible(true);
   }, []);
 
+  const handleSettingsChange = useCallback((newSettings: SettingsValues): void => {
+    setSettings(newSettings);
+    saveSettings(newSettings);
+  }, [saveSettings]);
+
   const handleSettingsModalDismiss = useCallback((): void => {
     setIsSettingsModalVisible(false);
   }, []);
@@ -187,6 +201,7 @@ export function useTimer(): State {
     handleCompleteClick,
     handleConfirmModalDismiss,
     handleResetClick,
+    handleSettingsChange,
     handleSettingsClick,
     handleSettingsModalDismiss,
     handleStartClick,
@@ -196,6 +211,7 @@ export function useTimer(): State {
     isSettingsModalVisible,
     pomodorosCompleted,
     selectedTypeId,
+    settings,
     startButtonLabel,
     timerDisplay,
     typeOptions,
@@ -206,6 +222,7 @@ interface State {
   handleCompleteClick: () => void;
   handleConfirmModalDismiss: (isContinue?: boolean) => void;
   handleResetClick: () => void;
+  handleSettingsChange: (settings: SettingsValues) => void;
   handleSettingsClick: () => void;
   handleSettingsModalDismiss: () => void;
   handleStartClick: () => void;
@@ -215,6 +232,7 @@ interface State {
   isSettingsModalVisible: boolean;
   pomodorosCompleted: string;
   selectedTypeId: TimerType;
+  settings: SettingsValues;
   startButtonLabel: string;
   timerDisplay: string;
   typeOptions: SegmentedControlProps.Option[];

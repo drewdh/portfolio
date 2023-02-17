@@ -1,8 +1,3 @@
-export enum Appearance {
-  Light = 'light',
-  Dark = 'dark',
-  Automatic = 'auto',
-}
 export enum AlarmTone {
   Bell = 'bell',
   Bird = 'bird',

@@ -11,8 +11,9 @@ import Modal from '@cloudscape-design/components/modal';
 
 import styles from './styles.module.scss';
 import { useSettingsModal } from './useSettingsModal';
+import { SettingsValues } from './types';
 
-export function SettingsModal({ visible, onDismiss }: Props) {
+export function SettingsModal({ visible, onDismiss, onChange, settings }: Props) {
   const {
     alarmToneOptions,
     handleAlarmToneChange,
@@ -33,7 +34,7 @@ export function SettingsModal({ visible, onDismiss }: Props) {
     pomodoroLength,
     selectedAlarmToneOption,
     shortBreakLength,
-  } = useSettingsModal({ onDismiss });
+  } = useSettingsModal({ onDismiss, onChange, settings });
 
   return (
     <Modal
@@ -136,5 +137,7 @@ export function SettingsModal({ visible, onDismiss }: Props) {
 
 interface Props {
   visible: boolean;
+  onChange: (settings: SettingsValues) => void;
   onDismiss: () => void;
+  settings: SettingsValues;
 }

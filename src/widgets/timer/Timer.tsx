@@ -18,6 +18,7 @@ export function Timer() {
     handleCompleteClick,
     handleConfirmModalDismiss,
     handleResetClick,
+    handleSettingsChange,
     handleSettingsClick,
     handleSettingsModalDismiss,
     handleStartClick,
@@ -27,6 +28,7 @@ export function Timer() {
     isSettingsModalVisible,
     pomodorosCompleted,
     selectedTypeId,
+    settings,
     startButtonLabel,
     timerDisplay,
     typeOptions,
@@ -106,7 +108,12 @@ export function Timer() {
         onDismiss={handleConfirmModalDismiss}
         visible={isConfirmModalVisible}
       />
-      <SettingsModal visible={isSettingsModalVisible} onDismiss={handleSettingsModalDismiss} />
+      <SettingsModal
+        onChange={handleSettingsChange}
+        onDismiss={handleSettingsModalDismiss}
+        settings={settings}
+        visible={isSettingsModalVisible}
+      />
     </ContentLayout>
   );
 }

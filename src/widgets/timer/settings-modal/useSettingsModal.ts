@@ -3,17 +3,14 @@ import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import { InputProps } from '@cloudscape-design/components/input';
 import { ToggleProps } from '@cloudscape-design/components/toggle';
 import { SelectProps } from '@cloudscape-design/components/select';
-
-import { useSettings } from './useSettings';
 import { AlarmTone, SettingsValues } from './types';
-import { getLengthInMinutes } from './utilities';
+import { getLengthInMinutes } from '../../../settings/utilities';
 
 type InputChangeEvent = NonCancelableCustomEvent<InputProps.ChangeDetail>;
 type ToggleChangeEvent = NonCancelableCustomEvent<ToggleProps.ChangeDetail>;
 type SelectChangeEvent = NonCancelableCustomEvent<SelectProps.ChangeDetail>;
 
-export function useSettingsModal({ onDismiss }: Props): State {
-  const { settings: initialSettings, updateSettings } = useSettings();
+export function useSettingsModal({ onDismiss, onChange, settings: initialSettings }: Props): State {
   const [settings, setSettings] = useState<SettingsValues>(initialSettings);
 
   const alarmToneOptions = useMemo((): SelectProps.Option[] => {
@@ -102,9 +99,9 @@ export function useSettingsModal({ onDismiss }: Props): State {
   }, []);
 
   const handleSubmit = useCallback((): void => {
-    updateSettings(settings);
+    onChange(settings);
     onDismiss();
-  }, [settings, updateSettings, onDismiss]);
+  }, [settings, onDismiss, onChange]);
 
   const longBreakLength = useMemo((): string => {
     return getLengthInMinutes(settings.longBreakLengthSeconds);
@@ -142,7 +139,9 @@ export function useSettingsModal({ onDismiss }: Props): State {
 }
 
 interface Props {
+  onChange: (settings: SettingsValues) => void;
   onDismiss: () => void;
+  settings: SettingsValues;
 }
 
 interface State {

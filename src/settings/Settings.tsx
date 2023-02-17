@@ -8,7 +8,7 @@ import RadioGroup, { RadioGroupProps } from '@cloudscape-design/components/radio
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { Appearance, SettingsValues } from './types';
-import { handleMatchChange, setAppearance } from '../widgets/timer/settings-modal/utilities';
+import { handleMatchChange, setAppearance } from './utilities';
 import { LocalStorageKey, useLocalStorage } from '../useLocalStorage';
 import { defaultSettings } from './constants';
 
@@ -16,8 +16,8 @@ let isInitialized = false;
 type RadioChangeEvent = NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>;
 
 export function Settings({ onDismiss, visible }: Props) {
-  const { getItem, setItem } = useLocalStorage<SettingsValues>(defaultSettings);
-  const [settings, setSettings] = useState<SettingsValues>(getItem(LocalStorageKey.GlobalSettings));
+  const { getItem, setItem } = useLocalStorage<SettingsValues>({ defaultValue: defaultSettings, key: LocalStorageKey.GlobalSettings });
+  const [settings, setSettings] = useState<SettingsValues>(getItem());
   const [match] = useState(window.matchMedia('(prefers-color-scheme: dark)'));
 
   useEffect(function initializeAppearance() {
@@ -31,7 +31,7 @@ export function Settings({ onDismiss, visible }: Props) {
   }, [match, settings]);
 
   useEffect(function syncToLocalStorage() {
-    setItem(LocalStorageKey.GlobalSettings, settings);
+    setItem(settings);
   }, [setItem, settings]);
 
   const appearanceItems = useMemo((): RadioGroupProps.RadioButtonDefinition[] => {
