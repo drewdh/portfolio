@@ -12,6 +12,7 @@ import useTimer from './useTimer';
 import ConfirmSwitchModal from './ConfirmSwitchModal';
 import SettingsModal from './settings-modal';
 import usePreviewNotification from '../../usePreviewNotification';
+import styles from './styles.module.scss';
 
 export default function Timer() {
   usePreviewNotification();
@@ -67,19 +68,27 @@ export default function Timer() {
         header={
           <Header
             actions={
-              <SpaceBetween direction="horizontal" size="xs">
-                <Button onClick={handleSettingsClick}>Settings</Button>
-                <Button onClick={handleResetClick}>Reset pomodoros</Button>
-                <Button onClick={handleStopClick}>Stop</Button>
-                <Button onClick={handleCompleteClick}>Complete</Button>
-                <Button variant="primary" onClick={handleStartClick}>
-                  {startButtonLabel}
-                </Button>
-              </SpaceBetween>
+              <Button
+                iconName="settings"
+                variant="icon"
+                onClick={handleSettingsClick}
+              >Settings</Button>
             }
           >
             Timer
           </Header>
+        }
+        footer={
+          <div className={styles.footer}>
+            <SpaceBetween direction="horizontal" size="xs">
+              <Button onClick={handleResetClick}>Reset pomodoros</Button>
+              <Button onClick={handleStopClick}>Stop</Button>
+              <Button onClick={handleCompleteClick}>Complete</Button>
+              <Button variant="primary" onClick={handleStartClick}>
+                {startButtonLabel}
+              </Button>
+            </SpaceBetween>
+          </div>
         }
       >
         <SpaceBetween size="l">
