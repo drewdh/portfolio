@@ -4,5 +4,5 @@ export enum Appearance {
   Automatic = 'auto',
 }
 export interface SettingsValues {
-  appearance: Appearance
+  appearance: Appearance;
 }

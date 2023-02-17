@@ -9,20 +9,30 @@ import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { Appearance, SettingsValues } from './types';
 import { handleMatchChange, setAppearance } from '../widgets/timer/settings-modal/utilities';
+import { LocalStorageKey, useLocalStorage } from '../useLocalStorage';
+import { defaultSettings } from './constants';
 
+let isInitialized = false;
 type RadioChangeEvent = NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>;
 
 export function Settings({ onDismiss, visible }: Props) {
-  const [settings, setSettings] = useState<SettingsValues>({ appearance: Appearance.Automatic });
+  const { getItem, setItem } = useLocalStorage<SettingsValues>(defaultSettings);
+  const [settings, setSettings] = useState<SettingsValues>(getItem(LocalStorageKey.GlobalSettings));
   const [match] = useState(window.matchMedia('(prefers-color-scheme: dark)'));
 
-  const updateSettings = useCallback((updatedSettings: Partial<SettingsValues>) => {
-    setSettings((prevState) => ({
-      ...prevState,
-      ...updateSettings,
-    }));
-    // TODO: Update local storage
-  }, []);
+  useEffect(function initializeAppearance() {
+    if (isInitialized) {
+      return;
+    }
+    if (settings.appearance === Appearance.Automatic) {
+      return setAppearance(match.matches ? Appearance.Dark : Appearance.Light);
+    }
+    setAppearance(settings.appearance);
+  }, [match, settings]);
+
+  useEffect(function syncToLocalStorage() {
+    setItem(LocalStorageKey.GlobalSettings, settings);
+  }, [setItem, settings]);
 
   const appearanceItems = useMemo((): RadioGroupProps.RadioButtonDefinition[] => {
     return [
