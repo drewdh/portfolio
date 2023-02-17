@@ -6,7 +6,7 @@ import Button from '@cloudscape-design/components/button';
 
 import { TimerType } from './types';
 
-export function ConfirmSwitchModal({ currentTimerType, visible, onDismiss }: Props) {
+export default function ConfirmSwitchModal({ currentTimerType, visible, onDismiss }: Props) {
   const handleDismiss = useCallback(() => onDismiss(), [onDismiss]);
   const handleConfirm = useCallback(() => onDismiss(true), [onDismiss]);
 

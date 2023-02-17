@@ -5,7 +5,7 @@ import Flashbar from '@cloudscape-design/components/flashbar';
 
 import styles from './styles.module.scss';
 
-export function Home() {
+export default function Home() {
   return (
     <Box margin={{ bottom: 'l' }}>
       <div className={styles.customHeader}>
@@ -75,5 +75,5 @@ export function Home() {
         </Grid>
       </Box>
     </Box>
-  )
+  );
 }

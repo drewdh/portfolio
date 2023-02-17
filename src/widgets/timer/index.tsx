@@ -1,18 +1,19 @@
 import Button from '@cloudscape-design/components/button';
 import Box from '@cloudscape-design/components/box';
 import Container from '@cloudscape-design/components/container';
+import ContentLayout from '@cloudscape-design/components/content-layout';
 import Header from '@cloudscape-design/components/header';
+import Link from '@cloudscape-design/components/link';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import SegmentedControl from '@cloudscape-design/components/segmented-control';
 import FormField from '@cloudscape-design/components/form-field';
 
-import { useTimer } from './useTimer';
-import { ConfirmSwitchModal } from './ConfirmSwitchModal';
-import { ContentLayout, Link } from '@cloudscape-design/components';
-import { SettingsModal } from './settings-modal/SettingsModal';
-import { usePreviewNotification } from '../../usePreviewNotification';
+import useTimer from './useTimer';
+import ConfirmSwitchModal from './ConfirmSwitchModal';
+import SettingsModal from './settings-modal';
+import usePreviewNotification from '../../usePreviewNotification';
 
-export function Timer() {
+export default function Timer() {
   usePreviewNotification();
   const {
     handleCompleteClick,

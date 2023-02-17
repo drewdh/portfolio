@@ -3,12 +3,12 @@ import { SegmentedControlProps } from '@cloudscape-design/components/segmented-c
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { RunStatus, SegmentedControlChangeEvent, SetTimerOptions, TimerType } from './types';
-import { useUpdateTitle } from '../../useUpdateTitle';
+import useUpdateTitle from '../../useUpdateTitle';
 import { SettingsValues } from './settings-modal/types';
-import { LocalStorageKey, useLocalStorage } from '../../useLocalStorage';
+import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
 import { defaultSettings } from './settings-modal/constants';
 
-export function useTimer(): State {
+export default function useTimer(): State {
   const { getItem: getSavedSettings, setItem: saveSettings } = useLocalStorage<SettingsValues>({
     defaultValue: defaultSettings,
     key: LocalStorageKey.PomodoroSettings,

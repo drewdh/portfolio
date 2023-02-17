@@ -1,9 +1,9 @@
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 
 import { NotificationsContext } from './app-layout/useNotifications';
-import { LocalStorageKey, useLocalStorage } from './useLocalStorage';
+import useLocalStorage, { LocalStorageKey } from './useLocalStorage';
 
-export function usePreviewNotification() {
+export default function usePreviewNotification() {
   const {
     getItem: getIsDismissed,
     setItem: saveIsDismissed,

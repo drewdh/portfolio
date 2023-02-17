@@ -10,7 +10,7 @@ type InputChangeEvent = NonCancelableCustomEvent<InputProps.ChangeDetail>;
 type ToggleChangeEvent = NonCancelableCustomEvent<ToggleProps.ChangeDetail>;
 type SelectChangeEvent = NonCancelableCustomEvent<SelectProps.ChangeDetail>;
 
-export function useSettingsModal({ onDismiss, onChange, settings: initialSettings }: Props): State {
+export default function useSettingsModal({ onDismiss, onChange, settings: initialSettings }: Props): State {
   const [settings, setSettings] = useState<SettingsValues>(initialSettings);
 
   const alarmToneOptions = useMemo((): SelectProps.Option[] => {

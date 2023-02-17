@@ -10,10 +10,10 @@ import Toggle from '@cloudscape-design/components/toggle';
 import Modal from '@cloudscape-design/components/modal';
 
 import styles from './styles.module.scss';
-import { useSettingsModal } from './useSettingsModal';
+import useSettingsModal from './useSettingsModal';
 import { SettingsValues } from './types';
 
-export function SettingsModal({ visible, onDismiss, onChange, settings }: Props) {
+export default function SettingsModal({ visible, onDismiss, onChange, settings }: Props) {
   const {
     alarmToneOptions,
     handleAlarmToneChange,

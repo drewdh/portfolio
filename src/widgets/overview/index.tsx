@@ -8,10 +8,10 @@ import Box from '@cloudscape-design/components/box';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 
-import { usePreviewNotification } from '../../usePreviewNotification';
+import usePreviewNotification from '../../usePreviewNotification';
 import { Pathname } from '../../routes';
 
-export function Overview() {
+export default function Overview() {
   usePreviewNotification();
   const navigate = useNavigate();
 

@@ -2,10 +2,10 @@ import CloudscapeTopNavigation from '@cloudscape-design/components/top-navigatio
 
 import styles from './styles.module.scss';
 import { topNavId } from './constants';
-import { useTopNavigation } from './useTopNavigation';
-import { Settings } from '../settings/Settings';
+import useTopNavigation from './useTopNavigation';
+import Settings from '../settings';
 
-export function TopNavigation() {
+export default function TopNavigation() {
   const {
     handleSettingsDismiss,
     i18nStrings,

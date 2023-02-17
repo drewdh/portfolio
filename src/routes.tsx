@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-
-import { Home } from './home/Home';
-import { Timer } from './widgets/timer/Timer';
-import { Handle } from './index';
 import { Navigate } from 'react-router-dom';
-import { Overview as WidgetsOverview } from './widgets/overview/Overview';
+
+import Home from './home';
+import Timer from './widgets/timer';
+import { Handle } from './index';
+import WidgetsOverview from './widgets/overview';
 
 export interface RouteConfig extends Handle {
   href: Pathname;

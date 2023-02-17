@@ -9,7 +9,7 @@ import { Handle } from '../index';
 import { NotificationsContext } from './useNotifications';
 import { Pathname } from '../routes';
 
-export function useAppLayout(): State {
+export default function useAppLayout(): State {
   const appLayoutRef = useRef<AppLayoutProps.Ref>(null);
   const matches = useMatches();
   const { notifications } = useContext(NotificationsContext);

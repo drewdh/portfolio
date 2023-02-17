@@ -9,13 +9,13 @@ import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { Appearance, SettingsValues } from './types';
 import { handleMatchChange, setAppearance } from './utilities';
-import { LocalStorageKey, useLocalStorage } from '../useLocalStorage';
+import useLocalStorage, { LocalStorageKey } from '../useLocalStorage';
 import { defaultSettings } from './constants';
 
 let isInitialized = false;
 type RadioChangeEvent = NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>;
 
-export function Settings({ onDismiss, visible }: Props) {
+export default function Settings({ onDismiss, visible }: Props) {
   const { getItem, setItem } = useLocalStorage<SettingsValues>({ defaultValue: defaultSettings, key: LocalStorageKey.GlobalSettings });
   const [settings, setSettings] = useState<SettingsValues>(getItem());
   const [match] = useState(window.matchMedia('(prefers-color-scheme: dark)'));

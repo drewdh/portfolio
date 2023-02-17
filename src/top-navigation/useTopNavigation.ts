@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Pathname } from '../routes';
 
-export function useTopNavigation(): State {
+export default function useTopNavigation(): State {
   const navigate = useNavigate();
   const [isSettingsVisible, setIsSettingsVisible] = useState<boolean>(false);
 

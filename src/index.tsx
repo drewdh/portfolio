@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.scss';
-import App from './app/App';
-import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import { RouterProvider } from 'react-router';
-import { RouteConfig, routeConfigs } from './routes';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
+
+import { RouteConfig, routeConfigs } from './routes';
+import './index.scss';
+import App from './app';
+import reportWebVitals from './reportWebVitals';
 
 export interface Handle {
   breadcrumbs?: BreadcrumbGroupProps.Item[];

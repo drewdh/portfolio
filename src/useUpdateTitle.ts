@@ -5,7 +5,7 @@ import { Handle } from './index';
 const defaultTitle = 'Drew Hanberry';
 
 /** Updates document title detail while retaining original title */
-export function useUpdateTitle() {
+export default function useUpdateTitle() {
   const matches = useMatches();
   const { pathname } = useLocation();
 
