@@ -84,6 +84,7 @@ export default function Settings({ onDismiss, visible }: Props) {
           </SpaceBetween>
         </Box>
       }
+      size="small"
       visible={visible}
       onDismiss={onDismiss}
     >

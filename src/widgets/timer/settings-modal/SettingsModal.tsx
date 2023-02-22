@@ -13,6 +13,7 @@ import { SettingsValues } from './types';
 import { ColumnLayout } from '@cloudscape-design/components';
 
 export default function SettingsModal({ visible, onDismiss, onChange, settings }: Props) {
+  const isSoundEnabled = false;
   const {
     alarmToneOptions,
     handleAlarmToneChange,
@@ -46,11 +47,11 @@ export default function SettingsModal({ visible, onDismiss, onChange, settings }
           </SpaceBetween>
         </Box>
       }
-      size="large"
+      size={isSoundEnabled ? 'large' : 'small'}
       visible={visible}
       onDismiss={handleDismiss}
     >
-      <ColumnLayout columns={2} variant="text-grid">
+      <ColumnLayout columns={isSoundEnabled ? 2 : 1} variant="text-grid">
         <SpaceBetween size="m">
           <FormField label="Pomodoro">
             <div className={styles.customInputSmall}>
@@ -96,34 +97,36 @@ export default function SettingsModal({ visible, onDismiss, onChange, settings }
             </Toggle>
           </FormField>
         </SpaceBetween>
-        <SpaceBetween size="m">
-          <FormField constraintText="Play an alarm whenever a timer completes.">
-            <Toggle checked={hasAlarmSound} onChange={handleHasAlarmSoundChange}>
-              Alarm sound
-            </Toggle>
-          </FormField>
-          {hasAlarmSound && (
-            <FormField label="Alarm tone">
-              <Select
-                onChange={handleAlarmToneChange}
-                options={alarmToneOptions}
-                selectedOption={selectedAlarmToneOption}
-              />
+        {isSoundEnabled && (
+          <SpaceBetween size="m">
+            <FormField constraintText="Play an alarm whenever a timer completes.">
+              <Toggle checked={hasAlarmSound} onChange={handleHasAlarmSoundChange}>
+                Alarm sound
+              </Toggle>
             </FormField>
-          )}
-          <FormField>
-            <Toggle checked={hasTickingSound} onChange={handleHasTickingChange}>
-              Ticking sound
-            </Toggle>
-          </FormField>
-          <FormField
-            constraintText="Play a short feedback sound when a timer starts, pauses, or stops."
-          >
-            <Toggle checked={hasStartAndStopSounds} onChange={handleHasStartAndStopSoundsChange}>
-              Feedback sounds
-            </Toggle>
-          </FormField>
-        </SpaceBetween>
+            {hasAlarmSound && (
+              <FormField label="Alarm tone">
+                <Select
+                  onChange={handleAlarmToneChange}
+                  options={alarmToneOptions}
+                  selectedOption={selectedAlarmToneOption}
+                />
+              </FormField>
+            )}
+            <FormField>
+              <Toggle checked={hasTickingSound} onChange={handleHasTickingChange}>
+                Ticking sound
+              </Toggle>
+            </FormField>
+            <FormField
+              constraintText="Play a short feedback sound when a timer starts, pauses, or stops."
+            >
+              <Toggle checked={hasStartAndStopSounds} onChange={handleHasStartAndStopSoundsChange}>
+                Feedback sounds
+              </Toggle>
+            </FormField>
+          </SpaceBetween>
+        )}
       </ColumnLayout>
     </Modal>
   );

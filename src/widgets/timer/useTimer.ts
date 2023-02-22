@@ -4,9 +4,9 @@ import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { RunStatus, SegmentedControlChangeEvent, SetTimerOptions, TimerType } from './types';
 import useUpdateTitle from '../../useUpdateTitle';
-import { SettingsValues } from './settings-modal/types';
+import { SettingsValues } from './settings-modal';
 import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
-import { defaultSettings } from './settings-modal/constants';
+import { defaultSettings } from './settings-modal';
 
 export default function useTimer(): State {
   const { getItem: getSavedSettings, setItem: saveSettings } = useLocalStorage<SettingsValues>({
