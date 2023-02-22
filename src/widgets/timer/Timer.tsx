@@ -2,6 +2,7 @@ import Button from '@cloudscape-design/components/button';
 import Box from '@cloudscape-design/components/box';
 import Container from '@cloudscape-design/components/container';
 import ContentLayout from '@cloudscape-design/components/content-layout';
+import Form from '@cloudscape-design/components/form';
 import Header from '@cloudscape-design/components/header';
 import Link from '@cloudscape-design/components/link';
 import SpaceBetween from '@cloudscape-design/components/space-between';
@@ -12,7 +13,6 @@ import useTimer from './useTimer';
 import ConfirmSwitchModal from './ConfirmSwitchModal';
 import SettingsModal from './settings-modal';
 import usePreviewNotification from '../../usePreviewNotification';
-import styles from './styles.module.scss';
 
 export default function Timer() {
   usePreviewNotification();
@@ -40,6 +40,7 @@ export default function Timer() {
     <ContentLayout
       header={
         <Header
+          variant="h1"
           description={
             <>
               <span>A time management tool that uses the Pomodoro Technique to help improve productivity.</span>
@@ -58,61 +59,61 @@ export default function Timer() {
               </Button>
             </SpaceBetween>
           }
-          variant="h1"
         >
           Pomodoro timer
         </Header>
       }
     >
-      <Container
-        header={
-          <Header
-            actions={
-              <Button
-                iconName="settings"
-                variant="icon"
-                onClick={handleSettingsClick}
-              >Settings</Button>
-            }
-          >
-            Timer
-          </Header>
-        }
-        footer={
-          <div className={styles.footer}>
-            <SpaceBetween direction="horizontal" size="xs">
-              <Button onClick={handleResetClick}>Reset pomodoros</Button>
-              <Button onClick={handleStopClick}>Stop</Button>
-              <Button onClick={handleCompleteClick}>Complete</Button>
-              <Button variant="primary" onClick={handleStartClick}>
-                {startButtonLabel}
-              </Button>
-            </SpaceBetween>
-          </div>
+      <Form
+        actions={
+          <SpaceBetween direction="horizontal" size="xs">
+            <Button onClick={handleResetClick}>Reset pomodoros</Button>
+            <Button onClick={handleStopClick}>Stop</Button>
+            <Button onClick={handleCompleteClick}>Complete</Button>
+            <Button variant="primary" onClick={handleStartClick}>
+              {startButtonLabel}
+            </Button>
+          </SpaceBetween>
         }
       >
-        <SpaceBetween size="l">
-          <FormField label="Type">
-            <SegmentedControl
-              selectedId={selectedTypeId}
-              onChange={handleTypeChange}
-              options={typeOptions}
-            />
-          </FormField>
-          <div>
-            <Box variant="awsui-key-label">Time remaining</Box>
-            <Box fontSize="display-l" fontWeight="bold">
-              {timerDisplay}
-            </Box>
-          </div>
-          <div>
-            <Box variant="awsui-key-label">Pomodoros completed</Box>
-            <Box fontSize="heading-l" fontWeight="bold">
-              {pomodorosCompleted}
-            </Box>
-          </div>
-        </SpaceBetween>
-      </Container>
+        <Container
+          header={
+            <Header
+              actions={
+                <Button
+                  iconName="settings"
+                  variant="icon"
+                  onClick={handleSettingsClick}
+                >Settings</Button>
+              }
+            >
+              Timer
+            </Header>
+          }
+        >
+          <SpaceBetween size="l">
+            <FormField label="Type">
+              <SegmentedControl
+                selectedId={selectedTypeId}
+                onChange={handleTypeChange}
+                options={typeOptions}
+              />
+            </FormField>
+            <div>
+              <Box variant="awsui-key-label">Time remaining</Box>
+              <Box fontSize="display-l" fontWeight="bold">
+                {timerDisplay}
+              </Box>
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Pomodoros completed</Box>
+              <Box fontSize="heading-l" fontWeight="bold">
+                {pomodorosCompleted}
+              </Box>
+            </div>
+          </SpaceBetween>
+        </Container>
+      </Form>
       <ConfirmSwitchModal
         currentTimerType={selectedTypeId}
         onDismiss={handleConfirmModalDismiss}
