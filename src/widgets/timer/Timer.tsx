@@ -2,6 +2,7 @@ import Button from '@cloudscape-design/components/button';
 import Box from '@cloudscape-design/components/box';
 import Container from '@cloudscape-design/components/container';
 import ContentLayout from '@cloudscape-design/components/content-layout';
+import ExpandableSection from '@cloudscape-design/components/expandable-section';
 import Form from '@cloudscape-design/components/form';
 import Header from '@cloudscape-design/components/header';
 import Link from '@cloudscape-design/components/link';
@@ -12,11 +13,8 @@ import FormField from '@cloudscape-design/components/form-field';
 import useTimer from './useTimer';
 import ConfirmSwitchModal from './ConfirmSwitchModal';
 import Settings from './settings';
-import usePreviewNotification from '../../usePreviewNotification';
-import { ExpandableSection } from '@cloudscape-design/components';
 
 export default function Timer() {
-  usePreviewNotification();
   const {
     handleCompleteClick,
     handleConfirmModalDismiss,

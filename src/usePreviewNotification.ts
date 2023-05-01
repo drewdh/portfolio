@@ -1,9 +1,9 @@
-import { useCallback, useContext, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
+import { FlashbarProps } from '@cloudscape-design/components/flashbar';
 
-import { NotificationsContext } from './app-layout/useNotifications';
 import useLocalStorage, { LocalStorageKey } from './useLocalStorage';
 
-export default function usePreviewNotification() {
+export default function usePreviewNotification(): FlashbarProps.MessageDefinition | undefined {
   const {
     getItem: getIsDismissed,
     setItem: saveIsDismissed,
@@ -11,28 +11,20 @@ export default function usePreviewNotification() {
     defaultValue: false,
     key: LocalStorageKey.IsPreviewNotificationDismissed,
   });
-  const { addNotification, dismissNotification } = useContext(NotificationsContext);
 
   const isDismissed = useMemo((): boolean => {
     return getIsDismissed();
   }, [getIsDismissed]);
 
-  const handleDismiss = useCallback((): void => {
-    saveIsDismissed(true);
-  }, [saveIsDismissed]);
-
-  useEffect((): undefined | (() => void) => {
+  return useMemo((): FlashbarProps.MessageDefinition | undefined => {
     if (isDismissed) {
       return;
     }
     const content = 'This site is under development. Some features might not work as expected.';
-    const id = addNotification({
+    return {
       content,
       dismissible: true,
-      onDismiss: handleDismiss,
-    });
-    return () => {
-      dismissNotification(id);
-    }
-  }, [handleDismiss, isDismissed, addNotification, dismissNotification]);
+      onDismiss: () => saveIsDismissed(true),
+    };
+  }, [saveIsDismissed, isDismissed]);
 }

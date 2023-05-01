@@ -1,3 +1,3 @@
-import Overview from './Overview';
+import Page from './Page';
 
-export default Overview;
+export default Page;

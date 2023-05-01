@@ -3,7 +3,7 @@ import { SegmentedControlProps } from '@cloudscape-design/components/segmented-c
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { RunStatus, SegmentedControlChangeEvent, SetTimerOptions, TimerType } from './types';
-import useUpdateTitle from '../../useUpdateTitle';
+import useTitle from '../../useTitle';
 import { SettingsValues } from './settings';
 import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
 import { defaultSettings } from './settings';
@@ -17,7 +17,6 @@ export default function useTimer(): State {
     return getSavedSettings();
   }, [getSavedSettings]);
   const [settings, setSettings] = useState<SettingsValues>(initialSettings);
-  const updateTitle = useUpdateTitle();
   const [pomodorosCompletedCount, setPomodorosCompletedCount] = useState<number>(0);
   const [selectedTypeId, setSelectedTypeId] = useState<TimerType>(TimerType.Pomodoro);
   const [runStatus, setRunStatus] = useState<RunStatus>(RunStatus.Stopped);
@@ -144,10 +143,7 @@ export default function useTimer(): State {
     return `${minutes}:${seconds}`;
   }, [secondsRemaining]);
 
-  // Update title
-  useEffect((): void => {
-    updateTitle(timerDisplay);
-  }, [timerDisplay, updateTitle]);
+  useTitle(timerDisplay);
 
   const typeOptions = useMemo((): SegmentedControlProps.Option[] => {
     return [
