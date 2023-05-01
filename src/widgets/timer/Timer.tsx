@@ -11,8 +11,9 @@ import FormField from '@cloudscape-design/components/form-field';
 
 import useTimer from './useTimer';
 import ConfirmSwitchModal from './ConfirmSwitchModal';
-import SettingsModal from './settings-modal';
+import Settings from './settings';
 import usePreviewNotification from '../../usePreviewNotification';
+import { ExpandableSection } from '@cloudscape-design/components';
 
 export default function Timer() {
   usePreviewNotification();
@@ -21,13 +22,10 @@ export default function Timer() {
     handleConfirmModalDismiss,
     handleResetClick,
     handleSettingsChange,
-    handleSettingsClick,
-    handleSettingsModalDismiss,
     handleStartClick,
     handleStopClick,
     handleTypeChange,
     isConfirmModalVisible,
-    isSettingsModalVisible,
     pomodorosCompleted,
     selectedTypeId,
     settings,
@@ -77,19 +75,15 @@ export default function Timer() {
         }
       >
         <Container
-          header={
-            <Header
-              actions={
-                <Button
-                  iconName="settings"
-                  variant="icon"
-                  onClick={handleSettingsClick}
-                >Settings</Button>
-              }
+          footer={
+            <ExpandableSection
+              headerText="Settings"
+              variant="footer"
             >
-              Timer
-            </Header>
+              <Settings onChange={handleSettingsChange} settings={settings} />
+            </ExpandableSection>
           }
+          header={<Header>Timer</Header>}
         >
           <SpaceBetween size="l">
             <FormField label="Type">
@@ -118,12 +112,6 @@ export default function Timer() {
         currentTimerType={selectedTypeId}
         onDismiss={handleConfirmModalDismiss}
         visible={isConfirmModalVisible}
-      />
-      <SettingsModal
-        onChange={handleSettingsChange}
-        onDismiss={handleSettingsModalDismiss}
-        settings={settings}
-        visible={isSettingsModalVisible}
       />
     </ContentLayout>
   );

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import { InputProps } from '@cloudscape-design/components/input';
 import { ToggleProps } from '@cloudscape-design/components/toggle';
@@ -10,8 +10,13 @@ type InputChangeEvent = NonCancelableCustomEvent<InputProps.ChangeDetail>;
 type ToggleChangeEvent = NonCancelableCustomEvent<ToggleProps.ChangeDetail>;
 type SelectChangeEvent = NonCancelableCustomEvent<SelectProps.ChangeDetail>;
 
-export default function useSettingsModal({ onDismiss, onChange, settings: initialSettings }: Props): State {
+export default function useSettings({ onChange, settings: initialSettings }: Props): State {
   const [settings, setSettings] = useState<SettingsValues>(initialSettings);
+
+  // Whenever settings changes, call onChange
+  useEffect(function handleChange() {
+    onChange(settings);
+  }, [settings, onChange])
 
   const alarmToneOptions = useMemo((): SelectProps.Option[] => {
     return [
@@ -41,11 +46,6 @@ export default function useSettingsModal({ onDismiss, onChange, settings: initia
       hasAutoStart: checked,
     }));
   }, []);
-
-  const handleDismiss = useCallback((): void => {
-    setSettings(initialSettings);
-    onDismiss();
-  }, [onDismiss, initialSettings]);
 
   const handleHasAlarmSoundChange = useCallback((event: ToggleChangeEvent): void => {
     const { checked } = event.detail;
@@ -98,11 +98,6 @@ export default function useSettingsModal({ onDismiss, onChange, settings: initia
     }));
   }, []);
 
-  const handleSubmit = useCallback((): void => {
-    onChange(settings);
-    onDismiss();
-  }, [settings, onDismiss, onChange]);
-
   const longBreakLength = useMemo((): string => {
     return getLengthInMinutes(settings.longBreakLengthSeconds);
   }, [settings.longBreakLengthSeconds]);
@@ -119,14 +114,12 @@ export default function useSettingsModal({ onDismiss, onChange, settings: initia
     alarmToneOptions,
     handleAlarmToneChange,
     handleAutoStartChange,
-    handleDismiss,
     handleHasAlarmSoundChange,
     handleHasStartAndStopSoundsChange,
     handleHasTickingChange,
     handleLongBreakLengthChange,
     handlePomodoroLengthChange,
     handleShortBreakLengthChange,
-    handleSubmit,
     hasAlarmSound: settings.hasAlarmSound,
     hasAutoStart: settings.hasAutoStart,
     hasStartAndStopSounds: settings.hasStartAndStopSounds,
@@ -140,7 +133,6 @@ export default function useSettingsModal({ onDismiss, onChange, settings: initia
 
 interface Props {
   onChange: (settings: SettingsValues) => void;
-  onDismiss: () => void;
   settings: SettingsValues;
 }
 
@@ -148,14 +140,12 @@ interface State {
   alarmToneOptions: SelectProps.Option[];
   handleAlarmToneChange: (event: SelectChangeEvent) => void;
   handleAutoStartChange: (event: ToggleChangeEvent) => void;
-  handleDismiss: () => void;
   handleHasAlarmSoundChange: (event: ToggleChangeEvent) => void;
   handleHasStartAndStopSoundsChange: (event: ToggleChangeEvent) => void;
   handleHasTickingChange: (event: ToggleChangeEvent) => void;
   handleLongBreakLengthChange: (event: InputChangeEvent) => void;
   handlePomodoroLengthChange: (event: InputChangeEvent) => void;
   handleShortBreakLengthChange: (event: InputChangeEvent) => void;
-  handleSubmit: () => void;
   hasAlarmSound: boolean;
   hasAutoStart: boolean;
   hasStartAndStopSounds: boolean;
