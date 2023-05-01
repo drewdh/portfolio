@@ -40,7 +40,7 @@ export function useNotificationsClient(): NotificationClient {
     notifications,
     addNotification,
     dismissNotification,
-  }
+  };
 }
 
 const defaultNotificationsClient: NotificationClient = {

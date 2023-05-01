@@ -14,8 +14,10 @@ export default function AppLayout() {
     contentType,
     disableContentPaddings,
     handleFollow,
+    handleNavigationChange,
     navigationHide,
     navigationItems,
+    navigationOpen,
     notifications,
     renderBreadcrumbs,
   } = useAppLayout();
@@ -37,7 +39,9 @@ export default function AppLayout() {
         />
       }
       navigationHide={navigationHide}
+      navigationOpen={navigationOpen}
       notifications={<Flashbar stackItems items={notifications} />}
+      onNavigationChange={handleNavigationChange}
       toolsHide
     />
   );

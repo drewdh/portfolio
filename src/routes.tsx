@@ -29,10 +29,11 @@ export const routeConfigs: { [routeKey: string]: RouteConfig } = {
     title: 'Home',
     element: <WidgetsOverview />,
     disableContentPaddings: true,
-    contentType: 'dashboard',
+    contentType: 'cards',
   },
   pomodoroTimer: {
     href: Pathname.PomodoroTimer,
+    contentType: 'form',
     title: 'Pomodoro timer',
     element: <Timer/>,
     breadcrumbs: [

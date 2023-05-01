@@ -1,9 +1,10 @@
-import { ReactNode, Ref, useCallback, useContext, useMemo, useRef } from 'react';
+import { ReactNode, Ref, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useMatches, useNavigate } from 'react-router';
 import BreadcrumbGroup, { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 import { FlashbarProps } from '@cloudscape-design/components/flashbar';
 import { SideNavigationProps } from '@cloudscape-design/components/side-navigation';
 import { AppLayoutProps } from '@cloudscape-design/components/app-layout';
+import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { Handle } from '../index';
 import { NotificationsContext } from './useNotifications';
@@ -11,6 +12,7 @@ import { Pathname } from '../routes';
 
 export default function useAppLayout(): State {
   const appLayoutRef = useRef<AppLayoutProps.Ref>(null);
+  const [navigationOpen, setNavigationOpen] = useState<boolean>(false);
   const matches = useMatches();
   const { notifications } = useContext(NotificationsContext);
   const navigate = useNavigate();
@@ -29,8 +31,7 @@ export default function useAppLayout(): State {
     }
     event.preventDefault();
     navigate(href);
-    appLayoutRef.current?.closeNavigationIfNecessary();
-  }, [navigate, appLayoutRef]);
+  }, [navigate]);
 
   const handleBreadcrumbFollow = useCallback((event: CustomEvent<BreadcrumbGroupProps.ClickDetail>): void => {
     const { external, href } = event.detail;
@@ -86,14 +87,27 @@ export default function useAppLayout(): State {
     );
   }, [handleBreadcrumbFollow, breadcrumbItems]);
 
+  const handleNavigationChange = useCallback((event: NonCancelableCustomEvent<AppLayoutProps.ChangeDetail>): void => {
+    setNavigationOpen(event.detail.open);
+  }, []);
+
+  useEffect((): void => {
+    const navOpenContentTypes: AppLayoutProps.ContentType[] = ['form', 'wizard'];
+    const isNavOpen = navOpenContentTypes.includes(contentType);
+    setNavigationOpen(isNavOpen);
+    appLayoutRef.current?.closeNavigationIfNecessary();
+  }, [appLayoutRef, contentType]);
+
   return {
     activeHref: pathname,
     appLayoutRef,
     contentType,
     disableContentPaddings,
     handleFollow,
+    handleNavigationChange,
     navigationHide,
     navigationItems,
+    navigationOpen,
     notifications,
     renderBreadcrumbs,
   };
@@ -105,8 +119,10 @@ interface State {
   contentType: AppLayoutProps.ContentType;
   disableContentPaddings: boolean;
   handleFollow: (event: CustomEvent<SideNavigationProps.FollowDetail>) => void;
+  handleNavigationChange: (event: NonCancelableCustomEvent<AppLayoutProps.ChangeDetail>) => void;
   navigationHide: boolean;
   navigationItems: SideNavigationProps.Item[];
+  navigationOpen: boolean;
   notifications: ReadonlyArray<FlashbarProps.MessageDefinition>;
   renderBreadcrumbs: () => ReactNode;
 }
