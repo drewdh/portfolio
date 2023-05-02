@@ -25,6 +25,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -52,6 +53,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.194",
-    "@types/uuid": "^9.0.0"
+    "@types/uuid": "^9.0.0",
+    "source-map-explorer": "^2.5.3"
   }
 }

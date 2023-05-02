@@ -1,5 +1,6 @@
 import Button from '@cloudscape-design/components/button';
 import Box from '@cloudscape-design/components/box';
+import ColumnLayout from '@cloudscape-design/components/column-layout';
 import Header from '@cloudscape-design/components/header';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import SegmentedControl from '@cloudscape-design/components/segmented-control';
@@ -7,7 +8,6 @@ import FormField from '@cloudscape-design/components/form-field';
 
 import useTimer from './useTimer';
 import ConfirmSwitchModal from './ConfirmSwitchModal';
-import { ColumnLayout } from '@cloudscape-design/components';
 import BoardItem, { BoardItemProps } from '@cloudscape-design/board-components/board-item';
 import ButtonDropdown from '@cloudscape-design/components/button-dropdown';
 import SettingsModal from './settings';
