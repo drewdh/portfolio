@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@cloudscape-design/components": "^3.0.195",
+    "@cloudscape-design/board-components": "^3.0.11",
+    "@cloudscape-design/components": "^3.0.264",
     "@cloudscape-design/design-tokens": "^3.0.8",
     "@cloudscape-design/global-styles": "^1.0.7",
     "@testing-library/jest-dom": "^5.16.5",

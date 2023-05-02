@@ -1,5 +1,5 @@
-import Settings from './Settings';
+import SettingsModal from './SettingsModal';
 
-export default Settings;
+export default SettingsModal;
 export * from './constants';
 export * from './types';

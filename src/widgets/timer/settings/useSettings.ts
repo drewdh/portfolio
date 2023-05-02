@@ -10,13 +10,13 @@ type InputChangeEvent = NonCancelableCustomEvent<InputProps.ChangeDetail>;
 type ToggleChangeEvent = NonCancelableCustomEvent<ToggleProps.ChangeDetail>;
 type SelectChangeEvent = NonCancelableCustomEvent<SelectProps.ChangeDetail>;
 
-export default function useSettings({ onChange, settings: initialSettings }: Props): State {
+export default function useSettings({ onChange, onDismiss, settings: initialSettings }: Props): State {
   const [settings, setSettings] = useState<SettingsValues>(initialSettings);
 
-  // Whenever settings changes, call onChange
-  useEffect(function handleChange() {
+  const handleSave = useCallback((): void => {
     onChange(settings);
-  }, [settings, onChange])
+    onDismiss();
+  }, [onDismiss, onChange, settings]);
 
   const alarmToneOptions = useMemo((): SelectProps.Option[] => {
     return [
@@ -26,6 +26,10 @@ export default function useSettings({ onChange, settings: initialSettings }: Pro
       { value: AlarmTone.Digital, label: 'Digital' },
     ];
   }, []);
+
+  const handleDismiss = useCallback((): void => {
+    onDismiss();
+  }, [onDismiss]);
 
   const selectedAlarmToneOption = useMemo((): SelectProps.Option => {
     return alarmToneOptions.find(({ value }) => value === settings.alarmTone)!;
@@ -114,11 +118,13 @@ export default function useSettings({ onChange, settings: initialSettings }: Pro
     alarmToneOptions,
     handleAlarmToneChange,
     handleAutoStartChange,
+    handleDismiss,
     handleHasAlarmSoundChange,
     handleHasStartAndStopSoundsChange,
     handleHasTickingChange,
     handleLongBreakLengthChange,
     handlePomodoroLengthChange,
+    handleSave,
     handleShortBreakLengthChange,
     hasAlarmSound: settings.hasAlarmSound,
     hasAutoStart: settings.hasAutoStart,
@@ -133,6 +139,7 @@ export default function useSettings({ onChange, settings: initialSettings }: Pro
 
 interface Props {
   onChange: (settings: SettingsValues) => void;
+  onDismiss: () => void;
   settings: SettingsValues;
 }
 
@@ -140,11 +147,13 @@ interface State {
   alarmToneOptions: SelectProps.Option[];
   handleAlarmToneChange: (event: SelectChangeEvent) => void;
   handleAutoStartChange: (event: ToggleChangeEvent) => void;
+  handleDismiss: () => void;
   handleHasAlarmSoundChange: (event: ToggleChangeEvent) => void;
   handleHasStartAndStopSoundsChange: (event: ToggleChangeEvent) => void;
   handleHasTickingChange: (event: ToggleChangeEvent) => void;
   handleLongBreakLengthChange: (event: InputChangeEvent) => void;
   handlePomodoroLengthChange: (event: InputChangeEvent) => void;
+  handleSave: () => void;
   handleShortBreakLengthChange: (event: InputChangeEvent) => void;
   hasAlarmSound: boolean;
   hasAutoStart: boolean;

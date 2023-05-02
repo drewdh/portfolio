@@ -1,3 +1,3 @@
-import Page from './Page';
+import Timer from './Timer';
 
-export default Page;
+export default Timer;

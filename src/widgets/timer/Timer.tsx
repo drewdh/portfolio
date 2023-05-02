@@ -13,17 +13,33 @@ import FormField from '@cloudscape-design/components/form-field';
 import useTimer from './useTimer';
 import ConfirmSwitchModal from './ConfirmSwitchModal';
 import Settings from './settings';
+import { ColumnLayout } from '@cloudscape-design/components';
+import BoardItem, { BoardItemProps } from '@cloudscape-design/board-components/board-item';
+import ButtonDropdown from '@cloudscape-design/components/button-dropdown';
+import SettingsModal from './settings';
 
-export default function Timer() {
+const i18nStrings: BoardItemProps.I18nStrings = {
+  dragHandleAriaLabel: 'Drag handle',
+  dragHandleAriaDescription:
+    'Use Space or Enter to activate drag, arrow keys to move, Space or Enter to submit, or Escape to discard.',
+  resizeHandleAriaLabel: "Resize handle",
+  resizeHandleAriaDescription:
+    'Use Space or Enter to activate resize, arrow keys to move, Space or Enter to submit, or Escape to discard.'
+};
+
+export default function Timer({ onRemove }: Props) {
   const {
     handleCompleteClick,
     handleConfirmModalDismiss,
     handleResetClick,
     handleSettingsChange,
+    handleSettingsClick,
+    handleSettingsModalDismiss,
     handleStartClick,
     handleStopClick,
     handleTypeChange,
     isConfirmModalVisible,
+    isSettingsModalVisible,
     pomodorosCompleted,
     selectedTypeId,
     settings,
@@ -32,65 +48,66 @@ export default function Timer() {
     typeOptions,
   } = useTimer();
 
+  const actions = [
+    { text: 'Complete', onClick: handleCompleteClick },
+    { text: 'Stop', onClick: handleStopClick },
+    { text: 'Reset pomodoros', onClick: handleResetClick },
+    { text: 'Edit settings', onClick: handleSettingsClick },
+    // TODO: Add once board palette is implemented
+    // { text: 'Remove', onClick: onRemove }
+  ];
+
   return (
-    <ContentLayout
-      header={
-        <Header
-          variant="h1"
-          description={
-            <>
-              <span>A time management tool that uses the Pomodoro Technique to help improve productivity.</span>
-              {' '}<Link external href="https://wikipedia.org/wiki/Pomodoro_Technique">Learn more</Link>
-            </>
-          }
-          actions={
-            <SpaceBetween size="xs" direction="horizontal">
-              <Button
-                href="https://github.com/drewdh/portfolio/tree/main/src/widgets/timer"
-                target="_blank"
-                iconName="external"
-                iconAlign="right"
-              >
-                Browse code
-              </Button>
-            </SpaceBetween>
-          }
-        >
-          Pomodoro timer
-        </Header>
-      }
-    >
-      <Form
-        actions={
-          <SpaceBetween direction="horizontal" size="xs">
-            <Button onClick={handleResetClick}>Reset pomodoros</Button>
-            <Button onClick={handleStopClick}>Stop</Button>
-            <Button onClick={handleCompleteClick}>Complete</Button>
-            <Button variant="primary" onClick={handleStartClick}>
-              {startButtonLabel}
-            </Button>
-          </SpaceBetween>
+    <>
+      <BoardItem
+        header={
+          <Header
+            actions={
+              <SpaceBetween size="xs" direction="horizontal">
+                <Button onClick={handleStartClick}>{startButtonLabel}</Button>
+              </SpaceBetween>
+            }
+            // TODO: Move to help panel
+            // info={<Link variant="info">Info</Link>}
+            // description={
+            //   <>
+            //     <span>A time management tool that uses the Pomodoro Technique to help improve productivity.</span>
+            //     {' '}<Link external href="https://wikipedia.org/wiki/Pomodoro_Technique">Learn more</Link>
+            //   </>
+            // }
+            variant="h2"
+          >
+            Pomodoro timer
+          </Header>
+        }
+        i18nStrings={i18nStrings}
+        settings={
+          <ButtonDropdown
+            ariaLabel="Widget settings"
+            items={actions.map((action) => {
+              return {
+                ...action,
+                id: action.text,
+              };
+            })}
+            onItemClick={(event) => {
+              const { id } = event.detail;
+              const matchingAction = actions.find((action) => action.text === id)!;
+              matchingAction.onClick();
+            }}
+            variant="icon"
+          />
         }
       >
-        <Container
-          footer={
-            <ExpandableSection
-              headerText="Settings"
-              variant="footer"
-            >
-              <Settings onChange={handleSettingsChange} settings={settings} />
-            </ExpandableSection>
-          }
-          header={<Header>Timer</Header>}
-        >
-          <SpaceBetween size="l">
-            <FormField label="Type">
-              <SegmentedControl
-                selectedId={selectedTypeId}
-                onChange={handleTypeChange}
-                options={typeOptions}
-              />
-            </FormField>
+        <SpaceBetween size="l">
+          <FormField label="Type">
+            <SegmentedControl
+              selectedId={selectedTypeId}
+              onChange={handleTypeChange}
+              options={typeOptions}
+            />
+          </FormField>
+          <ColumnLayout columns={2}>
             <div>
               <Box variant="awsui-key-label">Time remaining</Box>
               <Box fontSize="display-l" fontWeight="bold">
@@ -99,18 +116,28 @@ export default function Timer() {
             </div>
             <div>
               <Box variant="awsui-key-label">Pomodoros completed</Box>
-              <Box fontSize="heading-l" fontWeight="bold">
+              <Box fontSize="display-l" fontWeight="bold">
                 {pomodorosCompleted}
               </Box>
             </div>
-          </SpaceBetween>
-        </Container>
-      </Form>
+          </ColumnLayout>
+        </SpaceBetween>
+      </BoardItem>
       <ConfirmSwitchModal
         currentTimerType={selectedTypeId}
         onDismiss={handleConfirmModalDismiss}
         visible={isConfirmModalVisible}
       />
-    </ContentLayout>
+      <SettingsModal
+        isVisible={isSettingsModalVisible}
+        onDismiss={handleSettingsModalDismiss}
+        onChange={handleSettingsChange}
+        settings={settings}
+      />
+    </>
   );
+}
+
+interface Props {
+  onRemove: () => void;
 }

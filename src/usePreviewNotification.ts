@@ -12,19 +12,20 @@ export default function usePreviewNotification(): FlashbarProps.MessageDefinitio
     key: LocalStorageKey.IsPreviewNotificationDismissed,
   });
 
-  const isDismissed = useMemo((): boolean => {
-    return getIsDismissed();
-  }, [getIsDismissed]);
+  // const isDismissed = useMemo((): boolean => {
+  //   return getIsDismissed();
+  // }, [getIsDismissed]);
 
   return useMemo((): FlashbarProps.MessageDefinition | undefined => {
-    if (isDismissed) {
-      return;
-    }
+    // TODO: Check for dismissal if more pages added
+    // if (isDismissed) {
+    //   return;
+    // }
     const content = 'This site is under development. Some features might not work as expected.';
     return {
       content,
-      dismissible: true,
+      dismissible: false,
       onDismiss: () => saveIsDismissed(true),
     };
-  }, [saveIsDismissed, isDismissed]);
+  }, [saveIsDismissed]);
 }

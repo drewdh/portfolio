@@ -22,6 +22,7 @@ export default function useTimer(): State {
   const [runStatus, setRunStatus] = useState<RunStatus>(RunStatus.Stopped);
   const [nextTypeId, setNextTypeId] = useState<TimerType>();
   const [isConfirmModalVisible, setIsConfirmModalVisible] = useState<boolean>(false);
+  const [isSettingsModalVisible, setIsSettingsModalVisible] = useState<boolean>(false);
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timer>();
   // TODO: Find audio to use
   const [tickAudio] = useState(new Audio(''));
@@ -51,6 +52,14 @@ export default function useTimer(): State {
     }
     return 0;
   }, [settings]);
+
+  const handleSettingsClick = useCallback((): void => {
+    setIsSettingsModalVisible(true);
+  }, []);
+
+  const handleSettingsModalDismiss = useCallback((): void => {
+    setIsSettingsModalVisible(false);
+  }, []);
 
   const [secondsRemaining, setSecondsRemaining] = useState<number>(getPreferredTimerLengthInSeconds(selectedTypeId));
 
@@ -189,10 +198,13 @@ export default function useTimer(): State {
     handleConfirmModalDismiss,
     handleResetClick,
     handleSettingsChange,
+    handleSettingsClick,
+    handleSettingsModalDismiss,
     handleStartClick,
     handleStopClick,
     handleTypeChange,
     isConfirmModalVisible,
+    isSettingsModalVisible,
     pomodorosCompleted,
     selectedTypeId,
     settings,
@@ -207,10 +219,13 @@ interface State {
   handleConfirmModalDismiss: (isContinue?: boolean) => void;
   handleResetClick: () => void;
   handleSettingsChange: (settings: SettingsValues) => void;
+  handleSettingsClick: () => void;
+  handleSettingsModalDismiss: () => void;
   handleStartClick: () => void;
   handleStopClick: () => void;
   handleTypeChange: (event: SegmentedControlChangeEvent) => void;
   isConfirmModalVisible: boolean;
+  isSettingsModalVisible: boolean;
   pomodorosCompleted: string;
   selectedTypeId: TimerType;
   settings: SettingsValues;

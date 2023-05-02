@@ -7,8 +7,7 @@ import { Pathname } from './routes';
 import './index.scss';
 import App from './app';
 import reportWebVitals from './reportWebVitals';
-import WidgetsOverview from './widgets/overview';
-import Timer from './widgets/timer';
+import Dashboard from './dashboard';
 
 const router = createBrowserRouter([
   {
@@ -21,11 +20,7 @@ const router = createBrowserRouter([
       },
       {
         path: Pathname.Home,
-        element: <WidgetsOverview />,
-      },
-      {
-        path: Pathname.PomodoroTimer,
-        element: <Timer />,
+        element: <Dashboard />,
       },
     ],
   },
