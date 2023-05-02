@@ -16,8 +16,7 @@ let isInitialized = false;
 type RadioChangeEvent = NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>;
 
 export default function Settings({ onDismiss, visible }: Props) {
-  const { getItem, setItem } = useLocalStorage<SettingsValues>({ defaultValue: defaultSettings, key: LocalStorageKey.GlobalSettings });
-  const [settings, setSettings] = useState<SettingsValues>(getItem());
+  const [settings, setSettings] = useLocalStorage<SettingsValues>(LocalStorageKey.GlobalSettings, defaultSettings);
   const [match] = useState(window.matchMedia('(prefers-color-scheme: dark)'));
 
   const setAppearance = useCallback((appearance: Appearance): void => {
@@ -36,10 +35,6 @@ export default function Settings({ onDismiss, visible }: Props) {
     }
     setAppearance(settings.appearance);
   }, [setAppearance, settings]);
-
-  useEffect(function syncToLocalStorage() {
-    setItem(settings);
-  }, [setItem, settings]);
 
   const appearanceItems = useMemo((): RadioGroupProps.RadioButtonDefinition[] => {
     return [
@@ -72,7 +67,7 @@ export default function Settings({ onDismiss, visible }: Props) {
       appearance,
     }));
     setAppearance(appearance);
-  }, [setAppearance]);
+  }, [setAppearance, setSettings]);
 
   return (
     <Modal

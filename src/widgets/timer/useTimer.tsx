@@ -11,14 +11,7 @@ import { useHelpPanel } from '../../help-panel/help-panel';
 import HelpPanelContent from './HelpPanelContent';
 
 export default function useTimer(): State {
-  const { getItem: getSavedSettings, setItem: saveSettings } = useLocalStorage<SettingsValues>({
-    defaultValue: defaultSettings,
-    key: LocalStorageKey.PomodoroSettings,
-  });
-  const initialSettings = useMemo((): SettingsValues => {
-    return getSavedSettings();
-  }, [getSavedSettings]);
-  const [settings, setSettings] = useState<SettingsValues>(initialSettings);
+  const [settings, setSettings] = useLocalStorage<SettingsValues>(LocalStorageKey.PomodoroSettings, defaultSettings);
   const [pomodorosCompletedCount, setPomodorosCompletedCount] = useState<number>(0);
   const [selectedTypeId, setSelectedTypeId] = useState<TimerType>(TimerType.Pomodoro);
   const [runStatus, setRunStatus] = useState<RunStatus>(RunStatus.Stopped);
@@ -202,8 +195,7 @@ export default function useTimer(): State {
 
   const handleSettingsChange = useCallback((newSettings: SettingsValues): void => {
     setSettings(newSettings);
-    saveSettings(newSettings);
-  }, [saveSettings]);
+  }, [setSettings]);
 
   return {
     handleCompleteClick,

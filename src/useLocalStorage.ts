@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 export enum LocalStorageKey {
   GlobalSettings = 'globalSettings',
@@ -7,35 +7,27 @@ export enum LocalStorageKey {
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */
-export default function useLocalStorage<T>({ defaultValue, key }: Props<T>): State<T> {
-  const getItem = useCallback((): T => {
+export default function useLocalStorage<T>(key: LocalStorageKey, defaultValue: T): State<T> {
+  const [item, setItem] = useState<T>(() => {
     try {
       const value = localStorage.getItem(key);
       return value ? JSON.parse(value) : defaultValue;
     } catch {
       return defaultValue;
     }
-  }, [defaultValue, key]);
+  });
 
-  const setItem = useCallback((value: T): void => {
+  useEffect((): void => {
     try {
-      const stringifiedValue = JSON.stringify(value);
+      const stringifiedValue = JSON.stringify(item);
       localStorage.setItem(key, stringifiedValue);
     } catch {}
-  }, [key]);
+  }, [item, key]);
 
-  return {
-    getItem,
-    setItem,
-  };
+  return [item, setItem];
 }
 
-interface Props<T> {
-  defaultValue: T;
-  key: LocalStorageKey;
-}
-
-interface State<T> {
-  getItem: () => T;
-  setItem: (value: T) => void;
-}
+type State<T> = [
+  item: T,
+  setItem: Dispatch<SetStateAction<T>>,
+];

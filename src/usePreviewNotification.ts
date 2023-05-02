@@ -4,19 +4,10 @@ import { FlashbarProps } from '@cloudscape-design/components/flashbar';
 import useLocalStorage, { LocalStorageKey } from './useLocalStorage';
 
 export default function usePreviewNotification(): FlashbarProps.MessageDefinition | undefined {
-  const {
-    // getItem: getIsDismissed,
-    setItem: saveIsDismissed,
-  } = useLocalStorage<boolean>({
-    defaultValue: false,
-    key: LocalStorageKey.IsPreviewNotificationDismissed,
-  });
-
-  // const isDismissed = useMemo((): boolean => {
-  //   return getIsDismissed();
-  // }, [getIsDismissed]);
+  const [isDismissed, setIsDismissed] = useLocalStorage(LocalStorageKey.IsPreviewNotificationDismissed, false);
 
   return useMemo((): FlashbarProps.MessageDefinition | undefined => {
+    return undefined;
     // TODO: Check for dismissal if more pages added
     // if (isDismissed) {
     //   return;
@@ -25,7 +16,7 @@ export default function usePreviewNotification(): FlashbarProps.MessageDefinitio
     return {
       content,
       dismissible: false,
-      onDismiss: () => saveIsDismissed(true),
+      onDismiss: () => setIsDismissed(true),
     };
-  }, [saveIsDismissed]);
+  }, [setIsDismissed]);
 }
