@@ -5,6 +5,7 @@ import Header from '@cloudscape-design/components/header';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import SegmentedControl from '@cloudscape-design/components/segmented-control';
 import FormField from '@cloudscape-design/components/form-field';
+import Link from '@cloudscape-design/components/link';
 
 import useTimer from './useTimer';
 import ConfirmSwitchModal from './ConfirmSwitchModal';
@@ -25,6 +26,7 @@ export default function Timer({ onRemove }: Props) {
   const {
     handleCompleteClick,
     handleConfirmModalDismiss,
+    handleInfoFollow,
     handleResetClick,
     handleSettingsChange,
     handleSettingsClick,
@@ -61,14 +63,7 @@ export default function Timer({ onRemove }: Props) {
                 <Button onClick={handleStartClick}>{startButtonLabel}</Button>
               </SpaceBetween>
             }
-            // TODO: Move to help panel
-            // info={<Link variant="info">Info</Link>}
-            // description={
-            //   <>
-            //     <span>A time management tool that uses the Pomodoro Technique to help improve productivity.</span>
-            //     {' '}<Link external href="https://wikipedia.org/wiki/Pomodoro_Technique">Learn more</Link>
-            //   </>
-            // }
+            info={<Link onFollow={handleInfoFollow} variant="info">Info</Link>}
             variant="h2"
           >
             Pomodoro timer
