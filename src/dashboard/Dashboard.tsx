@@ -21,7 +21,7 @@ export default function Dashboard() {
         <Header
           description="A place where I make small, functional widgets to experiment with different user experience ideas and technologies."
           variant="h1"
-        >Drew Hanberry</Header>}
+        >Widgets</Header>}
     >
       <Board
         empty={

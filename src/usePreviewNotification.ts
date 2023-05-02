@@ -5,7 +5,7 @@ import useLocalStorage, { LocalStorageKey } from './useLocalStorage';
 
 export default function usePreviewNotification(): FlashbarProps.MessageDefinition | undefined {
   const {
-    getItem: getIsDismissed,
+    // getItem: getIsDismissed,
     setItem: saveIsDismissed,
   } = useLocalStorage<boolean>({
     defaultValue: false,
