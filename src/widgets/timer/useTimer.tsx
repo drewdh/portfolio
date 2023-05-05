@@ -48,15 +48,11 @@ export default function useTimer(): State {
     return 0;
   }, [settings]);
 
-  const { openPanel, setContent } = useHelpPanel();
+  const { setContent } = useHelpPanel();
 
   useEffect(function setHelpPanel() {
     setContent(<HelpPanelContent />);
   }, [setContent]);
-
-  const handleInfoFollow = useCallback((): void => {
-    openPanel();
-  }, [openPanel]);
 
   const handleSettingsClick = useCallback((): void => {
     setIsSettingsModalVisible(true);
@@ -200,7 +196,6 @@ export default function useTimer(): State {
   return {
     handleCompleteClick,
     handleConfirmModalDismiss,
-    handleInfoFollow,
     handleResetClick,
     handleSettingsChange,
     handleSettingsClick,
@@ -222,7 +217,6 @@ export default function useTimer(): State {
 interface State {
   handleCompleteClick: () => void;
   handleConfirmModalDismiss: (isContinue?: boolean) => void;
-  handleInfoFollow: () => void;
   handleResetClick: () => void;
   handleSettingsChange: (settings: SettingsValues) => void;
   handleSettingsClick: () => void;

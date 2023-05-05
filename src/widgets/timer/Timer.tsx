@@ -5,28 +5,20 @@ import Header from '@cloudscape-design/components/header';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import SegmentedControl from '@cloudscape-design/components/segmented-control';
 import FormField from '@cloudscape-design/components/form-field';
-import Link from '@cloudscape-design/components/link';
+import BoardItem from '@cloudscape-design/board-components/board-item';
+import ButtonDropdown from '@cloudscape-design/components/button-dropdown';
 
 import useTimer from './useTimer';
 import ConfirmSwitchModal from './ConfirmSwitchModal';
-import BoardItem, { BoardItemProps } from '@cloudscape-design/board-components/board-item';
-import ButtonDropdown from '@cloudscape-design/components/button-dropdown';
 import SettingsModal from './settings';
-
-const i18nStrings: BoardItemProps.I18nStrings = {
-  dragHandleAriaLabel: 'Drag handle',
-  dragHandleAriaDescription:
-    'Use Space or Enter to activate drag, arrow keys to move, Space or Enter to submit, or Escape to discard.',
-  resizeHandleAriaLabel: "Resize handle",
-  resizeHandleAriaDescription:
-    'Use Space or Enter to activate resize, arrow keys to move, Space or Enter to submit, or Escape to discard.'
-};
+import { boardItemI18nStrings } from '../../i18n-strings';
+import InfoLink from '../../common/info-link';
+import HelpPanelContent from './HelpPanelContent';
 
 export default function Timer({ onRemove }: Props) {
   const {
     handleCompleteClick,
     handleConfirmModalDismiss,
-    handleInfoFollow,
     handleResetClick,
     handleSettingsChange,
     handleSettingsClick,
@@ -63,13 +55,13 @@ export default function Timer({ onRemove }: Props) {
                 <Button onClick={handleStartClick}>{startButtonLabel}</Button>
               </SpaceBetween>
             }
-            info={<Link onFollow={handleInfoFollow} variant="info">Info</Link>}
+            info={<InfoLink content={<HelpPanelContent />} />}
             variant="h2"
           >
             Pomodoro timer
           </Header>
         }
-        i18nStrings={i18nStrings}
+        i18nStrings={boardItemI18nStrings}
         settings={
           <ButtonDropdown
             ariaLabel="Widget settings"
