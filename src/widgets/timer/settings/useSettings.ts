@@ -28,8 +28,9 @@ export default function useSettings({ onChange, onDismiss, settings: initialSett
   }, []);
 
   const handleDismiss = useCallback((): void => {
+    setSettings(initialSettings);
     onDismiss();
-  }, [onDismiss]);
+  }, [onDismiss, initialSettings]);
 
   const selectedAlarmToneOption = useMemo((): SelectProps.Option => {
     return alarmToneOptions.find(({ value }) => value === settings.alarmTone)!;
