@@ -21,7 +21,9 @@ export default function useLocalStorage<T>(key: LocalStorageKey, defaultValue: T
     try {
       const stringifiedValue = JSON.stringify(item);
       localStorage.setItem(key, stringifiedValue);
-    } catch {}
+    } catch (e) {
+      console.warn(`Could not save value for key ${key}:`, item, e);
+    }
   }, [item, key]);
 
   return [item, setItem];
