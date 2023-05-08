@@ -6,6 +6,7 @@ export enum LocalStorageKey {
   IsPreviewNotificationDismissed = 'previewNotification',
   DashboardLayout = 'dashboardLayout',
   WidgetPanelSize = 'widgetPanelSize',
+  CoffeeWeight = 'coffeeWeight',
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */

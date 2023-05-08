@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react';
 import Timer from './timer';
 import { WidgetConfig, WidgetId } from './interfaces';
 import useLocalStorage, { LocalStorageKey } from '../useLocalStorage';
+import CoffeeCalculator from './coffee-calculator';
 
 const widgetDataMap: Record<WidgetId, WidgetConfig> = {
   [WidgetId.Timer]: {
@@ -11,6 +12,12 @@ const widgetDataMap: Record<WidgetId, WidgetConfig> = {
     title: 'Pomodoro timer',
     widget: Timer,
     iconName: 'status-pending',
+  },
+  [WidgetId.CoffeeCalculator]: {
+    description: 'Measurement calculator for brewing coffee',
+    title: 'Coffee calculator',
+    widget: CoffeeCalculator,
+    iconName: 'status-info',
   },
 };
 
@@ -21,7 +28,15 @@ export const defaultLayout: ReadonlyArray<SavedBoardItem> = [
       defaultRowSpan: 3,
       defaultColumnSpan: 2,
     },
-  }];
+  },
+  {
+    id: WidgetId.CoffeeCalculator,
+    definition: {
+      defaultRowSpan: 3,
+      defaultColumnSpan: 1,
+    },
+  },
+];
 
 type SavedBoardItem = Omit<BoardProps.Item, 'data'>;
 
