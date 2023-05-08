@@ -7,8 +7,10 @@ import useLocalStorage, { LocalStorageKey } from '../useLocalStorage';
 
 const widgetDataMap: Record<WidgetId, WidgetConfig> = {
   [WidgetId.Timer]: {
+    description: 'Time management tool',
     title: 'Pomodoro timer',
     widget: Timer,
+    iconName: 'status-pending',
   },
 };
 
@@ -47,8 +49,22 @@ export function useWidgetLayout(): State {
     setSavedLayout(layoutWithoutData);
   }, [setSavedLayout]);
 
+  const paletteItems = useMemo((): ReadonlyArray<BoardProps.Item<WidgetConfig>> => {
+    return defaultLayout
+      .filter((widget) => {
+        return !savedLayout.find((visibleWidget) => visibleWidget.id === widget.id)
+      })
+      .map((widget) => {
+        return {
+          ...widget,
+          data: widgetDataMap[widget.id as WidgetId],
+        };
+      });
+  }, [savedLayout]);
+
   return {
     layout: layoutWithData,
+    paletteItems,
     updateLayout,
     resetLayout,
   }
@@ -56,6 +72,7 @@ export function useWidgetLayout(): State {
 
 interface State {
   layout: ReadonlyArray<BoardProps.Item<WidgetConfig>>;
+  paletteItems: ReadonlyArray<BoardProps.Item<WidgetConfig>>;
   updateLayout: (state: ReadonlyArray<BoardProps.Item<WidgetConfig>>) => void;
   resetLayout: () => void;
 }

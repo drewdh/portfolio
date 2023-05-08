@@ -1,17 +1,22 @@
 import { BoardProps } from '@cloudscape-design/board-components/board';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { WidgetConfig } from '../widgets/interfaces';
 import { useWidgetLayout } from '../widgets/widget-config';
 
-export default function useDashboard(): State {
+export default function useDashboard({ onPaletteItemsChange }: Props): State {
   const [isResetModalVisible, setIsResetModalVisible] = useState<boolean>(false);
   const {
     layout: items,
     resetLayout,
     updateLayout: setItems,
+    paletteItems,
   } = useWidgetLayout();
+
+  useEffect((): void => {
+    onPaletteItemsChange(paletteItems);
+  }, [onPaletteItemsChange, paletteItems]);
 
   const handleItemsChange = useCallback((event: NonCancelableCustomEvent<BoardProps.ItemsChangeDetail<WidgetConfig>>): void => {
     setItems(event.detail.items);
@@ -57,4 +62,8 @@ interface State {
   isResetModalVisible: boolean;
   items: ReadonlyArray<BoardProps.Item<WidgetConfig>>;
   renderItem: (item: BoardProps.Item<WidgetConfig>, actions: BoardProps.ItemActions) => JSX.Element;
+}
+
+interface Props {
+  onPaletteItemsChange: (items: ReadonlyArray<BoardProps.Item<WidgetConfig>>) => void;
 }

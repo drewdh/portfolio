@@ -5,6 +5,7 @@ export enum LocalStorageKey {
   PomodoroSettings = 'pomodoroSettings',
   IsPreviewNotificationDismissed = 'previewNotification',
   DashboardLayout = 'dashboardLayout',
+  WidgetPanelSize = 'widgetPanelSize',
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */

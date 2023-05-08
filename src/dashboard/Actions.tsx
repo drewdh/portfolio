@@ -1,14 +1,20 @@
 import Button from '@cloudscape-design/components/button';
-import Box from '@cloudscape-design/components/box';
+import SpaceBetween from '@cloudscape-design/components/space-between';
 
-export default function Actions({ onReset }: Props) {
+export default function Actions({ onAdd, onReset }: Props) {
   return (
-    <Box textAlign="center">
-      <Button onClick={onReset}>Reset to default layout</Button>
-    </Box>
+    <SpaceBetween direction="horizontal" size="xs">
+      <Button onClick={onReset}>
+        Reset to default layout
+      </Button>
+      <Button onClick={onAdd} iconName="add-plus">
+        Add widget
+      </Button>
+    </SpaceBetween>
   )
 }
 
 interface Props {
+  onAdd: () => void;
   onReset: () => void;
 }
