@@ -37,10 +37,10 @@ export default function Board() {
               <SpaceBetween size="xxs">
                 <div>
                   <Box variant="strong" color="inherit">
-                    No items
+                    No widgets
                   </Box>
                   <Box variant="p" color="inherit">
-                    There are no items on the dashboard.
+                    There are no widgets on the dashboard.
                   </Box>
                 </div>
                 <Actions onReset={() => handleResetClick(false)} />
