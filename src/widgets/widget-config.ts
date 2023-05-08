@@ -35,6 +35,10 @@ export function useWidgetLayout(): State {
     });
   }, [savedLayout]);
 
+  const resetLayout = useCallback((): void => {
+    setSavedLayout(defaultLayout);
+  }, [setSavedLayout]);
+
   const updateLayout = useCallback((newValue: ReadonlyArray<BoardProps.Item<WidgetConfig>>): void => {
     const layoutWithoutData: SavedBoardItem[] = newValue.map((item: BoardProps.Item<WidgetConfig>) => {
       const { data, ...spread } = item;
@@ -43,13 +47,15 @@ export function useWidgetLayout(): State {
     setSavedLayout(layoutWithoutData);
   }, [setSavedLayout]);
 
-  return useMemo((): State => ([
-    layoutWithData,
+  return {
+    layout: layoutWithData,
     updateLayout,
-  ]), [layoutWithData, updateLayout]);
+    resetLayout,
+  }
 }
 
-type State = [
-  layout: ReadonlyArray<BoardProps.Item<WidgetConfig>>,
-  updateLayout: (state: ReadonlyArray<BoardProps.Item<WidgetConfig>>) => void,
-]
+interface State {
+  layout: ReadonlyArray<BoardProps.Item<WidgetConfig>>;
+  updateLayout: (state: ReadonlyArray<BoardProps.Item<WidgetConfig>>) => void;
+  resetLayout: () => void;
+}

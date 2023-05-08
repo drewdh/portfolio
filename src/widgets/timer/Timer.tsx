@@ -41,8 +41,7 @@ export default function Timer({ onRemove }: Props) {
     { text: 'Stop', onClick: handleStopClick },
     { text: 'Reset pomodoros', onClick: handleResetClick },
     { text: 'Edit settings', onClick: handleSettingsClick },
-    // TODO: Add once board palette is implemented
-    // { text: 'Remove', onClick: onRemove }
+    { text: 'Remove', onClick: onRemove }
   ];
 
   return (
