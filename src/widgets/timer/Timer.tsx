@@ -90,13 +90,13 @@ export default function Timer({ onRemove }: Props) {
           <ColumnLayout columns={2}>
             <div>
               <Box variant="awsui-key-label">Time remaining</Box>
-              <Box fontSize="display-l" fontWeight="bold">
+              <Box variant="awsui-value-large">
                 {timerDisplay}
               </Box>
             </div>
             <div>
               <Box variant="awsui-key-label">Pomodoros completed</Box>
-              <Box fontSize="display-l" fontWeight="bold">
+              <Box variant="awsui-value-large">
                 {pomodorosCompleted}
               </Box>
             </div>
