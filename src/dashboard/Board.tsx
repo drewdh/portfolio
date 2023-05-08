@@ -6,11 +6,11 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import Button from '@cloudscape-design/components/button';
 
 import useDashboard from './useDashboard';
+import { boardI18nStrings } from '../i18n-strings';
 
 export default function Board() {
   const {
     handleItemsChange,
-    i18nStrings,
     items,
     renderItem,
   } = useDashboard();
@@ -42,7 +42,7 @@ export default function Board() {
           </Box>
         }
         items={items}
-        i18nStrings={i18nStrings}
+        i18nStrings={boardI18nStrings}
         onItemsChange={handleItemsChange}
         renderItem={renderItem}
       />
