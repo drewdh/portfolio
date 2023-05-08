@@ -8,20 +8,24 @@ import styles from './styles.module.scss';
 import useDashboard from './useDashboard';
 import { boardI18nStrings } from '../i18n-strings';
 import Actions from './Actions';
+import ConfirmResetModal from './ConfirmResetModal';
 
 export default function Board() {
   const {
     handleItemsChange,
+    handleResetConfirm,
+    handleResetClick,
+    handleResetModalDismiss,
+    isResetModalVisible,
     items,
     renderItem,
-    resetLayout,
   } = useDashboard();
 
   return (
     <ContentLayout
       header={
         <Header
-          actions={<Actions onReset={resetLayout} />}
+          actions={<Actions onReset={() => handleResetClick(true)} />}
           description="A place where I make small, functional widgets to experiment with different user experience ideas and technologies."
           variant="h1"
         >Widgets</Header>}
@@ -39,7 +43,7 @@ export default function Board() {
                     There are no items on the dashboard.
                   </Box>
                 </div>
-                <Actions onReset={resetLayout} />
+                <Actions onReset={() => handleResetClick(false)} />
               </SpaceBetween>
             </Box>
           </div>
@@ -48,6 +52,11 @@ export default function Board() {
         i18nStrings={boardI18nStrings}
         onItemsChange={handleItemsChange}
         renderItem={renderItem}
+      />
+      <ConfirmResetModal
+        isVisible={isResetModalVisible}
+        onConfirm={handleResetConfirm}
+        onDismiss={handleResetModalDismiss}
       />
     </ContentLayout>
   );
