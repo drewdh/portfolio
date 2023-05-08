@@ -16,7 +16,9 @@ export default function useCoffeeCalculator(): State {
     }
     // Multiply by 16, round to nearest .1
     const waterWeightNum = coffeeWeightNum * waterToCoffeeRatio;
-    return waterWeightNum.toFixed(1);
+    return waterWeightNum.toLocaleString(undefined, {
+      maximumFractionDigits: 1,
+    });
   }, []);
 
   const [waterWeight, setWaterWeight] = useState<string>(() => {
