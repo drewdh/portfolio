@@ -1,13 +1,13 @@
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import Header from '@cloudscape-design/components/header';
-import Board from '@cloudscape-design/board-components/board';
+import CloudscapeBoard from '@cloudscape-design/board-components/board';
 import Box from '@cloudscape-design/components/box';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Button from '@cloudscape-design/components/button';
 
 import useDashboard from './useDashboard';
 
-export default function Dashboard() {
+export default function Board() {
   const {
     handleItemsChange,
     i18nStrings,
@@ -23,7 +23,7 @@ export default function Dashboard() {
           variant="h1"
         >Widgets</Header>}
     >
-      <Board
+      <CloudscapeBoard
         empty={
           <Box textAlign="center" color="inherit">
             <SpaceBetween size="xxs">

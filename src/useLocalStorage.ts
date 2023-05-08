@@ -4,6 +4,7 @@ export enum LocalStorageKey {
   GlobalSettings = 'globalSettings',
   PomodoroSettings = 'pomodoroSettings',
   IsPreviewNotificationDismissed = 'previewNotification',
+  DashboardLayout = 'dashboardLayout',
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */

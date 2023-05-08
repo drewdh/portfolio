@@ -1,17 +1,9 @@
 import { BoardProps } from '@cloudscape-design/board-components/board';
-import { JSXElementConstructor, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
-import Timer from '../widgets/timer';
-
-interface WidgetProps extends Record<string, any> {
-  onRemove: () => void;
-}
-
-interface WidgetConfig {
-  title: string;
-  widget: JSXElementConstructor<WidgetProps>;
-}
+import { WidgetConfig } from '../widgets/interfaces';
+import { useWidgetLayout } from '../widgets/widget-config';
 
 function createAnnouncement(
   operationAnnouncement: string,
@@ -25,21 +17,11 @@ function createAnnouncement(
 }
 
 export default function useDashboard(): State {
-  const [items, setItems] = useState<ReadonlyArray<BoardProps.Item<WidgetConfig>>>([
-    {
-      id: '1',
-      rowSpan: 3,
-      columnSpan: 2,
-      data: {
-        title: 'Pomodoro timer',
-        widget: Timer,
-      },
-    },
-  ]);
+  const [items, setItems] = useWidgetLayout();
 
   const handleItemsChange = useCallback((event: NonCancelableCustomEvent<BoardProps.ItemsChangeDetail<WidgetConfig>>): void => {
     setItems(event.detail.items);
-  }, []);
+  }, [setItems]);
 
   const i18nStrings = useMemo((): BoardProps.I18nStrings<WidgetConfig> => {
     return {
