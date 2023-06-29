@@ -8,23 +8,42 @@ import './index.scss';
 import App from './app';
 import reportWebVitals from './reportWebVitals';
 import Dashboard from './dashboard';
+import SuggestedSigilTierPage from './widgets/suggested-sigil-tier';
+import MonsterLevelCalculatorPage from './widgets/monster-level-calculator';
+import SuggestedSigilTierSettings from './widgets/suggested-sigil-tier/Settings';
 
 const router = createBrowserRouter([
+    {
+      element: <App />,
+      children: [
+        {
+          path: Pathname.Fallback,
+          // TODO: Log 404s since it could be a broken link
+          element: <Navigate to={Pathname.Home} replace />,
+        },
+        {
+          path: Pathname.Home,
+          element: <Dashboard />,
+        },
+        {
+          path: Pathname.DiabloMonsterLevelCalculator,
+          element: <MonsterLevelCalculatorPage />,
+        },
+        {
+          path: Pathname.DiabloSuggestedSigilTier,
+          element: <SuggestedSigilTierPage />,
+        },
+        {
+          path: Pathname.DiabloSuggestedSigilTierSettings,
+          element: <SuggestedSigilTierSettings />,
+        },
+      ],
+    },
+  ],
   {
-    element: <App />,
-    children: [
-      {
-        path: Pathname.Fallback,
-        // TODO: Log 404s since it could be a broken link
-        element: <Navigate to={Pathname.Home} replace />,
-      },
-      {
-        path: Pathname.Home,
-        element: <Dashboard />,
-      },
-    ],
-  },
-]);
+    basename: '/widgets',
+  }
+);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

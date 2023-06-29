@@ -4,7 +4,8 @@ import { useCallback } from 'react';
 export default function useFollow(): State {
   const navigate = useNavigate();
 
-  return useCallback((href: string, isExternal: boolean, event: CustomEvent): void => {
+  return useCallback((options: Options): void => {
+    const { isExternal, event, href} = options;
     if (isExternal) {
       return;
     }
@@ -13,4 +14,10 @@ export default function useFollow(): State {
   }, [navigate]);
 }
 
-type State = (href: string, isExternal: boolean, event: CustomEvent) => void;
+interface Options {
+  href: string;
+  isExternal?: boolean;
+  event: CustomEvent;
+}
+
+type State = (opts: Options) => void;

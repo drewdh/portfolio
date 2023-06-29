@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 
 export enum LocalStorageKey {
   GlobalSettings = 'globalSettings',
@@ -7,6 +7,10 @@ export enum LocalStorageKey {
   DashboardLayout = 'dashboardLayout',
   WidgetPanelSize = 'widgetPanelSize',
   CoffeeWeight = 'coffeeWeight',
+  DiabloWorldTier = 'diabloWorldTier',
+  DiabloPlayerLevel = 'diabloPlayerLevel',
+  DiabloSigilTier = 'diabloSigilTier',
+  DiabloMonsterLevelOffset = 'diabloMonsterLevelOffset',
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */
@@ -20,16 +24,18 @@ export default function useLocalStorage<T>(key: LocalStorageKey, defaultValue: T
     }
   });
 
-  useEffect((): void => {
+  const updateItem = useCallback((updater: T | ((prevValue: T) => T)): void => {
+    const newValue = typeof updater === 'function' ? (updater as Function)(item) : updater;
     try {
-      const stringifiedValue = JSON.stringify(item);
+      const stringifiedValue = JSON.stringify(newValue);
       localStorage.setItem(key, stringifiedValue);
+      setItem(newValue);
     } catch (e) {
       console.warn(`Could not save value for key ${key}:`, item, e);
     }
   }, [item, key]);
 
-  return [item, setItem];
+  return [item, updateItem];
 }
 
 type State<T> = [
