@@ -6,7 +6,7 @@ import TopNavigation from '../top-navigation';
 export default function App() {
   return (
     <>
-      <TopNavigation />
+      {/*<TopNavigation />*/}
       <Outlet />
     </>
   );

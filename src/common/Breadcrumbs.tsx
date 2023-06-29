@@ -8,7 +8,7 @@ export default function Breadcrumbs({ items }: Props) {
   const follow = useFollow();
   const allItems = useMemo((): BreadcrumbGroupProps.Item[] => {
     return [
-      { text: 'Drew Hanberry', href: Pathname.Home },
+      { text: 'Drew\'s Widgets', href: Pathname.Home },
       ...items,
     ];
   }, [items]);

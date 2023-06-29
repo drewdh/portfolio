@@ -66,7 +66,6 @@ export default function Settings() {
 
   const breadcrumbItems = useMemo((): BreadcrumbGroupProps.Item[] => {
     return [
-      { text: 'Widgets', href: Pathname.Home },
       { text: 'Diablo IV Nightmare Dungeon: Suggested sigil tier', href: Pathname.DiabloSuggestedSigilTier },
       { text: 'Settings', href: Pathname.DiabloSuggestedSigilTierSettings },
     ];

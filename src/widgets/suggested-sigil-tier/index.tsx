@@ -8,7 +8,6 @@ import DhSideNavigation from '../../common/side-navigation';
 
 export default function SuggestedSigilTierPage() {
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [
-    { text: 'Widgets', href: Pathname.Home },
     { text: 'Diablo IV Nightmare Dungeon: Suggested sigil tier', href: Pathname.DiabloSuggestedSigilTier },
   ];
 

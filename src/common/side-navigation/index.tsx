@@ -15,6 +15,11 @@ export default function DhSideNavigation() {
 
   const items = useMemo((): SideNavigationProps.Item[] => {
     return [
+      // {
+      //   type: 'link',
+      //   text: 'Pomodoro timer',
+      //   href: Pathname.Pomodoro,
+      // },
       {
         type: 'section',
         text: 'Diablo IV Nightmare Dungeon',
@@ -31,13 +36,20 @@ export default function DhSideNavigation() {
           },
         ],
       },
+      // TODO: Add unified settings
+      // { type: 'divider' },
+      // {
+      //   type: 'link',
+      //   text: 'Settings',
+      //   href: Pathname.Settings,
+      // },
     ];
   }, []);
 
   return (
     <SideNavigation
       activeHref={pathname}
-      header={{ text: 'Widgets', href: Pathname.Home }}
+      header={{ text: 'Drew\'s Widgets', href: Pathname.Home }}
       items={items}
       onFollow={handleFollow}
     />

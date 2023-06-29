@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-const defaultTitle = 'Drew Hanberry';
+const defaultTitle = 'Drew\'s Widgets';
 
 /** Updates document title */
-export default function useTitle(title: string) {
+export default function useTitle(title?: string) {
   useEffect(function updateTitle() {
     const titleParts = [];
     if (title) {

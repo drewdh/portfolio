@@ -27,7 +27,7 @@ export default function Board({ onAdd, onPaletteItemsChange }: Props) {
           actions={<Actions onAdd={onAdd} onReset={() => handleResetClick(true)} />}
           description="A place where I make small, functional widgets to experiment with different user experience ideas and technologies."
           variant="h1"
-        >Widgets</Header>}
+        >Drew's Widgets</Header>}
     >
       <CloudscapeBoard
         empty={

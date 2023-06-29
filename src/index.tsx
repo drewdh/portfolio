@@ -11,6 +11,7 @@ import Dashboard from './dashboard';
 import SuggestedSigilTierPage from './widgets/suggested-sigil-tier';
 import MonsterLevelCalculatorPage from './widgets/monster-level-calculator';
 import SuggestedSigilTierSettings from './widgets/suggested-sigil-tier/Settings';
+import OverviewPage from './widgets/overview';
 
 const router = createBrowserRouter([
     {
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
         },
         {
           path: Pathname.Home,
-          element: <Dashboard />,
+          element: <OverviewPage />,
         },
         {
           path: Pathname.DiabloMonsterLevelCalculator,
@@ -40,9 +41,6 @@ const router = createBrowserRouter([
       ],
     },
   ],
-  {
-    basename: '/widgets',
-  }
 );
 
 const root = ReactDOM.createRoot(

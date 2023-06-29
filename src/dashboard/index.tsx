@@ -15,6 +15,7 @@ import { BoardProps } from '@cloudscape-design/board-components/board';
 import { WidgetConfig } from '../widgets/interfaces';
 import DhSideNavigation from '../common/side-navigation';
 import Breadcrumbs from '../common/Breadcrumbs';
+import { Pathname } from '../routes';
 
 const maxPanelSize = 360;
 
@@ -47,14 +48,10 @@ export default function Dashboard() {
     setPaletteItems(items);
   }, []);
 
-  const breadcrumbItems = [
-    { text: 'Widgets', href: '/' },
-  ];
-
   return (
     <HelpPanelProvider config={{ content, setContent, openPanel }}>
       <AppLayout
-        breadcrumbs={<Breadcrumbs items={breadcrumbItems} />}
+        breadcrumbs={<Breadcrumbs items={[]} />}
         ref={ref}
         content={
           <Board

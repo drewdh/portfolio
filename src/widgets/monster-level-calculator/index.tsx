@@ -8,7 +8,6 @@ import MonsterLevelCalculator from './MonsterLevelCalculator';
 
 export default function MonsterLevelCalculatorPage() {
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [
-    { text: 'Widgets', href: Pathname.Home },
     { text: 'Diablo IV Nightmare Dungeon: Monster level calculator', href: Pathname.DiabloMonsterLevelCalculator },
   ];
 
