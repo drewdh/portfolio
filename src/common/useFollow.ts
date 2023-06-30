@@ -1,8 +1,10 @@
-import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 import { useCallback } from 'react';
+import useNavigateWithRef from './useNavigateWithRef';
 
 export default function useFollow(): State {
-  const navigate = useNavigate();
+  const navigate = useNavigateWithRef();
+  const { pathname } = useLocation();
 
   return useCallback((options: Options): void => {
     const { isExternal, event, href} = options;
@@ -10,8 +12,12 @@ export default function useFollow(): State {
       return;
     }
     event.preventDefault();
-    navigate(href);
-  }, [navigate]);
+    navigate(href, {
+      state: {
+        ref: pathname,
+      },
+    });
+  }, [pathname, navigate]);
 }
 
 interface Options {

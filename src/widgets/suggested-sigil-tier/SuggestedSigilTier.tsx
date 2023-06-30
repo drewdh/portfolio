@@ -6,20 +6,22 @@ import Header from '@cloudscape-design/components/header';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import FormField from '@cloudscape-design/components/form-field';
 import { useCallback, useMemo, useState } from 'react';
-import RadioGroup, { RadioGroupProps } from '@cloudscape-design/components/radio-group';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Select, { SelectProps } from '@cloudscape-design/components/select';
 import Box from '@cloudscape-design/components/box';
 import ColumnLayout from '@cloudscape-design/components/column-layout';
+import Tiles, { TilesProps } from '@cloudscape-design/components/tiles';
 
 import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
 import useTitle from '../../useTitle';
 import { Pathname } from '../../routes';
 import ButtonLink from '../../common/ButtonLink';
+import InfoLink from '../../common/info-link';
+import HelpContent from './HelpContent';
 
-const worldTierItems: RadioGroupProps.RadioButtonDefinition[] = [
-  { value: '3', label: 'World Tier 3 - Nightmare' },
-  { value: '4', label: 'World Tier 4 - Torment' },
+const worldTierItems: TilesProps.TilesDefinition[] = [
+  { value: '3', label: 'Nightmare', description: 'World Tier 3' },
+  { value: '4', label: 'Torment', description: 'World Tier 4' },
 ];
 
 export default function SuggestedSigilTier() {
@@ -69,7 +71,7 @@ export default function SuggestedSigilTier() {
     updateSuggestions(playerWorldTier, newPlayerLevelOption.value ?? '1');
   }, [setSelectedPlayerLevelOption, updateSuggestions, playerWorldTier]);
 
-  const handlePlayerWorldTierChange = useCallback((event: NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>): void => {
+  const handlePlayerWorldTierChange = useCallback((event: NonCancelableCustomEvent<TilesProps.ChangeDetail>): void => {
     const newWorldTier = event.detail.value;
     setPlayerWorldTier(newWorldTier);
     updateSuggestions(newWorldTier, selectedPlayerLevelOption?.value || '1');
@@ -94,8 +96,12 @@ export default function SuggestedSigilTier() {
     <ContentLayout
       header={
         <Header
+          actions={
+            <ButtonLink href={Pathname.DiabloSuggestedSigilTierSettings}>Settings</ButtonLink>
+          }
           variant="h1"
-          description="The suggested sigil tier maximizes bonus XP from killing higher-level monsters. Monsters 3 levels higher than player level grant the maximum bonus XP of 25%. Monsters more than 3 levels higher grant more base XP but no additional bonus XP."
+          info={<InfoLink content={<HelpContent />} />}
+          description="Calculate the optimal nightmare sigil tier for earning XP."
         >
           Suggested sigil tier
         </Header>
@@ -112,7 +118,8 @@ export default function SuggestedSigilTier() {
               />
             </FormField>
             <FormField label="World Tier">
-              <RadioGroup
+              <Tiles
+                columns={1}
                 value={playerWorldTier}
                 onChange={handlePlayerWorldTierChange}
                 items={worldTierItems}
@@ -120,15 +127,7 @@ export default function SuggestedSigilTier() {
             </FormField>
           </SpaceBetween>
         </Container>
-        <Container
-          header={
-            <Header
-              actions={<ButtonLink href={Pathname.DiabloSuggestedSigilTierSettings}>Settings</ButtonLink>}
-            >
-              Suggested sigil tier
-            </Header>
-          }
-        >
+        <Container header={<Header>Suggested sigil tier</Header>}>
           <SpaceBetween size="l">
             <ColumnLayout columns={2} variant="text-grid">
               <div>

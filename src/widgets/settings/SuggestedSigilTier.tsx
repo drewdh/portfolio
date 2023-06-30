@@ -5,22 +5,23 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 import Header from '@cloudscape-design/components/header';
-import { useNavigate } from 'react-router';
 import Button from '@cloudscape-design/components/button';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import FormField from '@cloudscape-design/components/form-field';
 import Input, { InputProps } from '@cloudscape-design/components/input';
+import { useLocation } from 'react-router';
 
 import DhSideNavigation from '../../common/side-navigation';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import { Pathname } from '../../routes';
 import useTitle from '../../useTitle';
-import ButtonLink from '../../common/ButtonLink';
 import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
+import useNavigateWithRef from '../../common/useNavigateWithRef';
 
-export default function Settings() {
-  useTitle('Settings');
-  const navigate = useNavigate();
+export default function SuggestedSigilTierSettings() {
+  useTitle('Edit suggested sigil tier');
+  const { state } = useLocation();
+  const navigate = useNavigateWithRef();
   const inputRef = useRef<InputProps.Ref>(null);
   const [isSubmitted, setIsSubmitted] = useState<boolean>();
   const [savedOffset, setSavedOffset] = useLocalStorage<number>(LocalStorageKey.DiabloMonsterLevelOffset, 3);
@@ -44,6 +45,10 @@ export default function Settings() {
     return true;
   }, []);
 
+  const handleCancel = useCallback((): void => {
+    navigate(state?.ref ?? Pathname.Settings);
+  }, [navigate, state]);
+
   const handleSave = useCallback((): void => {
     setIsSubmitted(true);
     const offsetNum = Number(offsetValue);
@@ -53,8 +58,8 @@ export default function Settings() {
       return;
     }
     setSavedOffset(offsetNum);
-    navigate(Pathname.DiabloSuggestedSigilTier);
-  }, [navigate, offsetValue, setSavedOffset, validate]);
+    navigate(state?.ref ?? Pathname.Settings);
+  }, [state, navigate, offsetValue, setSavedOffset, validate]);
 
   const handleOffsetChange = useCallback((event: NonCancelableCustomEvent<InputProps.ChangeDetail>): void => {
     const { value: offset } = event.detail;
@@ -66,8 +71,8 @@ export default function Settings() {
 
   const breadcrumbItems = useMemo((): BreadcrumbGroupProps.Item[] => {
     return [
-      { text: 'Diablo IV Nightmare Dungeon: Suggested sigil tier', href: Pathname.DiabloSuggestedSigilTier },
-      { text: 'Settings', href: Pathname.DiabloSuggestedSigilTierSettings },
+      { text: 'Settings', href: Pathname.Settings },
+      { text: 'Edit suggested sigil tier', href: Pathname.DiabloSuggestedSigilTierSettings },
     ];
   }, []);
 
@@ -81,13 +86,13 @@ export default function Settings() {
         <Form
           actions={
             <SpaceBetween size="xs" direction="horizontal">
-              <ButtonLink href={Pathname.DiabloSuggestedSigilTier}>Cancel</ButtonLink>
+              <Button onClick={handleCancel}>Cancel</Button>
               <Button onClick={handleSave} variant="primary">Save</Button>
             </SpaceBetween>
           }
-          header={<Header variant="h1">Settings</Header>}
+          header={<Header variant="h1">Edit suggested sigil tier</Header>}
         >
-          <Container header={<Header variant="h2">Settings</Header>}>
+          <Container header={<Header variant="h2">Edit suggested sigil tier</Header>}>
             <FormField
               label="Monster level offset"
               description="Difference between monster level and player level. The default is 3."

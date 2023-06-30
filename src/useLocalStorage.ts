@@ -11,6 +11,8 @@ export enum LocalStorageKey {
   DiabloPlayerLevel = 'diabloPlayerLevel',
   DiabloSigilTier = 'diabloSigilTier',
   DiabloMonsterLevelOffset = 'diabloMonsterLevelOffset',
+  ContentDensity = 'contentDensity',
+  VisualMode = 'visualMode',
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */

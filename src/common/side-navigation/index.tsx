@@ -37,12 +37,12 @@ export default function DhSideNavigation() {
         ],
       },
       // TODO: Add unified settings
-      // { type: 'divider' },
-      // {
-      //   type: 'link',
-      //   text: 'Settings',
-      //   href: Pathname.Settings,
-      // },
+      { type: 'divider' },
+      {
+        type: 'link',
+        text: 'Settings',
+        href: Pathname.Settings,
+      },
     ];
   }, []);
 

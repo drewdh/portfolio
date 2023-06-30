@@ -1,10 +1,10 @@
 import { TopNavigationProps } from '@cloudscape-design/components/top-navigation';
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
 import { Pathname } from '../routes';
+import useNavigateWithRef from '../common/useNavigateWithRef';
 
 export default function useTopNavigation(): State {
-  const navigate = useNavigate();
+  const navigate = useNavigateWithRef();
   const [isSettingsVisible, setIsSettingsVisible] = useState<boolean>(false);
 
   const handleSettingsDismiss = useCallback((): void => {

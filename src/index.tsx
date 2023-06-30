@@ -7,11 +7,12 @@ import { Pathname } from './routes';
 import './index.scss';
 import App from './app';
 import reportWebVitals from './reportWebVitals';
-import Dashboard from './dashboard';
 import SuggestedSigilTierPage from './widgets/suggested-sigil-tier';
 import MonsterLevelCalculatorPage from './widgets/monster-level-calculator';
-import SuggestedSigilTierSettings from './widgets/suggested-sigil-tier/Settings';
+import SuggestedSigilTierSettings from './widgets/settings/SuggestedSigilTier';
 import OverviewPage from './widgets/overview';
+import SettingsPage from './widgets/settings';
+import Display from './widgets/settings/Display';
 
 const router = createBrowserRouter([
     {
@@ -37,6 +38,14 @@ const router = createBrowserRouter([
         {
           path: Pathname.DiabloSuggestedSigilTierSettings,
           element: <SuggestedSigilTierSettings />,
+        },
+        {
+          path: Pathname.Settings,
+          element: <SettingsPage />,
+        },
+        {
+          path: Pathname.SettingsDisplay,
+          element: <Display />,
         },
       ],
     },
