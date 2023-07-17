@@ -4,6 +4,8 @@ import { useLocation } from 'react-router';
 
 import { Pathname } from '../../routes';
 import useFollow from '../useFollow';
+import Link from '@cloudscape-design/components/link';
+import widgetDetails from '../widgetDetails';
 
 export default function DhSideNavigation() {
   const follow = useFollow();
@@ -17,41 +19,31 @@ export default function DhSideNavigation() {
     return [
       // {
       //   type: 'link',
-      //   text: 'Pomodoro timer',
-      //   href: Pathname.Pomodoro,
+      //   text: 'Coffee Calculator',
+      //   href: Pathname.CoffeeCalculator,
       // },
       {
-        type: 'section',
-        text: 'Diablo IV Nightmare Dungeon',
-        items: [
-          {
-            type: 'link',
-            text: 'Suggested sigil tier',
-            href: Pathname.DiabloSuggestedSigilTier,
-          },
-          {
-            type: 'link',
-            text: 'Monster level calculator',
-            href: Pathname.DiabloMonsterLevelCalculator,
-          },
-        ],
-      },
-      // TODO: Add unified settings
-      { type: 'divider' },
-      {
         type: 'link',
-        text: 'Settings',
-        href: Pathname.Settings,
+        text: widgetDetails.diablo.title,
+        href: Pathname.DiabloSuggestedSigilTier,
       },
+      // { type: 'divider' },
+      // {
+      //   type: 'link',
+      //   text: 'Feedback',
+      //   href: Pathname.Settings,
+      // },
     ];
   }, []);
 
   return (
-    <SideNavigation
-      activeHref={pathname}
-      header={{ text: 'Drew\'s Widgets', href: Pathname.Home }}
-      items={items}
-      onFollow={handleFollow}
-    />
+    <>
+      <SideNavigation
+        activeHref={pathname}
+        header={{ text: 'Drew\'s Widgets', href: Pathname.Home }}
+        items={items}
+        onFollow={handleFollow}
+      />
+    </>
   );
 }

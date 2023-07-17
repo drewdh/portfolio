@@ -1,10 +1,11 @@
-import { Table, TableProps } from '@cloudscape-design/components';
 import Header from '@cloudscape-design/components/header';
+import Table, { TableProps } from '@cloudscape-design/components/table';
 import { useMemo } from 'react';
 
 import useTitle from '../../useTitle';
 import { Pathname } from '../../routes';
-import Link from '@cloudscape-design/components/link';
+import InternalLink from '../../common/InternalLink';
+import widgetDetails from '../../common/widgetDetails';
 
 interface Widget {
   title: string;
@@ -14,17 +15,13 @@ interface Widget {
 
 export default function Overview() {
   useTitle();
+
   const widgets = useMemo((): Widget[] => {
     return [
       {
-        title: 'Diablo IV Nightmare Dungeon: Suggested sigil tier',
+        title: widgetDetails.diablo.title,
         href: Pathname.DiabloSuggestedSigilTier,
-        description: 'Calculate the optimal nightmare sigil tier for earning XP.',
-      },
-      {
-        title: 'Diablo IV Nightmare Dungeon: Monster level calculator',
-        href: Pathname.DiabloMonsterLevelCalculator,
-        description: 'Calculate the sigil tier required for your desired monster level, or see what level the monsters are for a specific sigil tier.',
+        description: widgetDetails.diablo.description,
       },
     ];
   }, []);
@@ -34,7 +31,7 @@ export default function Overview() {
       {
         header: 'Widget',
         cell: (item) => (
-          <Link href={item.href}>{item.title}</Link>
+          <InternalLink href={item.href}>{item.title}</InternalLink>
         ),
       },
       {

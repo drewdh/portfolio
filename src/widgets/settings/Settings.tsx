@@ -36,12 +36,6 @@ export default function Settings() {
         {/*    </div>*/}
         {/*  </ColumnLayout>*/}
         {/*</Container>*/}
-        <Container
-          header={<Header actions={<ButtonLink href={Pathname.DiabloSuggestedSigilTierSettings}>Edit</ButtonLink>}>Suggested sigil tier</Header>}
-        >
-          <Box variant="awsui-key-label">Monster level offset</Box>
-          <Box>{monsterLevelOffset}</Box>
-        </Container>
       </SpaceBetween>
     </ContentLayout>
   );

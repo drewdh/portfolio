@@ -1,3 +1,4 @@
+import { ReactNode, useCallback, useRef, useState } from 'react';
 import AppLayout, { AppLayoutProps } from '@cloudscape-design/components/app-layout';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 
@@ -6,14 +7,13 @@ import { Pathname } from '../../routes';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import DhSideNavigation from '../../common/side-navigation';
 import { HelpPanelProvider } from '../../help-panel/help-panel';
-import { ReactNode, useCallback, useRef, useState } from 'react';
-import HelpContent from './HelpContent';
+import widgetDetails from '../../common/widgetDetails';
 
 export default function SuggestedSigilTierPage() {
-  const [content, setContent] = useState<ReactNode>(<HelpContent />);
+  const [content, setContent] = useState<ReactNode>(null);
   const ref = useRef<AppLayoutProps.Ref>(null);
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [
-    { text: 'Diablo IV Nightmare Dungeon: Suggested sigil tier', href: Pathname.DiabloSuggestedSigilTier },
+    { text: widgetDetails.diablo.title, href: Pathname.DiabloSuggestedSigilTier },
   ];
 
   const openPanel = useCallback((): void => {
@@ -28,6 +28,7 @@ export default function SuggestedSigilTierPage() {
         navigation={<DhSideNavigation />}
         ref={ref}
         tools={content}
+        toolsHide
       />
     </HelpPanelProvider>
   )

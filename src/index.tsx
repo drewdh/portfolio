@@ -9,10 +9,10 @@ import App from './app';
 import reportWebVitals from './reportWebVitals';
 import SuggestedSigilTierPage from './widgets/suggested-sigil-tier';
 import MonsterLevelCalculatorPage from './widgets/monster-level-calculator';
-import SuggestedSigilTierSettings from './widgets/settings/SuggestedSigilTier';
 import OverviewPage from './widgets/overview';
 import SettingsPage from './widgets/settings';
 import Display from './widgets/settings/Display';
+import CoffeeCalculatorPage from './widgets/coffee-calculator';
 
 const router = createBrowserRouter([
     {
@@ -29,15 +29,15 @@ const router = createBrowserRouter([
         },
         {
           path: Pathname.DiabloMonsterLevelCalculator,
-          element: <MonsterLevelCalculatorPage />,
+          element: <Navigate to={Pathname.DiabloSuggestedSigilTier} replace />,
+        },
+        {
+          path: Pathname.DiabloSuggestedSigilTierOld,
+          element: <Navigate to={Pathname.DiabloSuggestedSigilTier} replace />,
         },
         {
           path: Pathname.DiabloSuggestedSigilTier,
           element: <SuggestedSigilTierPage />,
-        },
-        {
-          path: Pathname.DiabloSuggestedSigilTierSettings,
-          element: <SuggestedSigilTierSettings />,
         },
         {
           path: Pathname.Settings,
@@ -47,6 +47,10 @@ const router = createBrowserRouter([
           path: Pathname.SettingsDisplay,
           element: <Display />,
         },
+        // {
+        //   path: Pathname.CoffeeCalculator,
+        //   element: <CoffeeCalculatorPage />,
+        // },
       ],
     },
   ],

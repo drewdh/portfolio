@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react';
 import Timer from './timer';
 import { WidgetConfig, WidgetId } from './interfaces';
 import useLocalStorage, { LocalStorageKey } from '../useLocalStorage';
-import CoffeeCalculator from './coffee-calculator';
+import CoffeeCalculator from './coffee-calculator-old';
 
 const widgetDataMap: Record<WidgetId, WidgetConfig> = {
   [WidgetId.Timer]: {
