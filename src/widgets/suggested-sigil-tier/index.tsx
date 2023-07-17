@@ -8,6 +8,7 @@ import Breadcrumbs from '../../common/Breadcrumbs';
 import DhSideNavigation from '../../common/side-navigation';
 import { HelpPanelProvider } from '../../help-panel/help-panel';
 import widgetDetails from '../../common/widgetDetails';
+import { topNavSelector } from '../../top-navigation/constants';
 
 export default function SuggestedSigilTierPage() {
   const [content, setContent] = useState<ReactNode>(null);
@@ -28,6 +29,7 @@ export default function SuggestedSigilTierPage() {
         navigation={<DhSideNavigation />}
         ref={ref}
         tools={content}
+        headerSelector={topNavSelector}
         toolsHide
       />
     </HelpPanelProvider>

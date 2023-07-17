@@ -6,6 +6,7 @@ import DhSideNavigation from '../../common/side-navigation';
 import Overview from './Overview';
 import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
+import { topNavSelector } from '../../top-navigation/constants';
 
 export default function OverviewPage() {
   const [isNewVisitor, setIsNewVisitor] = useLocalStorage<boolean>(LocalStorageKey.IsNewVisitor, true);
@@ -29,6 +30,7 @@ export default function OverviewPage() {
       navigationOpen={navigationOpen}
       navigation={<DhSideNavigation />}
       toolsHide
+      headerSelector={topNavSelector}
     />
   );
 }

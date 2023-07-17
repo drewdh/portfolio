@@ -33,18 +33,6 @@ export default function useTopNavigation(): State {
     return [
       {
         type: 'button',
-        text: 'GitHub',
-        external: true,
-        href: 'https://github.com/drewdh/portfolio',
-      },
-      {
-        type: 'button',
-        text: 'LinkedIn',
-        external: true,
-        href: 'https://www.linkedin.com/in/drew-hanberry-b56264105/',
-      },
-      {
-        type: 'button',
         iconName: 'settings',
         title: 'Settings',
         onClick: handleSettingsClick,
