@@ -13,6 +13,7 @@ export enum LocalStorageKey {
   DiabloMonsterLevelOffset = 'diabloMonsterLevelOffset',
   ContentDensity = 'contentDensity',
   VisualMode = 'visualMode',
+  IsNewVisitor = 'isNewVisitor',
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */
