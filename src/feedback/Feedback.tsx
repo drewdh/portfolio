@@ -10,6 +10,7 @@ import Textarea from '@cloudscape-design/components/textarea';
 import RadioGroup from '@cloudscape-design/components/radio-group';
 
 import useFeedback from './useFeedback';
+import Input from '@cloudscape-design/components/input';
 
 export default function Feedback({
   isVisible,
@@ -18,6 +19,7 @@ export default function Feedback({
   const {
     errors,
     handleDismiss,
+    handleEmailChange,
     handleMessageChange,
     handleSatisfiedChange,
     handleSubmitClick,
@@ -74,6 +76,13 @@ export default function Feedback({
               onChange={handleSatisfiedChange}
               value={values.satisfied}
             />
+          </FormField>
+          <FormField
+            errorText={errors.email}
+            label={<span>Email - <i>optional</i></span>}
+            description="If you would like to be contacted about your feedback, enter your email address."
+          >
+            <Input placeholder="person.doe@email.com" value={values.email} onChange={handleEmailChange} />
           </FormField>
           {isApiError && (
             <Alert type="error">

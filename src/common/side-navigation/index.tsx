@@ -4,7 +4,6 @@ import { useLocation } from 'react-router';
 
 import { Pathname } from '../../routes';
 import useFollow from '../useFollow';
-import Link from '@cloudscape-design/components/link';
 import widgetDetails from '../widgetDetails';
 
 export default function DhSideNavigation() {

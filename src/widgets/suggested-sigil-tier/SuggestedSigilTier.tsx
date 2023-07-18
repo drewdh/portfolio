@@ -1,4 +1,3 @@
-import ContentLayout from '@cloudscape-design/components/content-layout';
 import Container from '@cloudscape-design/components/container';
 import Grid from '@cloudscape-design/components/grid';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
@@ -23,7 +22,6 @@ const worldTierItems: TilesProps.TilesDefinition[] = [
 ];
 
 export default function SuggestedSigilTier() {
-  useTitle(widgetDetails.diablo.title);
   const [monsterLevelOffset, setMonsterLevelOffset] = useLocalStorage<number>(LocalStorageKey.DiabloMonsterLevelOffset, 3);
   const [playerWorldTier, setPlayerWorldTier] = useLocalStorage<string>(LocalStorageKey.DiabloWorldTier, '3');
 
@@ -84,13 +82,11 @@ export default function SuggestedSigilTier() {
   const handlePlayerLevelChange = useCallback((event: NonCancelableCustomEvent<SelectProps.ChangeDetail>): void => {
     const newPlayerLevelOption = event.detail.selectedOption;
     setSelectedPlayerLevelOption(newPlayerLevelOption);
-    // updateSuggestions(playerWorldTier, newPlayerLevelOption.value ?? '1');
   }, [setSelectedPlayerLevelOption]);
 
   const handlePlayerWorldTierChange = useCallback((event: NonCancelableCustomEvent<TilesProps.ChangeDetail>): void => {
     const newWorldTier = event.detail.value;
     setPlayerWorldTier(newWorldTier);
-    // updateSuggestions(newWorldTier, selectedPlayerLevelOption?.value || '1');
   }, [setPlayerWorldTier]);
 
   const statusType = useMemo((): 'warning' | 'info' | undefined => {
@@ -106,87 +102,78 @@ export default function SuggestedSigilTier() {
   }, [monsterLevelDiff, selectedPlayerLevelOption, suggestedMonsterLevel]);
 
   return (
-    <ContentLayout
-      header={
-        <Header
-          variant="h1"
-          description={widgetDetails.diablo.description}
-        >{widgetDetails.diablo.title}</Header>
-      }
-    >
-      <Grid gridDefinition={[{ colspan: { default: 12, s: 4 } }, { colspan: { default: 12, s: 8 } }]}>
-        <Container header={<Header>Configuration</Header>}>
+    <Grid gridDefinition={[{ colspan: { default: 12, s: 4 } }, { colspan: { default: 12, s: 8 } }]}>
+      <Container header={<Header>Configuration</Header>}>
+        <SpaceBetween size="l">
+          <FormField label="Player level">
+            <Select
+              selectedOption={selectedPlayerLevelOption}
+              onChange={handlePlayerLevelChange}
+              options={playerLevelOptions}
+            />
+          </FormField>
+          <FormField label="World Tier">
+            <Tiles
+              columns={1}
+              value={playerWorldTier}
+              onChange={handlePlayerWorldTierChange}
+              items={worldTierItems}
+            />
+          </FormField>
+          <FormField
+            label="Desired monster level offset"
+            description="Desired difference between monster level and player level. The default is 3."
+          >
+            <Input
+              value={String(monsterLevelOffset)}
+              onChange={handleOffsetChange}
+              type="number"
+              inputMode="numeric"
+            />
+          </FormField>
+        </SpaceBetween>
+      </Container>
+      <Container header={<Header>Details</Header>}>
+        <ColumnLayout columns={2} variant="text-grid">
           <SpaceBetween size="l">
-            <FormField label="Player level">
-              <Select
-                selectedOption={selectedPlayerLevelOption}
-                onChange={handlePlayerLevelChange}
-                options={playerLevelOptions}
-              />
-            </FormField>
-            <FormField label="World Tier">
-              <Tiles
-                columns={1}
-                value={playerWorldTier}
-                onChange={handlePlayerWorldTierChange}
-                items={worldTierItems}
-              />
-            </FormField>
-            <FormField
-              label="Desired monster level offset"
-              description="Desired difference between monster level and player level. The default is 3."
-            >
-              <Input
-                value={String(monsterLevelOffset)}
-                onChange={handleOffsetChange}
-                type="number"
-                inputMode="numeric"
-              />
-            </FormField>
+            <Box variant="h3" padding="n">
+              Dungeon
+            </Box>
+            <div>
+              <Box variant="awsui-key-label">Sigil tier</Box>
+              <Box>Tier {suggestedSigilTier}</Box>
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Monster level</Box>
+              <Box>Level {suggestedMonsterLevel}</Box>
+            </div>
+            <div>
+              <Box variant="awsui-key-label">Monster level offset</Box>
+              {statusType && (
+                <div>
+                  <StatusIndicator type={statusType}>
+                    {statusMessage}
+                  </StatusIndicator>
+                </div>
+              )}
+              {!statusType && (
+                <div>{statusMessage}</div>
+              )}
+            </div>
           </SpaceBetween>
-        </Container>
-        <Container header={<Header>Details</Header>}>
-          <ColumnLayout columns={2} variant="text-grid">
-            <SpaceBetween size="l">
-              <Box variant="h3" padding="n">
-                Dungeon
-              </Box>
-              <div>
-                <Box variant="awsui-key-label">Sigil tier</Box>
-                <Box>Tier {suggestedSigilTier}</Box>
-              </div>
-              <div>
-                <Box variant="awsui-key-label">Monster level</Box>
-                <Box>Level {suggestedMonsterLevel}</Box>
-              </div>
-              <div>
-                <Box variant="awsui-key-label">Monster level offset</Box>
-                {statusType && (
-                  <div>
-                    <StatusIndicator type={statusType}>
-                      {statusMessage}
-                    </StatusIndicator>
-                  </div>
-                )}
-                {!statusType && (
-                  <div>{statusMessage}</div>
-                )}
-              </div>
-            </SpaceBetween>
-            <SpaceBetween size="l">
-              <Box variant="h3" padding="n">
-                XP bonuses
-              </Box>
-              <div>
-                <Box variant="awsui-key-label">Monster XP multiplier</Box>
-                <StatusIndicator type={xpMultiplier > 0 ? 'success' : 'warning'}>
-                  {xpMultiplierLabel} XP {xpMultiplier === .25 && '(max)'}
-                </StatusIndicator>
-              </div>
-            </SpaceBetween>
-          </ColumnLayout>
-        </Container>
-      </Grid>
-    </ContentLayout>
+          <SpaceBetween size="l">
+            <Box variant="h3" padding="n">
+              XP bonuses
+            </Box>
+            <div>
+              <Box variant="awsui-key-label">Monster XP multiplier</Box>
+              <StatusIndicator type={xpMultiplier > 0 ? 'success' : 'warning'}>
+                {xpMultiplierLabel} XP {xpMultiplier === .25 && '(max)'}
+              </StatusIndicator>
+            </div>
+          </SpaceBetween>
+        </ColumnLayout>
+      </Container>
+    </Grid>
   );
 }

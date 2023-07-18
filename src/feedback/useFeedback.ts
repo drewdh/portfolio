@@ -7,6 +7,7 @@ import { FormikErrors, useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { sendFeedback } from './feedbackApi';
+import { InputProps } from '@cloudscape-design/components/input';
 
 enum Satisfied {
   Yes = 'yes',
@@ -21,6 +22,7 @@ enum Type {
 }
 
 interface Values {
+  email: string;
   message: string;
   satisfied: Satisfied | null;
   type: SelectProps.Option;
@@ -31,7 +33,9 @@ const validationSchema = Yup.object().shape({
     .max(1000, 'Message must be 1,000 characters or fewer.')
     .required('Enter a message.'),
   satisfied: Yup.string()
-    .required('Choose a satisfaction.')
+    .required('Choose a satisfaction.'),
+  email: Yup.string()
+    .email('Enter a valid email.')
 });
 
 export default function useFeedback({
@@ -70,6 +74,7 @@ export default function useFeedback({
     values,
   } = useFormik<Values>({
     initialValues: {
+      email: '',
       message: '',
       satisfied: null,
       type: typeOptions[0],
@@ -83,6 +88,7 @@ export default function useFeedback({
           message: values.message,
           type: values.type.value!,
           satisfied: values.satisfied!,
+          email: values.email,
         });
         setIsSuccess(true);
       } catch {
@@ -103,6 +109,10 @@ export default function useFeedback({
       },
     ];
   }, []);
+
+  const handleEmailChange = useCallback((event: NonCancelableCustomEvent<InputProps.ChangeDetail>): void => {
+    setFieldValue('email', event.detail.value);
+  }, [setFieldValue]);
 
   const handleTypeChange = useCallback((event: NonCancelableCustomEvent<SelectProps.ChangeDetail>): void => {
     setFieldValue('type', event.detail.selectedOption);
@@ -138,6 +148,7 @@ export default function useFeedback({
   return {
     errors,
     handleDismiss,
+    handleEmailChange,
     handleMessageChange,
     handleSatisfiedChange,
     handleSubmitClick,
@@ -159,6 +170,7 @@ interface Props {
 interface State {
   errors: FormikErrors<Values>;
   handleDismiss: () => void;
+  handleEmailChange: (event: NonCancelableCustomEvent<InputProps.ChangeDetail>) => void;
   handleMessageChange: (event: NonCancelableCustomEvent<TextareaProps.ChangeDetail>) => void;
   handleSatisfiedChange: (event: NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>) => void;
   handleSubmitClick: () => void;

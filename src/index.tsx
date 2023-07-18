@@ -47,10 +47,10 @@ const router = createBrowserRouter([
           path: Pathname.SettingsDisplay,
           element: <Display />,
         },
-        // {
-        //   path: Pathname.CoffeeCalculator,
-        //   element: <CoffeeCalculatorPage />,
-        // },
+        {
+          path: Pathname.CoffeeCalculator,
+          element: <CoffeeCalculatorPage />,
+        },
       ],
     },
   ],
