@@ -11,10 +11,9 @@ import Box from '@cloudscape-design/components/box';
 import ColumnLayout from '@cloudscape-design/components/column-layout';
 import Tiles, { TilesProps } from '@cloudscape-design/components/tiles';
 import Input, { InputProps } from '@cloudscape-design/components/input';
+import Alert from '@cloudscape-design/components/alert';
 
 import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
-import useTitle from '../../useTitle';
-import widgetDetails from '../../common/widgetDetails';
 
 const worldTierItems: TilesProps.TilesDefinition[] = [
   { value: '3', label: 'Nightmare', description: 'World Tier 3' },
@@ -102,78 +101,83 @@ export default function SuggestedSigilTier() {
   }, [monsterLevelDiff, selectedPlayerLevelOption, suggestedMonsterLevel]);
 
   return (
-    <Grid gridDefinition={[{ colspan: { default: 12, s: 4 } }, { colspan: { default: 12, s: 8 } }]}>
-      <Container header={<Header>Configuration</Header>}>
-        <SpaceBetween size="l">
-          <FormField label="Player level">
-            <Select
-              selectedOption={selectedPlayerLevelOption}
-              onChange={handlePlayerLevelChange}
-              options={playerLevelOptions}
-            />
-          </FormField>
-          <FormField label="World Tier">
-            <Tiles
-              columns={1}
-              value={playerWorldTier}
-              onChange={handlePlayerWorldTierChange}
-              items={worldTierItems}
-            />
-          </FormField>
-          <FormField
-            label="Desired monster level offset"
-            description="Desired difference between monster level and player level. The default is 3."
-          >
-            <Input
-              value={String(monsterLevelOffset)}
-              onChange={handleOffsetChange}
-              type="number"
-              inputMode="numeric"
-            />
-          </FormField>
-        </SpaceBetween>
-      </Container>
-      <Container header={<Header>Details</Header>}>
-        <ColumnLayout columns={2} variant="text-grid">
+    <SpaceBetween size="l">
+      <Alert type="warning" header="Out of date">
+        This tool has not yet been updated to include the latest changes to XP and Nightmare Dungeons.
+      </Alert>
+      <Grid gridDefinition={[{ colspan: { default: 12, s: 4 } }, { colspan: { default: 12, s: 8 } }]}>
+        <Container header={<Header>Configuration</Header>}>
           <SpaceBetween size="l">
-            <Box variant="h3" padding="n">
-              Dungeon
-            </Box>
-            <div>
-              <Box variant="awsui-key-label">Sigil tier</Box>
-              <Box>Tier {suggestedSigilTier}</Box>
-            </div>
-            <div>
-              <Box variant="awsui-key-label">Monster level</Box>
-              <Box>Level {suggestedMonsterLevel}</Box>
-            </div>
-            <div>
-              <Box variant="awsui-key-label">Monster level offset</Box>
-              {statusType && (
-                <div>
-                  <StatusIndicator type={statusType}>
-                    {statusMessage}
-                  </StatusIndicator>
-                </div>
-              )}
-              {!statusType && (
-                <div>{statusMessage}</div>
-              )}
-            </div>
+            <FormField label="Player level">
+              <Select
+                selectedOption={selectedPlayerLevelOption}
+                onChange={handlePlayerLevelChange}
+                options={playerLevelOptions}
+              />
+            </FormField>
+            <FormField label="World Tier">
+              <Tiles
+                columns={1}
+                value={playerWorldTier}
+                onChange={handlePlayerWorldTierChange}
+                items={worldTierItems}
+              />
+            </FormField>
+            <FormField
+              label="Desired monster level offset"
+              description="Desired difference between monster level and player level. The default is 3."
+            >
+              <Input
+                value={String(monsterLevelOffset)}
+                onChange={handleOffsetChange}
+                type="number"
+                inputMode="numeric"
+              />
+            </FormField>
           </SpaceBetween>
-          <SpaceBetween size="l">
-            <Box variant="h3" padding="n">
-              XP bonuses
-            </Box>
-            <div>
-              <Box variant="awsui-key-label">Monster XP multiplier</Box>
-              <StatusIndicator type={xpMultiplier > 0 ? 'success' : 'warning'}>
-                {xpMultiplierLabel} XP {xpMultiplier === .25 && '(max)'}
-              </StatusIndicator>
-            </div>
-          </SpaceBetween>
-        </ColumnLayout>
-      </Container>
-    </Grid>
+        </Container>
+        <Container header={<Header>Details</Header>}>
+          <ColumnLayout columns={2} variant="text-grid">
+            <SpaceBetween size="l">
+              <Box variant="h3" padding="n">
+                Dungeon
+              </Box>
+              <div>
+                <Box variant="awsui-key-label">Sigil tier</Box>
+                <Box>Tier {suggestedSigilTier}</Box>
+              </div>
+              <div>
+                <Box variant="awsui-key-label">Monster level</Box>
+                <Box>Level {suggestedMonsterLevel}</Box>
+              </div>
+              <div>
+                <Box variant="awsui-key-label">Monster level offset</Box>
+                {statusType && (
+                  <div>
+                    <StatusIndicator type={statusType}>
+                      {statusMessage}
+                    </StatusIndicator>
+                  </div>
+                )}
+                {!statusType && (
+                  <div>{statusMessage}</div>
+                )}
+              </div>
+            </SpaceBetween>
+            <SpaceBetween size="l">
+              <Box variant="h3" padding="n">
+                XP bonuses
+              </Box>
+              <div>
+                <Box variant="awsui-key-label">Monster XP multiplier</Box>
+                <StatusIndicator type={xpMultiplier > 0 ? 'success' : 'warning'}>
+                  {xpMultiplierLabel} XP {xpMultiplier === .25 && '(max)'}
+                </StatusIndicator>
+              </div>
+            </SpaceBetween>
+          </ColumnLayout>
+        </Container>
+      </Grid>
+    </SpaceBetween>
   );
 }
