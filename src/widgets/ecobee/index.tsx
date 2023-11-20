@@ -19,6 +19,7 @@ export default function EcobeePage() {
       navigation={<DhSideNavigation />}
       breadcrumbs={<Breadcrumbs items={breadcrumbItems} />}
       content={<Ecobee />}
+      toolsHide
     />
   );
 }

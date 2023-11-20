@@ -36,7 +36,7 @@ export default function DhSideNavigation() {
         type: 'link',
         text: widgetDetails.diablo.title,
         href: Pathname.DiabloSuggestedSigilTier,
-        info: <Badge>Out of date</Badge>,
+        info: <Badge>Outdated</Badge>,
       },
       // { type: 'divider' },
       // {
