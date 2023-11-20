@@ -19,6 +19,11 @@ export default function Overview() {
   const widgets = useMemo((): Widget[] => {
     return [
       {
+        title: widgetDetails.ecobee.title,
+        href: Pathname.Ecobee,
+        description: widgetDetails.ecobee.description,
+      },
+      {
         title: widgetDetails.diablo.title,
         href: Pathname.DiabloSuggestedSigilTier,
         description: widgetDetails.diablo.description,
