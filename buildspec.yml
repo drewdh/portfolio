@@ -1,4 +1,7 @@
 version: 0.1
+env:
+  secrets-manager:
+    FONTAWESOME_NPM_AUTH_TOKEN: "PortfolioBuild:FONTAWESOME_NPM_AUTH_TOKEN"
 phases:
   pre_build:
     commands:
