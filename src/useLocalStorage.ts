@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 export enum LocalStorageKey {
   GlobalSettings = 'globalSettings',
@@ -17,7 +23,10 @@ export enum LocalStorageKey {
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */
-export default function useLocalStorage<T>(key: LocalStorageKey, defaultValue: T): State<T> {
+export default function useLocalStorage<T>(
+  key: LocalStorageKey,
+  defaultValue: T
+): State<T> {
   const [item, setItem] = useState<T>(() => {
     try {
       const value = localStorage.getItem(key);
@@ -27,21 +36,22 @@ export default function useLocalStorage<T>(key: LocalStorageKey, defaultValue: T
     }
   });
 
-  const updateItem = useCallback((updater: T | ((prevValue: T) => T)): void => {
-    const newValue = typeof updater === 'function' ? (updater as Function)(item) : updater;
-    try {
-      const stringifiedValue = JSON.stringify(newValue);
-      localStorage.setItem(key, stringifiedValue);
-      setItem(newValue);
-    } catch (e) {
-      console.warn(`Could not save value for key ${key}:`, item, e);
-    }
-  }, [item, key]);
+  const updateItem = useCallback(
+    (updater: T | ((prevValue: T) => T)): void => {
+      const newValue =
+        typeof updater === 'function' ? (updater as Function)(item) : updater;
+      try {
+        const stringifiedValue = JSON.stringify(newValue);
+        localStorage.setItem(key, stringifiedValue);
+        setItem(newValue);
+      } catch (e) {
+        console.warn(`Could not save value for key ${key}:`, item, e);
+      }
+    },
+    [item, key]
+  );
 
   return [item, updateItem];
 }
 
-type State<T> = [
-  item: T,
-  setItem: Dispatch<SetStateAction<T>>,
-];
+type State<T> = [item: T, setItem: Dispatch<SetStateAction<T>>];

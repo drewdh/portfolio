@@ -23,7 +23,10 @@ export function useHelpPanel(): HelpPanelConfig {
   };
 }
 
-export function HelpPanelProvider({ children, config }: PropsWithChildren<ProviderProps>) {
+export function HelpPanelProvider({
+  children,
+  config,
+}: PropsWithChildren<ProviderProps>) {
   return (
     <HelpPanelContext.Provider value={config}>
       {children}

@@ -8,11 +8,18 @@ export default function InternalLink({
 }: PropsWithChildren<Props>) {
   const follow = useFollow();
 
-  const handleFollow = useCallback((event: CustomEvent<LinkProps.FollowDetail>): void => {
-    follow({ href, event });
-  }, [follow, href]);
+  const handleFollow = useCallback(
+    (event: CustomEvent<LinkProps.FollowDetail>): void => {
+      follow({ href, event });
+    },
+    [follow, href]
+  );
 
-  return <Link onFollow={handleFollow} href={href}>{children}</Link>
+  return (
+    <Link onFollow={handleFollow} href={href}>
+      {children}
+    </Link>
+  );
 }
 
 interface Props {

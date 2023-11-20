@@ -2,7 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { SegmentedControlProps } from '@cloudscape-design/components/segmented-control';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
-import { RunStatus, SegmentedControlChangeEvent, SetTimerOptions, TimerType } from './types';
+import {
+  RunStatus,
+  SegmentedControlChangeEvent,
+  SetTimerOptions,
+  TimerType,
+} from './types';
 import useTitle from '../../useTitle';
 import { SettingsValues } from './settings';
 import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
@@ -11,13 +16,21 @@ import { useHelpPanel } from '../../help-panel/help-panel';
 import HelpPanelContent from './HelpPanelContent';
 
 export default function useTimer(): State {
-  const [settings, setSettings] = useLocalStorage<SettingsValues>(LocalStorageKey.PomodoroSettings, defaultSettings);
-  const [pomodorosCompletedCount, setPomodorosCompletedCount] = useState<number>(0);
-  const [selectedTypeId, setSelectedTypeId] = useState<TimerType>(TimerType.Pomodoro);
+  const [settings, setSettings] = useLocalStorage<SettingsValues>(
+    LocalStorageKey.PomodoroSettings,
+    defaultSettings
+  );
+  const [pomodorosCompletedCount, setPomodorosCompletedCount] =
+    useState<number>(0);
+  const [selectedTypeId, setSelectedTypeId] = useState<TimerType>(
+    TimerType.Pomodoro
+  );
   const [runStatus, setRunStatus] = useState<RunStatus>(RunStatus.Stopped);
   const [nextTypeId, setNextTypeId] = useState<TimerType>();
-  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState<boolean>(false);
-  const [isSettingsModalVisible, setIsSettingsModalVisible] = useState<boolean>(false);
+  const [isConfirmModalVisible, setIsConfirmModalVisible] =
+    useState<boolean>(false);
+  const [isSettingsModalVisible, setIsSettingsModalVisible] =
+    useState<boolean>(false);
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timer>();
   // TODO: Find audio to use
   const [tickAudio] = useState(new Audio(''));
@@ -25,7 +38,7 @@ export default function useTimer(): State {
 
   useEffect((): void => {
     tickAudio.loop = true;
-  }, [tickAudio])
+  }, [tickAudio]);
 
   const startButtonLabel = useMemo((): string => {
     if (runStatus === RunStatus.Running) {
@@ -37,22 +50,28 @@ export default function useTimer(): State {
     return 'Start';
   }, [runStatus]);
 
-  const getPreferredTimerLengthInSeconds = useCallback((type: TimerType): number => {
-    if (type === TimerType.Pomodoro) {
-      return settings.pomodoroLengthSeconds;
-    } else if (type === TimerType.ShortBreak) {
-      return settings.shortBreakLengthSeconds;
-    } else if (type === TimerType.LongBreak) {
-      return settings.longBreakLengthSeconds;
-    }
-    return 0;
-  }, [settings]);
+  const getPreferredTimerLengthInSeconds = useCallback(
+    (type: TimerType): number => {
+      if (type === TimerType.Pomodoro) {
+        return settings.pomodoroLengthSeconds;
+      } else if (type === TimerType.ShortBreak) {
+        return settings.shortBreakLengthSeconds;
+      } else if (type === TimerType.LongBreak) {
+        return settings.longBreakLengthSeconds;
+      }
+      return 0;
+    },
+    [settings]
+  );
 
   const { setContent } = useHelpPanel();
 
-  useEffect(function setHelpPanel() {
-    setContent(<HelpPanelContent />);
-  }, [setContent]);
+  useEffect(
+    function setHelpPanel() {
+      setContent(<HelpPanelContent />);
+    },
+    [setContent]
+  );
 
   const handleSettingsClick = useCallback((): void => {
     setIsSettingsModalVisible(true);
@@ -62,7 +81,9 @@ export default function useTimer(): State {
     setIsSettingsModalVisible(false);
   }, []);
 
-  const [secondsRemaining, setSecondsRemaining] = useState<number>(getPreferredTimerLengthInSeconds(selectedTypeId));
+  const [secondsRemaining, setSecondsRemaining] = useState<number>(
+    getPreferredTimerLengthInSeconds(selectedTypeId)
+  );
 
   // Update current time remaining if changed and not running
   useEffect((): void => {
@@ -92,17 +113,26 @@ export default function useTimer(): State {
     startTickSound();
   }, [interval, startTickSound]);
 
-  const setTimer = useCallback((type: TimerType, opts: SetTimerOptions = {}): void => {
-    setSelectedTypeId(type);
-    clearInterval(timerInterval);
-    setSecondsRemaining(getPreferredTimerLengthInSeconds(type));
-    setRunStatus(RunStatus.Stopped);
-    tickAudio.pause();
-    const hasAutoStart = !opts.disableAutoStart && settings.hasAutoStart;
-    if (hasAutoStart) {
-      start();
-    }
-  }, [timerInterval, getPreferredTimerLengthInSeconds, settings, start, tickAudio]);
+  const setTimer = useCallback(
+    (type: TimerType, opts: SetTimerOptions = {}): void => {
+      setSelectedTypeId(type);
+      clearInterval(timerInterval);
+      setSecondsRemaining(getPreferredTimerLengthInSeconds(type));
+      setRunStatus(RunStatus.Stopped);
+      tickAudio.pause();
+      const hasAutoStart = !opts.disableAutoStart && settings.hasAutoStart;
+      if (hasAutoStart) {
+        start();
+      }
+    },
+    [
+      timerInterval,
+      getPreferredTimerLengthInSeconds,
+      settings,
+      start,
+      tickAudio,
+    ]
+  );
 
   const completeTimer = useCallback((): void => {
     if (selectedTypeId === TimerType.Pomodoro) {
@@ -135,15 +165,24 @@ export default function useTimer(): State {
       buttonPressAudio.play();
     }
     runStatus === RunStatus.Running ? pause() : start();
-  }, [settings.hasStartAndStopSounds, runStatus, pause, start, buttonPressAudio]);
+  }, [
+    settings.hasStartAndStopSounds,
+    runStatus,
+    pause,
+    start,
+    buttonPressAudio,
+  ]);
 
-  const handleConfirmModalDismiss = useCallback((isContinue?: boolean): void => {
-    if (isContinue) {
-      setTimer(nextTypeId!, { disableAutoStart: true });
-    }
-    setIsConfirmModalVisible(false);
-    setNextTypeId(undefined);
-  }, [setTimer, nextTypeId]);
+  const handleConfirmModalDismiss = useCallback(
+    (isContinue?: boolean): void => {
+      if (isContinue) {
+        setTimer(nextTypeId!, { disableAutoStart: true });
+      }
+      setIsConfirmModalVisible(false);
+      setNextTypeId(undefined);
+    },
+    [setTimer, nextTypeId]
+  );
 
   const timerDisplay = useMemo((): string => {
     // Prevent flicker of negative time once timer ends
@@ -160,18 +199,23 @@ export default function useTimer(): State {
       { text: 'Pomodoro', id: TimerType.Pomodoro },
       { text: 'Short break', id: TimerType.ShortBreak },
       { text: 'Long break', id: TimerType.LongBreak },
-    ]
+    ];
   }, []);
 
-  const handleTypeChange = useCallback((event: NonCancelableCustomEvent<SegmentedControlProps.ChangeDetail>): void => {
-    const newTypeId = event.detail.selectedId as TimerType;
-    if (runStatus === RunStatus.Running) {
-      setNextTypeId(newTypeId);
-      setIsConfirmModalVisible(true);
-      return;
-    }
-    setTimer(newTypeId, { disableAutoStart: true });
-  }, [setTimer, runStatus]);
+  const handleTypeChange = useCallback(
+    (
+      event: NonCancelableCustomEvent<SegmentedControlProps.ChangeDetail>
+    ): void => {
+      const newTypeId = event.detail.selectedId as TimerType;
+      if (runStatus === RunStatus.Running) {
+        setNextTypeId(newTypeId);
+        setIsConfirmModalVisible(true);
+        return;
+      }
+      setTimer(newTypeId, { disableAutoStart: true });
+    },
+    [setTimer, runStatus]
+  );
 
   const handleCompleteClick = useCallback((): void => {
     completeTimer();
@@ -189,9 +233,12 @@ export default function useTimer(): State {
     return Number(pomodorosCompletedCount).toLocaleString();
   }, [pomodorosCompletedCount]);
 
-  const handleSettingsChange = useCallback((newSettings: SettingsValues): void => {
-    setSettings(newSettings);
-  }, [setSettings]);
+  const handleSettingsChange = useCallback(
+    (newSettings: SettingsValues): void => {
+      setSettings(newSettings);
+    },
+    [setSettings]
+  );
 
   return {
     handleCompleteClick,

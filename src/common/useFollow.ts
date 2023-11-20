@@ -6,18 +6,21 @@ export default function useFollow(): State {
   const navigate = useNavigateWithRef();
   const { pathname } = useLocation();
 
-  return useCallback((options: Options): void => {
-    const { isExternal, event, href} = options;
-    if (isExternal) {
-      return;
-    }
-    event.preventDefault();
-    navigate(href, {
-      state: {
-        ref: pathname,
-      },
-    });
-  }, [pathname, navigate]);
+  return useCallback(
+    (options: Options): void => {
+      const { isExternal, event, href } = options;
+      if (isExternal) {
+        return;
+      }
+      event.preventDefault();
+      navigate(href, {
+        state: {
+          ref: pathname,
+        },
+      });
+    },
+    [pathname, navigate]
+  );
 }
 
 interface Options {

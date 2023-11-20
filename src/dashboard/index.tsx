@@ -1,5 +1,7 @@
 import { ReactNode, useCallback, useRef, useState } from 'react';
-import AppLayout, { AppLayoutProps } from '@cloudscape-design/components/app-layout';
+import AppLayout, {
+  AppLayoutProps,
+} from '@cloudscape-design/components/app-layout';
 import Flashbar from '@cloudscape-design/components/flashbar';
 import SplitPanel from '@cloudscape-design/components/split-panel';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
@@ -23,30 +25,46 @@ export default function Dashboard() {
   const { items } = useNotifications();
   const [content, setContent] = useState<ReactNode>();
   const [isSplitPanelOpen, setIsSplitPanelOpen] = useState<boolean>(false);
-  const [splitPanelSize, setSplitPanelSize] = useLocalStorage<number>(LocalStorageKey.WidgetPanelSize, 360);
-  const [paletteItems, setPaletteItems] = useState<ReadonlyArray<BoardProps.Item<WidgetConfig>>>([]);
+  const [splitPanelSize, setSplitPanelSize] = useLocalStorage<number>(
+    LocalStorageKey.WidgetPanelSize,
+    360
+  );
+  const [paletteItems, setPaletteItems] = useState<
+    ReadonlyArray<BoardProps.Item<WidgetConfig>>
+  >([]);
   const ref = useRef<AppLayoutProps.Ref>(null);
 
   const openPanel = useCallback(() => {
     ref.current?.openTools();
   }, [ref]);
 
-  const handleSplitPanelResize = useCallback((event: NonCancelableCustomEvent<AppLayoutProps.SplitPanelResizeDetail>): void => {
-    const newSize = Math.min(event.detail.size, maxPanelSize);
-    setSplitPanelSize(newSize);
-  }, [setSplitPanelSize]);
+  const handleSplitPanelResize = useCallback(
+    (
+      event: NonCancelableCustomEvent<AppLayoutProps.SplitPanelResizeDetail>
+    ): void => {
+      const newSize = Math.min(event.detail.size, maxPanelSize);
+      setSplitPanelSize(newSize);
+    },
+    [setSplitPanelSize]
+  );
 
-  const handleSplitPanelToggle = useCallback((event: NonCancelableCustomEvent<AppLayoutProps.ChangeDetail>): void => {
-    setIsSplitPanelOpen(event.detail.open);
-  }, []);
+  const handleSplitPanelToggle = useCallback(
+    (event: NonCancelableCustomEvent<AppLayoutProps.ChangeDetail>): void => {
+      setIsSplitPanelOpen(event.detail.open);
+    },
+    []
+  );
 
   const handleAdd = useCallback((): void => {
     setIsSplitPanelOpen(true);
   }, []);
 
-  const handlePaletteItemsChange = useCallback((items: ReadonlyArray<BoardProps.Item<WidgetConfig>>): void => {
-    setPaletteItems(items);
-  }, []);
+  const handlePaletteItemsChange = useCallback(
+    (items: ReadonlyArray<BoardProps.Item<WidgetConfig>>): void => {
+      setPaletteItems(items);
+    },
+    []
+  );
 
   return (
     <HelpPanelProvider config={{ content, setContent, openPanel }}>
@@ -57,7 +75,8 @@ export default function Dashboard() {
           <Board
             onAdd={handleAdd}
             onPaletteItemsChange={handlePaletteItemsChange}
-          />}
+          />
+        }
         contentType="dashboard"
         navigation={<DhSideNavigation />}
         notifications={<Flashbar items={items} stackItems />}

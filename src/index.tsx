@@ -8,53 +8,56 @@ import './index.scss';
 import App from './app';
 import reportWebVitals from './reportWebVitals';
 import SuggestedSigilTierPage from './widgets/suggested-sigil-tier';
-import MonsterLevelCalculatorPage from './widgets/monster-level-calculator';
 import OverviewPage from './widgets/overview';
 import SettingsPage from './widgets/settings';
 import Display from './widgets/settings/Display';
 import CoffeeCalculatorPage from './widgets/coffee-calculator';
+import EcobeePage from './widgets/ecobee';
 
 const router = createBrowserRouter([
-    {
-      element: <App />,
-      children: [
-        {
-          path: Pathname.Fallback,
-          // TODO: Log 404s since it could be a broken link
-          element: <Navigate to={Pathname.Home} replace />,
-        },
-        {
-          path: Pathname.Home,
-          element: <OverviewPage />,
-        },
-        {
-          path: Pathname.DiabloMonsterLevelCalculator,
-          element: <Navigate to={Pathname.DiabloSuggestedSigilTier} replace />,
-        },
-        {
-          path: Pathname.DiabloSuggestedSigilTierOld,
-          element: <Navigate to={Pathname.DiabloSuggestedSigilTier} replace />,
-        },
-        {
-          path: Pathname.DiabloSuggestedSigilTier,
-          element: <SuggestedSigilTierPage />,
-        },
-        {
-          path: Pathname.Settings,
-          element: <SettingsPage />,
-        },
-        {
-          path: Pathname.SettingsDisplay,
-          element: <Display />,
-        },
-        {
-          path: Pathname.CoffeeCalculator,
-          element: <CoffeeCalculatorPage />,
-        },
-      ],
-    },
-  ],
-);
+  {
+    element: <App />,
+    children: [
+      {
+        path: Pathname.Fallback,
+        // TODO: Log 404s since it could be a broken link
+        element: <Navigate to={Pathname.Home} replace />,
+      },
+      {
+        path: Pathname.Home,
+        element: <OverviewPage />,
+      },
+      {
+        path: Pathname.DiabloMonsterLevelCalculator,
+        element: <Navigate to={Pathname.DiabloSuggestedSigilTier} replace />,
+      },
+      {
+        path: Pathname.DiabloSuggestedSigilTierOld,
+        element: <Navigate to={Pathname.DiabloSuggestedSigilTier} replace />,
+      },
+      {
+        path: Pathname.DiabloSuggestedSigilTier,
+        element: <SuggestedSigilTierPage />,
+      },
+      {
+        path: Pathname.Settings,
+        element: <SettingsPage />,
+      },
+      {
+        path: Pathname.SettingsDisplay,
+        element: <Display />,
+      },
+      {
+        path: Pathname.CoffeeCalculator,
+        element: <CoffeeCalculatorPage />,
+      },
+      {
+        path: Pathname.Ecobee,
+        element: <EcobeePage />,
+      },
+    ],
+  },
+]);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

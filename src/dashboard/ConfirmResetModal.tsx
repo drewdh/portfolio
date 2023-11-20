@@ -4,7 +4,11 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import Button from '@cloudscape-design/components/button';
 import Header from '@cloudscape-design/components/header';
 
-export default function ConfirmResetModal({ isVisible, onConfirm, onDismiss }: Props) {
+export default function ConfirmResetModal({
+  isVisible,
+  onConfirm,
+  onDismiss,
+}: Props) {
   return (
     <Modal
       header={<Header>Reset to default layout</Header>}
@@ -12,7 +16,9 @@ export default function ConfirmResetModal({ isVisible, onConfirm, onDismiss }: P
         <Box float="right">
           <SpaceBetween size="xs" direction="horizontal">
             <Button onClick={onDismiss}>Cancel</Button>
-            <Button variant="primary" onClick={onConfirm}>Reset</Button>
+            <Button variant="primary" onClick={onConfirm}>
+              Reset
+            </Button>
           </SpaceBetween>
         </Box>
       }

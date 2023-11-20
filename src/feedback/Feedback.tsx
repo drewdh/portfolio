@@ -12,10 +12,7 @@ import RadioGroup from '@cloudscape-design/components/radio-group';
 import useFeedback from './useFeedback';
 import Input from '@cloudscape-design/components/input';
 
-export default function Feedback({
-  isVisible,
-  onDismiss,
-}: Props) {
+export default function Feedback({ isVisible, onDismiss }: Props) {
   const {
     errors,
     handleDismiss,
@@ -38,14 +35,20 @@ export default function Feedback({
       footer={
         <Box float="right">
           {isSuccess && (
-            <Button variant="primary" onClick={handleDismiss}>Close</Button>
+            <Button variant="primary" onClick={handleDismiss}>
+              Close
+            </Button>
           )}
           {!isSuccess && (
             <SpaceBetween size="xs" direction="horizontal">
               <Button variant="link" onClick={handleDismiss}>
                 Cancel
               </Button>
-              <Button loading={isSubmitting} variant="primary" onClick={handleSubmitClick}>
+              <Button
+                loading={isSubmitting}
+                variant="primary"
+                onClick={handleSubmitClick}
+              >
                 Submit
               </Button>
             </SpaceBetween>
@@ -57,20 +60,29 @@ export default function Feedback({
       visible={isVisible}
     >
       {isSuccess && (
-        <Alert type="success">
-          Successfully submitted feedback.
-        </Alert>
+        <Alert type="success">Successfully submitted feedback.</Alert>
       )}
       {!isSuccess && (
         <SpaceBetween size="l">
           <span>Thank you for taking time to provide feedback.</span>
           <FormField label="Feedback type">
-            <Select selectedOption={values.type} onChange={handleTypeChange} options={typeOptions} />
+            <Select
+              selectedOption={values.type}
+              onChange={handleTypeChange}
+              options={typeOptions}
+            />
           </FormField>
-          <FormField label="Message" constraintText={messageConstraintText} errorText={errors.message}>
+          <FormField
+            label="Message"
+            constraintText={messageConstraintText}
+            errorText={errors.message}
+          >
             <Textarea value={values.message} onChange={handleMessageChange} />
           </FormField>
-          <FormField label="Are you satisfied with your experience?" errorText={errors.satisfied}>
+          <FormField
+            label="Are you satisfied with your experience?"
+            errorText={errors.satisfied}
+          >
             <RadioGroup
               items={satisfiedItems}
               onChange={handleSatisfiedChange}
@@ -79,16 +91,20 @@ export default function Feedback({
           </FormField>
           <FormField
             errorText={errors.email}
-            label={<span>Email - <i>optional</i></span>}
+            label={
+              <span>
+                Email - <i>optional</i>
+              </span>
+            }
             description="If you would like to be contacted about your feedback, enter your email address."
           >
-            <Input placeholder="person.doe@email.com" value={values.email} onChange={handleEmailChange} />
+            <Input
+              placeholder="person.doe@email.com"
+              value={values.email}
+              onChange={handleEmailChange}
+            />
           </FormField>
-          {isApiError && (
-            <Alert type="error">
-              Failed to submit feedback.
-            </Alert>
-          )}
+          {isApiError && <Alert type="error">Failed to submit feedback.</Alert>}
         </SpaceBetween>
       )}
     </Modal>

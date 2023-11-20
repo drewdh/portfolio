@@ -8,4 +8,5 @@ export enum Pathname {
   DiabloSuggestedSigilTier = '/diablo',
   SettingsDisplay = '/settings/display',
   CoffeeCalculator = '/coffee',
+  Ecobee = '/ecobee',
 }

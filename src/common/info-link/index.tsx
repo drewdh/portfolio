@@ -11,7 +11,11 @@ export default function InfoLink({ content }: Props) {
     openPanel();
   }, [content, setContent, openPanel]);
 
-  return <Link onFollow={handleFollow} variant="info">Info</Link>;
+  return (
+    <Link onFollow={handleFollow} variant="info">
+      Info
+    </Link>
+  );
 }
 
 interface Props {

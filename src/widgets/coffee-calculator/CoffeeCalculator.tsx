@@ -12,20 +12,43 @@ import Box from '@cloudscape-design/components/box';
 export default function CoffeeCalculator() {
   return (
     <ContentLayout header={<Header variant="h1">Coffee Calculator</Header>}>
-      <Grid gridDefinition={[{ colspan: { default: 12, s: 4 } }, { colspan: { default: 12, s: 8 } }]}>
-
+      <Grid
+        gridDefinition={[
+          { colspan: { default: 12, s: 4 } },
+          { colspan: { default: 12, s: 8 } },
+        ]}
+      >
         <Container header={<Header>Configuration</Header>}>
           <SpaceBetween size="l">
             <FormField label="Coffee strength">
-              <Tiles columns={1} value="no" items={[
-                { value: 'no', label: 'Normal', description: '16:1 water-to-coffee ratio. Best for most coffees.' },
-                { value: 'yes', label: 'Strong', description: '15:1 water-to-coffee ratio. Best for lighter roasts.' },
-                { value: 'nop', label: 'Weak', description: '17:1 water-to-coffee ratio. Best for darker roasts.' },
-              ]} />
+              <Tiles
+                columns={1}
+                value="no"
+                items={[
+                  {
+                    value: 'no',
+                    label: 'Normal',
+                    description:
+                      '16:1 water-to-coffee ratio. Best for most coffees.',
+                  },
+                  {
+                    value: 'yes',
+                    label: 'Strong',
+                    description:
+                      '15:1 water-to-coffee ratio. Best for lighter roasts.',
+                  },
+                  {
+                    value: 'nop',
+                    label: 'Weak',
+                    description:
+                      '17:1 water-to-coffee ratio. Best for darker roasts.',
+                  },
+                ]}
+              />
             </FormField>
             <FormField label="Coffee weight">
-              <div style={{display: 'flex', alignItems: 'center'}}>
-                <div style={{ maxWidth: '130px'}}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{ maxWidth: '130px' }}>
                   <Input value="3" />
                 </div>
                 <Box padding={{ left: 'xs' }}>grams</Box>
@@ -34,8 +57,7 @@ export default function CoffeeCalculator() {
           </SpaceBetween>
         </Container>
 
-        <Container header={<Header>Test</Header>}>
-        </Container>
+        <Container header={<Header>Test</Header>}></Container>
       </Grid>
     </ContentLayout>
   );

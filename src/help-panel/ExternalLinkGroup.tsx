@@ -10,17 +10,15 @@ export default function ExternalLinkGroup({ links }: Props) {
         {links.map((link) => {
           return (
             <li key={link.href}>
-              <a
-                href={link.href}
-                rel="noopener noreferrer"
-                target="_blank"
-              >{link.text}</a>
+              <a href={link.href} rel="noopener noreferrer" target="_blank">
+                {link.text}
+              </a>
             </li>
           );
         })}
       </ul>
     </div>
-  )
+  );
 }
 
 interface Props {

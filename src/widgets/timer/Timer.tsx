@@ -41,7 +41,7 @@ export default function Timer({ onRemove }: Props) {
     { text: 'Stop', onClick: handleStopClick },
     { text: 'Reset pomodoros', onClick: handleResetClick },
     { text: 'Edit settings', onClick: handleSettingsClick },
-    { text: 'Remove', onClick: onRemove }
+    { text: 'Remove', onClick: onRemove },
   ];
 
   return (
@@ -72,7 +72,9 @@ export default function Timer({ onRemove }: Props) {
             })}
             onItemClick={(event) => {
               const { id } = event.detail;
-              const matchingAction = actions.find((action) => action.text === id)!;
+              const matchingAction = actions.find(
+                (action) => action.text === id
+              )!;
               matchingAction.onClick();
             }}
             variant="icon"
@@ -90,15 +92,11 @@ export default function Timer({ onRemove }: Props) {
           <ColumnLayout columns={2}>
             <div>
               <Box variant="awsui-key-label">Time remaining</Box>
-              <Box variant="awsui-value-large">
-                {timerDisplay}
-              </Box>
+              <Box variant="awsui-value-large">{timerDisplay}</Box>
             </div>
             <div>
               <Box variant="awsui-key-label">Pomodoros completed</Box>
-              <Box variant="awsui-value-large">
-                {pomodorosCompleted}
-              </Box>
+              <Box variant="awsui-value-large">{pomodorosCompleted}</Box>
             </div>
           </ColumnLayout>
         </SpaceBetween>

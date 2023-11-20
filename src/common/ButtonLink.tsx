@@ -9,16 +9,18 @@ export default function ButtonLink({
 }: PropsWithChildren<Props>) {
   const follow = useFollow();
 
-  const handleFollow = useCallback((event: CustomEvent<ButtonProps.FollowDetail>): void => {
-    follow({ href, isExternal: false, event });
-  }, [follow, href]);
+  const handleFollow = useCallback(
+    (event: CustomEvent<ButtonProps.FollowDetail>): void => {
+      follow({ href, isExternal: false, event });
+    },
+    [follow, href]
+  );
 
   return (
-    <Button
-      href={href}
-      onFollow={handleFollow}
-    >{children}</Button>
-  )
+    <Button href={href} onFollow={handleFollow}>
+      {children}
+    </Button>
+  );
 }
 
 interface Props {

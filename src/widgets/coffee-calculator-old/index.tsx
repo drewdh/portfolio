@@ -10,24 +10,19 @@ import { boardItemI18nStrings } from '../../i18n-strings';
 import useCoffeeCalculator from './useCoffeeCalculator';
 
 export default function CoffeeCalculator({ onRemove }: Props) {
-  const settingsActions = [
-    { text: 'Remove', onClick: onRemove },
-  ];
-  const {
-    coffeeWeight,
-    handleCoffeeWeightChange,
-    waterWeight,
-  } = useCoffeeCalculator();
+  const settingsActions = [{ text: 'Remove', onClick: onRemove }];
+  const { coffeeWeight, handleCoffeeWeightChange, waterWeight } =
+    useCoffeeCalculator();
   return (
     <BoardItem
-      header={
-        <Header>
-          Coffee calculator
-        </Header>}
+      header={<Header>Coffee calculator</Header>}
       i18nStrings={boardItemI18nStrings}
       settings={
         <ButtonDropdown
-          items={settingsActions.map((action) => ({ id: action.text, text: action.text }))}
+          items={settingsActions.map((action) => ({
+            id: action.text,
+            text: action.text,
+          }))}
           variant="icon"
           onItemClick={(event) => {
             const { id } = event.detail;
@@ -46,12 +41,8 @@ export default function CoffeeCalculator({ onRemove }: Props) {
           />
         </FormField>
         <div>
-          <Box variant="awsui-key-label">
-            Water weight (grams)
-          </Box>
-          <Box variant="awsui-value-large">
-            {waterWeight}
-          </Box>
+          <Box variant="awsui-key-label">Water weight (grams)</Box>
+          <Box variant="awsui-value-large">{waterWeight}</Box>
         </div>
       </SpaceBetween>
     </BoardItem>

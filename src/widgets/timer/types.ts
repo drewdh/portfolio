@@ -14,4 +14,5 @@ export enum RunStatus {
 export interface SetTimerOptions {
   disableAutoStart?: boolean;
 }
-export type SegmentedControlChangeEvent = NonCancelableCustomEvent<SegmentedControlProps.ChangeDetail>;
+export type SegmentedControlChangeEvent =
+  NonCancelableCustomEvent<SegmentedControlProps.ChangeDetail>;

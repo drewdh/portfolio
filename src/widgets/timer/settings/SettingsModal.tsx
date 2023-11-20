@@ -12,7 +12,12 @@ import Modal from '@cloudscape-design/components/modal';
 import Button from '@cloudscape-design/components/button';
 import Header from '@cloudscape-design/components/header';
 
-export default function SettingsModal({ onDismiss, isVisible, onChange, settings }: Props) {
+export default function SettingsModal({
+  onDismiss,
+  isVisible,
+  onChange,
+  settings,
+}: Props) {
   const isSoundEnabled = false;
   const {
     alarmToneOptions,
@@ -38,16 +43,18 @@ export default function SettingsModal({ onDismiss, isVisible, onChange, settings
 
   return (
     <Modal
-      header={
-        <Header>Pomodoro timer settings</Header>
-      }
+      header={<Header>Pomodoro timer settings</Header>}
       onDismiss={handleDismiss}
       visible={isVisible}
       footer={
         <Box float="right">
           <SpaceBetween size="xs" direction="horizontal">
-            <Button variant="link" onClick={handleDismiss}>Cancel</Button>
-            <Button variant="primary" onClick={handleSave}>Save</Button>
+            <Button variant="link" onClick={handleDismiss}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleSave}>
+              Save
+            </Button>
           </SpaceBetween>
         </Box>
       }
@@ -89,9 +96,7 @@ export default function SettingsModal({ onDismiss, isVisible, onChange, settings
             minutes
           </Box>
         </FormField>
-        <FormField
-          constraintText="Allows the next timer to auto-start once a timer completes."
-        >
+        <FormField constraintText="Allows the next timer to auto-start once a timer completes.">
           <Toggle checked={hasAutoStart} onChange={handleAutoStartChange}>
             Auto-start next timer
           </Toggle>
@@ -99,7 +104,10 @@ export default function SettingsModal({ onDismiss, isVisible, onChange, settings
         {isSoundEnabled && (
           <>
             <FormField constraintText="Play an alarm whenever a timer completes.">
-              <Toggle checked={hasAlarmSound} onChange={handleHasAlarmSoundChange}>
+              <Toggle
+                checked={hasAlarmSound}
+                onChange={handleHasAlarmSoundChange}
+              >
                 Alarm sound
               </Toggle>
             </FormField>
@@ -113,14 +121,18 @@ export default function SettingsModal({ onDismiss, isVisible, onChange, settings
               </FormField>
             )}
             <FormField>
-              <Toggle checked={hasTickingSound} onChange={handleHasTickingChange}>
+              <Toggle
+                checked={hasTickingSound}
+                onChange={handleHasTickingChange}
+              >
                 Ticking sound
               </Toggle>
             </FormField>
-            <FormField
-              constraintText="Play a short feedback sound when a timer starts, pauses, or stops."
-            >
-              <Toggle checked={hasStartAndStopSounds} onChange={handleHasStartAndStopSoundsChange}>
+            <FormField constraintText="Play a short feedback sound when a timer starts, pauses, or stops.">
+              <Toggle
+                checked={hasStartAndStopSounds}
+                onChange={handleHasStartAndStopSoundsChange}
+              >
                 Feedback sounds
               </Toggle>
             </FormField>

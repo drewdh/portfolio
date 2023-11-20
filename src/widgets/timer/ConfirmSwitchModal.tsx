@@ -6,7 +6,11 @@ import Button from '@cloudscape-design/components/button';
 
 import { TimerType } from './types';
 
-export default function ConfirmSwitchModal({ currentTimerType, visible, onDismiss }: Props) {
+export default function ConfirmSwitchModal({
+  currentTimerType,
+  visible,
+  onDismiss,
+}: Props) {
   const handleDismiss = useCallback(() => onDismiss(), [onDismiss]);
   const handleConfirm = useCallback(() => onDismiss(true), [onDismiss]);
 
@@ -19,16 +23,15 @@ export default function ConfirmSwitchModal({ currentTimerType, visible, onDismis
           <SpaceBetween size="xs" direction="horizontal">
             <Button onClick={handleDismiss}>Cancel</Button>
             <Button
-              variant={currentTimerType === TimerType.Pomodoro ? 'normal' : 'primary'}
+              variant={
+                currentTimerType === TimerType.Pomodoro ? 'normal' : 'primary'
+              }
               onClick={handleConfirm}
             >
               Switch
             </Button>
             {currentTimerType === TimerType.Pomodoro && (
-              <Button
-                onClick={handleConfirm}
-                variant="primary"
-              >
+              <Button onClick={handleConfirm} variant="primary">
                 Complete & switch
               </Button>
             )}

@@ -8,7 +8,9 @@ import Settings from './Settings';
 export default function SettingsPage() {
   return (
     <AppLayout
-      breadcrumbs={<Breadcrumbs items={[{ text: 'Settings', href: Pathname.Settings }]} />}
+      breadcrumbs={
+        <Breadcrumbs items={[{ text: 'Settings', href: Pathname.Settings }]} />
+      }
       content={<Settings />}
       navigation={<DhSideNavigation />}
       toolsHide

@@ -8,7 +8,13 @@ import CoffeeCalculator from './CoffeeCalculator';
 export default function CoffeeCalculatorPage() {
   return (
     <AppLayout
-      breadcrumbs={<Breadcrumbs items={[{ text: 'Coffee Calculator', href: Pathname.CoffeeCalculator }]} />}
+      breadcrumbs={
+        <Breadcrumbs
+          items={[
+            { text: 'Coffee Calculator', href: Pathname.CoffeeCalculator },
+          ]}
+        />
+      }
       content={<CoffeeCalculator />}
       toolsHide
       navigation={<DhSideNavigation />}

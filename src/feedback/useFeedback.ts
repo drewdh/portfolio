@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import { TextareaProps } from '@cloudscape-design/components/textarea';
 import { RadioGroupProps } from '@cloudscape-design/components/radio-group';
@@ -32,38 +32,32 @@ const validationSchema = Yup.object().shape({
   message: Yup.string()
     .max(1000, 'Message must be 1,000 characters or fewer.')
     .required('Enter a message.'),
-  satisfied: Yup.string()
-    .required('Choose a satisfaction.'),
-  email: Yup.string()
-    .email('Enter a valid email.')
+  satisfied: Yup.string().required('Choose a satisfaction.'),
+  email: Yup.string().email('Enter a valid email.'),
 });
 
-export default function useFeedback({
-  onDismiss,
-}: Props): State {
+export default function useFeedback({ onDismiss }: Props): State {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isApiError, setIsApiError] = useState<boolean>(false);
-  const typeOptions = useMemo((): SelectProps.Option[] => {
-    return [
-      {
-        label: 'General feedback',
-        value: Type.General,
-      },
-      {
-        label: 'Feature request',
-        value: Type.FeatureRequest,
-      },
-      {
-        label: 'Report an issue',
-        value: Type.Issue,
-      },
-      {
-        label: 'UI feedback',
-        value: Type.UiFeedback,
-      },
-    ];
-  }, []);
+  const typeOptions: SelectProps.Option[] = [
+    {
+      label: 'General feedback',
+      value: Type.General,
+    },
+    {
+      label: 'Feature request',
+      value: Type.FeatureRequest,
+    },
+    {
+      label: 'Report an issue',
+      value: Type.Issue,
+    },
+    {
+      label: 'UI feedback',
+      value: Type.UiFeedback,
+    },
+  ];
 
   const {
     errors,
@@ -97,53 +91,58 @@ export default function useFeedback({
     },
   });
 
-  const satisfiedItems = useMemo((): RadioGroupProps.RadioButtonDefinition[] => {
-    return [
-      {
-        value: Satisfied.Yes,
-        label: 'Yes',
-      },
-      {
-        value: Satisfied.No,
-        label: 'No',
-      },
-    ];
-  }, []);
+  const satisfiedItems: RadioGroupProps.RadioButtonDefinition[] = [
+    {
+      value: Satisfied.Yes,
+      label: 'Yes',
+    },
+    {
+      value: Satisfied.No,
+      label: 'No',
+    },
+  ];
 
-  const handleEmailChange = useCallback((event: NonCancelableCustomEvent<InputProps.ChangeDetail>): void => {
+  function handleEmailChange(
+    event: NonCancelableCustomEvent<InputProps.ChangeDetail>
+  ) {
     setFieldValue('email', event.detail.value);
-  }, [setFieldValue]);
+  }
 
-  const handleTypeChange = useCallback((event: NonCancelableCustomEvent<SelectProps.ChangeDetail>): void => {
+  function handleTypeChange(
+    event: NonCancelableCustomEvent<SelectProps.ChangeDetail>
+  ) {
     setFieldValue('type', event.detail.selectedOption);
-  }, [setFieldValue]);
+  }
 
-  const handleMessageChange = useCallback((event: NonCancelableCustomEvent<TextareaProps.ChangeDetail>): void => {
+  function handleMessageChange(
+    event: NonCancelableCustomEvent<TextareaProps.ChangeDetail>
+  ) {
     setFieldValue('message', event.detail.value);
-  }, [setFieldValue]);
+  }
 
-  const handleSatisfiedChange = useCallback((event: NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>): void => {
+  function handleSatisfiedChange(
+    event: NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>
+  ) {
     setFieldValue('satisfied', event.detail.value as Satisfied);
-  }, [setFieldValue]);
+  }
 
-  const messageConstraintText = useMemo((): string | undefined => {
-    const remainingCharacters = 1000 - values.message.length;
-    const characterString = remainingCharacters === 1 ? 'character' : 'characters';
-    return `${remainingCharacters.toLocaleString()} ${characterString} remaining`;
-  }, [values.message]);
+  const remainingCharacters = 1000 - values.message.length;
+  const characterString =
+    remainingCharacters === 1 ? 'character' : 'characters';
+  const messageConstraintText = `${remainingCharacters.toLocaleString()} ${characterString} remaining`;
 
-  const handleSubmitClick = useCallback((): void => {
+  function handleSubmitClick() {
     setIsSubmitted(true);
     handleSubmit();
-  }, [handleSubmit]);
+  }
 
-  const handleDismiss = useCallback((): void => {
+  function handleDismiss() {
     onDismiss();
     setIsSubmitted(false);
     setIsSuccess(false);
     setIsApiError(false);
     resetForm();
-  }, [onDismiss, resetForm]);
+  }
 
   return {
     errors,
@@ -170,11 +169,19 @@ interface Props {
 interface State {
   errors: FormikErrors<Values>;
   handleDismiss: () => void;
-  handleEmailChange: (event: NonCancelableCustomEvent<InputProps.ChangeDetail>) => void;
-  handleMessageChange: (event: NonCancelableCustomEvent<TextareaProps.ChangeDetail>) => void;
-  handleSatisfiedChange: (event: NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>) => void;
+  handleEmailChange: (
+    event: NonCancelableCustomEvent<InputProps.ChangeDetail>
+  ) => void;
+  handleMessageChange: (
+    event: NonCancelableCustomEvent<TextareaProps.ChangeDetail>
+  ) => void;
+  handleSatisfiedChange: (
+    event: NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>
+  ) => void;
   handleSubmitClick: () => void;
-  handleTypeChange: (event: NonCancelableCustomEvent<SelectProps.ChangeDetail>) => void;
+  handleTypeChange: (
+    event: NonCancelableCustomEvent<SelectProps.ChangeDetail>
+  ) => void;
   isApiError: boolean;
   isSubmitting: boolean;
   isSuccess: boolean;

@@ -1,6 +1,8 @@
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import Header from '@cloudscape-design/components/header';
-import CloudscapeBoard, { BoardProps } from '@cloudscape-design/board-components/board';
+import CloudscapeBoard, {
+  BoardProps,
+} from '@cloudscape-design/board-components/board';
 
 import useDashboard from './useDashboard';
 import { boardI18nStrings } from '../i18n-strings';
@@ -24,15 +26,22 @@ export default function Board({ onAdd, onPaletteItemsChange }: Props) {
     <ContentLayout
       header={
         <Header
-          actions={<Actions onAdd={onAdd} onReset={() => handleResetClick(true)} />}
+          actions={
+            <Actions onAdd={onAdd} onReset={() => handleResetClick(true)} />
+          }
           description="A place where I make small, functional widgets to experiment with different user experience ideas and technologies."
           variant="h1"
-        >Drew's Widgets</Header>}
+        >
+          Drew's Widgets
+        </Header>
+      }
     >
       <CloudscapeBoard
         empty={
           <Empty
-            actions={<Actions onAdd={onAdd} onReset={() => handleResetClick(false)}/>}
+            actions={
+              <Actions onAdd={onAdd} onReset={() => handleResetClick(false)} />
+            }
             title="No widgets"
             description="There are no widgets on the dashboard."
           />
@@ -53,5 +62,7 @@ export default function Board({ onAdd, onPaletteItemsChange }: Props) {
 
 interface Props {
   onAdd: () => void;
-  onPaletteItemsChange: (items: ReadonlyArray<BoardProps.Item<WidgetConfig>>) => void;
+  onPaletteItemsChange: (
+    items: ReadonlyArray<BoardProps.Item<WidgetConfig>>
+  ) => void;
 }

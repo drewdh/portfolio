@@ -10,15 +10,18 @@ import { topNavSelector } from '../../top-navigation/constants';
 let initialIsNewVisitor: boolean | undefined;
 
 export default function OverviewPage() {
-  const [isNewVisitor, setIsNewVisitor] = useLocalStorage<boolean>(LocalStorageKey.IsNewVisitor, true);
+  const [isNewVisitor, setIsNewVisitor] = useLocalStorage<boolean>(
+    LocalStorageKey.IsNewVisitor,
+    true
+  );
 
   useEffect(() => {
     if (initialIsNewVisitor === undefined) {
       initialIsNewVisitor = isNewVisitor;
     }
-    return function() {
+    return function () {
       setIsNewVisitor(false);
-    }
+    };
   }, [isNewVisitor, setIsNewVisitor]);
 
   return (

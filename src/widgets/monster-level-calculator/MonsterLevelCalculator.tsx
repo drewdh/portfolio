@@ -18,7 +18,16 @@ export default function MonsterLevelCalculator() {
   } = useMonsterLevelCalculator();
 
   return (
-    <ContentLayout header={<Header variant="h1" description="Calculate the sigil tier required for your desired monster level, or see what level the monsters are for a specific sigil tier.">Monster level calculator</Header>}>
+    <ContentLayout
+      header={
+        <Header
+          variant="h1"
+          description="Calculate the sigil tier required for your desired monster level, or see what level the monsters are for a specific sigil tier."
+        >
+          Monster level calculator
+        </Header>
+      }
+    >
       <Container header={<Header>Monster level calculator</Header>}>
         <SpaceBetween size="l">
           <FormField label="Nightmare sigil tier">

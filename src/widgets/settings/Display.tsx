@@ -17,7 +17,9 @@ import Form from '@cloudscape-design/components/form';
 import Button from '@cloudscape-design/components/button';
 import ButtonLink from '../../common/ButtonLink';
 import useNavigateWithRef from '../../common/useNavigateWithRef';
-import RadioGroup, { RadioGroupProps } from '@cloudscape-design/components/radio-group';
+import RadioGroup, {
+  RadioGroupProps,
+} from '@cloudscape-design/components/radio-group';
 
 enum ContentDensity {
   Comfortable = 'comfortable',
@@ -62,24 +64,44 @@ const visualModeItems: RadioGroupProps.RadioButtonDefinition[] = [
 export default function Display() {
   useTitle('Edit display');
   const navigate = useNavigateWithRef();
-  const [savedContentDensity, setSavedContentDensity] = useLocalStorage<ContentDensity>(LocalStorageKey.ContentDensity, ContentDensity.Comfortable);
-  const [savedVisualMode, setSavedVisualMode] = useLocalStorage<VisualMode>(LocalStorageKey.VisualMode, VisualMode.Default);
+  const [savedContentDensity, setSavedContentDensity] =
+    useLocalStorage<ContentDensity>(
+      LocalStorageKey.ContentDensity,
+      ContentDensity.Comfortable
+    );
+  const [savedVisualMode, setSavedVisualMode] = useLocalStorage<VisualMode>(
+    LocalStorageKey.VisualMode,
+    VisualMode.Default
+  );
   const [visualMode, setVisualMode] = useState<VisualMode>(savedVisualMode);
-  const [contentDensity, setContentDensity] = useState<ContentDensity>(savedContentDensity);
+  const [contentDensity, setContentDensity] =
+    useState<ContentDensity>(savedContentDensity);
 
-  const handleDensityChange = useCallback((event: NonCancelableCustomEvent<TilesProps.ChangeDetail>): void => {
-    setContentDensity(event.detail.value as ContentDensity);
-  }, []);
+  const handleDensityChange = useCallback(
+    (event: NonCancelableCustomEvent<TilesProps.ChangeDetail>): void => {
+      setContentDensity(event.detail.value as ContentDensity);
+    },
+    []
+  );
 
-  const handleVisualModeChange = useCallback((event: NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>): void => {
-    setVisualMode(event.detail.value as VisualMode);
-  }, []);
+  const handleVisualModeChange = useCallback(
+    (event: NonCancelableCustomEvent<RadioGroupProps.ChangeDetail>): void => {
+      setVisualMode(event.detail.value as VisualMode);
+    },
+    []
+  );
 
   const handleSave = useCallback((): void => {
     setSavedContentDensity(contentDensity);
     setSavedVisualMode(visualMode);
     navigate(Pathname.Settings);
-  }, [contentDensity, navigate, setSavedContentDensity, setSavedVisualMode, visualMode]);
+  }, [
+    contentDensity,
+    navigate,
+    setSavedContentDensity,
+    setSavedVisualMode,
+    visualMode,
+  ]);
 
   return (
     <AppLayout
@@ -88,7 +110,9 @@ export default function Display() {
           actions={
             <SpaceBetween size="xs" direction="horizontal">
               <ButtonLink href={Pathname.Settings}>Cancel</ButtonLink>
-              <Button onClick={handleSave} variant="primary">Save</Button>
+              <Button onClick={handleSave} variant="primary">
+                Save
+              </Button>
             </SpaceBetween>
           }
           header={<Header variant="h1">Edit display</Header>}

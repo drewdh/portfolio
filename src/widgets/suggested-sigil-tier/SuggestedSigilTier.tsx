@@ -21,8 +21,14 @@ const worldTierItems: TilesProps.TilesDefinition[] = [
 ];
 
 export default function SuggestedSigilTier() {
-  const [monsterLevelOffset, setMonsterLevelOffset] = useLocalStorage<number>(LocalStorageKey.DiabloMonsterLevelOffset, 3);
-  const [playerWorldTier, setPlayerWorldTier] = useLocalStorage<string>(LocalStorageKey.DiabloWorldTier, '3');
+  const [monsterLevelOffset, setMonsterLevelOffset] = useLocalStorage<number>(
+    LocalStorageKey.DiabloMonsterLevelOffset,
+    3
+  );
+  const [playerWorldTier, setPlayerWorldTier] = useLocalStorage<string>(
+    LocalStorageKey.DiabloWorldTier,
+    '3'
+  );
 
   const playerLevelOptions = useMemo((): SelectProps.Option[] => {
     const options: SelectProps.Option[] = [];
@@ -33,14 +39,21 @@ export default function SuggestedSigilTier() {
     return options;
   }, []);
 
-  const [selectedPlayerLevelOption, setSelectedPlayerLevelOption] = useLocalStorage<SelectProps.Option>(LocalStorageKey.DiabloPlayerLevel, playerLevelOptions[50]);
+  const [selectedPlayerLevelOption, setSelectedPlayerLevelOption] =
+    useLocalStorage<SelectProps.Option>(
+      LocalStorageKey.DiabloPlayerLevel,
+      playerLevelOptions[50]
+    );
 
   const suggestedMonsterLevel = useMemo((): number => {
     const worldTierNumber = Number(playerWorldTier);
     const playerLevelNumber = Number(selectedPlayerLevelOption?.value);
     const minMonsterLevel = worldTierNumber === 3 ? 54 : 75;
     const maxMonsterLevel = worldTierNumber === 3 ? 73 : 154;
-    return Math.min(Math.max(minMonsterLevel, playerLevelNumber + monsterLevelOffset), maxMonsterLevel);
+    return Math.min(
+      Math.max(minMonsterLevel, playerLevelNumber + monsterLevelOffset),
+      maxMonsterLevel
+    );
   }, [monsterLevelOffset, playerWorldTier, selectedPlayerLevelOption]);
 
   const suggestedSigilTier = useMemo((): number => {
@@ -49,17 +62,18 @@ export default function SuggestedSigilTier() {
     return Math.max(minSigilTier, suggestedMonsterLevel - 50 - worldTierNumber);
   }, [playerWorldTier, suggestedMonsterLevel]);
 
-  const monsterLevelDiff = suggestedMonsterLevel - Number(selectedPlayerLevelOption?.value);
+  const monsterLevelDiff =
+    suggestedMonsterLevel - Number(selectedPlayerLevelOption?.value);
 
   const xpMultiplier = useMemo((): number => {
     if (monsterLevelDiff === 1) {
-      return .15;
+      return 0.15;
     }
     if (monsterLevelDiff === 2) {
-      return .2;
+      return 0.2;
     }
     if (monsterLevelDiff >= 3) {
-      return .25;
+      return 0.25;
     }
     if (monsterLevelDiff >= -10) {
       return Math.max(monsterLevelDiff / 10, -1);
@@ -69,43 +83,65 @@ export default function SuggestedSigilTier() {
 
   const xpMultiplierLabel = useMemo((): string => {
     const plusMinus = monsterLevelDiff > -1 ? '+' : '';
-    const percent = xpMultiplier.toLocaleString(undefined, { style: 'percent' });
+    const percent = xpMultiplier.toLocaleString(undefined, {
+      style: 'percent',
+    });
     return `${plusMinus}${percent}`;
   }, [monsterLevelDiff, xpMultiplier]);
 
-  const handleOffsetChange = useCallback((event: NonCancelableCustomEvent<InputProps.ChangeDetail>): void => {
-    const { value } = event.detail;
-    setMonsterLevelOffset(Number(Number(value).toFixed(0)));
-  }, [setMonsterLevelOffset]);
+  const handleOffsetChange = useCallback(
+    (event: NonCancelableCustomEvent<InputProps.ChangeDetail>): void => {
+      const { value } = event.detail;
+      setMonsterLevelOffset(Number(Number(value).toFixed(0)));
+    },
+    [setMonsterLevelOffset]
+  );
 
-  const handlePlayerLevelChange = useCallback((event: NonCancelableCustomEvent<SelectProps.ChangeDetail>): void => {
-    const newPlayerLevelOption = event.detail.selectedOption;
-    setSelectedPlayerLevelOption(newPlayerLevelOption);
-  }, [setSelectedPlayerLevelOption]);
+  const handlePlayerLevelChange = useCallback(
+    (event: NonCancelableCustomEvent<SelectProps.ChangeDetail>): void => {
+      const newPlayerLevelOption = event.detail.selectedOption;
+      setSelectedPlayerLevelOption(newPlayerLevelOption);
+    },
+    [setSelectedPlayerLevelOption]
+  );
 
-  const handlePlayerWorldTierChange = useCallback((event: NonCancelableCustomEvent<TilesProps.ChangeDetail>): void => {
-    const newWorldTier = event.detail.value;
-    setPlayerWorldTier(newWorldTier);
-  }, [setPlayerWorldTier]);
+  const handlePlayerWorldTierChange = useCallback(
+    (event: NonCancelableCustomEvent<TilesProps.ChangeDetail>): void => {
+      const newWorldTier = event.detail.value;
+      setPlayerWorldTier(newWorldTier);
+    },
+    [setPlayerWorldTier]
+  );
 
   const statusType = useMemo((): 'warning' | 'info' | undefined => {
     const playerLevel = Number(selectedPlayerLevelOption?.value);
-    if (suggestedMonsterLevel > (playerLevel + monsterLevelOffset)) {
+    if (suggestedMonsterLevel > playerLevel + monsterLevelOffset) {
       return 'warning';
     }
   }, [monsterLevelOffset, selectedPlayerLevelOption, suggestedMonsterLevel]);
 
   const statusMessage = useMemo((): string => {
-    const plusSign = suggestedMonsterLevel > Number(selectedPlayerLevelOption?.value) ? '+' : '';
-    return `${plusSign}${monsterLevelDiff} level${monsterLevelDiff === 1 ? '' : 's'}`;
+    const plusSign =
+      suggestedMonsterLevel > Number(selectedPlayerLevelOption?.value)
+        ? '+'
+        : '';
+    return `${plusSign}${monsterLevelDiff} level${
+      monsterLevelDiff === 1 ? '' : 's'
+    }`;
   }, [monsterLevelDiff, selectedPlayerLevelOption, suggestedMonsterLevel]);
 
   return (
     <SpaceBetween size="l">
       <Alert type="warning" header="Out of date">
-        This tool has not yet been updated to include the latest changes to XP and Nightmare Dungeons.
+        This tool has not been updated to include the latest changes to XP and
+        Nightmare Dungeons.
       </Alert>
-      <Grid gridDefinition={[{ colspan: { default: 12, s: 4 } }, { colspan: { default: 12, s: 8 } }]}>
+      <Grid
+        gridDefinition={[
+          { colspan: { default: 12, s: 4 } },
+          { colspan: { default: 12, s: 8 } },
+        ]}
+      >
         <Container header={<Header>Configuration</Header>}>
           <SpaceBetween size="l">
             <FormField label="Player level">
@@ -159,9 +195,7 @@ export default function SuggestedSigilTier() {
                     </StatusIndicator>
                   </div>
                 )}
-                {!statusType && (
-                  <div>{statusMessage}</div>
-                )}
+                {!statusType && <div>{statusMessage}</div>}
               </div>
             </SpaceBetween>
             <SpaceBetween size="l">
@@ -170,8 +204,10 @@ export default function SuggestedSigilTier() {
               </Box>
               <div>
                 <Box variant="awsui-key-label">Monster XP multiplier</Box>
-                <StatusIndicator type={xpMultiplier > 0 ? 'success' : 'warning'}>
-                  {xpMultiplierLabel} XP {xpMultiplier === .25 && '(max)'}
+                <StatusIndicator
+                  type={xpMultiplier > 0 ? 'success' : 'warning'}
+                >
+                  {xpMultiplierLabel} XP {xpMultiplier === 0.25 && '(max)'}
                 </StatusIndicator>
               </div>
             </SpaceBetween>

@@ -1,5 +1,5 @@
 import { TopNavigationProps } from '@cloudscape-design/components/top-navigation';
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Pathname } from '../routes';
 import useNavigateWithRef from '../common/useNavigateWithRef';
 
@@ -8,51 +8,45 @@ export default function useTopNavigation(): State {
   const [isSettingsVisible, setIsSettingsVisible] = useState<boolean>(false);
   const [isFeedbackVisible, setIsFeedbackVisible] = useState<boolean>(false);
 
-  const handleSettingsDismiss = useCallback((): void => {
+  function handleSettingsDismiss() {
     setIsSettingsVisible(false);
-  }, []);
+  }
 
-  const handleFeedbackDismiss = useCallback((): void => {
+  function handleFeedbackDismiss() {
     setIsFeedbackVisible(false);
-  }, []);
+  }
 
-  const i18nStrings = useMemo((): TopNavigationProps.I18nStrings => ({
+  const i18nStrings: TopNavigationProps.I18nStrings = {
     overflowMenuTriggerText: 'More',
     overflowMenuTitleText: 'All',
-  }), []);
+  };
 
-  const identity = useMemo((): TopNavigationProps.Identity => ({
+  const identity: TopNavigationProps.Identity = {
     title: 'Drew Hanberry',
     href: Pathname.Home,
     onFollow: (event) => {
       event.preventDefault();
       navigate(Pathname.Home);
     },
-  }), [navigate]);
+  };
 
-  const handleSettingsClick = useCallback((): void => {
-    setIsSettingsVisible(true);
-  }, []);
-
-  const handleFeedbackClick = useCallback((): void => {
-    setIsFeedbackVisible(true);
-  }, []);
-
-  const utilities = useMemo((): TopNavigationProps.Utility[] => {
-    return [
-      {
-        type: 'button',
-        text: 'Feedback',
-        onClick: handleFeedbackClick,
+  const utilities: TopNavigationProps.Utility[] = [
+    {
+      type: 'button',
+      text: 'Feedback',
+      onClick() {
+        setIsFeedbackVisible(true);
       },
-      {
-        type: 'button',
-        iconName: 'settings',
-        title: 'Settings',
-        onClick: handleSettingsClick,
+    },
+    {
+      type: 'button',
+      iconName: 'settings',
+      title: 'Settings',
+      onClick() {
+        setIsSettingsVisible(true);
       },
-    ];
-  }, [handleFeedbackClick, handleSettingsClick]);
+    },
+  ];
 
   return {
     isFeedbackVisible,

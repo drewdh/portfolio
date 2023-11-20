@@ -6,7 +6,8 @@ import { WidgetConfig } from '../widgets/interfaces';
 import { useWidgetLayout } from '../widgets/widget-config';
 
 export default function useDashboard({ onPaletteItemsChange }: Props): State {
-  const [isResetModalVisible, setIsResetModalVisible] = useState<boolean>(false);
+  const [isResetModalVisible, setIsResetModalVisible] =
+    useState<boolean>(false);
   const {
     layout: items,
     resetLayout,
@@ -18,17 +19,27 @@ export default function useDashboard({ onPaletteItemsChange }: Props): State {
     onPaletteItemsChange(paletteItems);
   }, [onPaletteItemsChange, paletteItems]);
 
-  const handleItemsChange = useCallback((event: NonCancelableCustomEvent<BoardProps.ItemsChangeDetail<WidgetConfig>>): void => {
-    setItems(event.detail.items);
-  }, [setItems]);
+  const handleItemsChange = useCallback(
+    (
+      event: NonCancelableCustomEvent<
+        BoardProps.ItemsChangeDetail<WidgetConfig>
+      >
+    ): void => {
+      setItems(event.detail.items);
+    },
+    [setItems]
+  );
 
-  const handleResetClick = useCallback((requiresConfirm: boolean): void => {
-    if (requiresConfirm) {
-      setIsResetModalVisible(true);
-    } else {
-      resetLayout();
-    }
-  }, [resetLayout]);
+  const handleResetClick = useCallback(
+    (requiresConfirm: boolean): void => {
+      if (requiresConfirm) {
+        setIsResetModalVisible(true);
+      } else {
+        resetLayout();
+      }
+    },
+    [resetLayout]
+  );
 
   const handleResetModalDismiss = useCallback((): void => {
     setIsResetModalVisible(false);
@@ -39,9 +50,15 @@ export default function useDashboard({ onPaletteItemsChange }: Props): State {
     resetLayout();
   }, [resetLayout]);
 
-  const renderItem = useCallback((item: BoardProps.Item<WidgetConfig>, actions: BoardProps.ItemActions): JSX.Element => {
-    return <item.data.widget onRemove={actions.removeItem} />;
-  }, []);
+  const renderItem = useCallback(
+    (
+      item: BoardProps.Item<WidgetConfig>,
+      actions: BoardProps.ItemActions
+    ): JSX.Element => {
+      return <item.data.widget onRemove={actions.removeItem} />;
+    },
+    []
+  );
 
   return {
     handleItemsChange,
@@ -55,15 +72,22 @@ export default function useDashboard({ onPaletteItemsChange }: Props): State {
 }
 
 interface State {
-  handleItemsChange: (event: NonCancelableCustomEvent<BoardProps.ItemsChangeDetail<WidgetConfig>>) => void;
+  handleItemsChange: (
+    event: NonCancelableCustomEvent<BoardProps.ItemsChangeDetail<WidgetConfig>>
+  ) => void;
   handleResetModalDismiss: () => void;
   handleResetConfirm: () => void;
   handleResetClick: (requiresConfirm: boolean) => void;
   isResetModalVisible: boolean;
   items: ReadonlyArray<BoardProps.Item<WidgetConfig>>;
-  renderItem: (item: BoardProps.Item<WidgetConfig>, actions: BoardProps.ItemActions) => JSX.Element;
+  renderItem: (
+    item: BoardProps.Item<WidgetConfig>,
+    actions: BoardProps.ItemActions
+  ) => JSX.Element;
 }
 
 interface Props {
-  onPaletteItemsChange: (items: ReadonlyArray<BoardProps.Item<WidgetConfig>>) => void;
+  onPaletteItemsChange: (
+    items: ReadonlyArray<BoardProps.Item<WidgetConfig>>
+  ) => void;
 }

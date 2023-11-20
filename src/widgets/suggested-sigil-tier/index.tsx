@@ -1,5 +1,14 @@
-import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import AppLayout, { AppLayoutProps } from '@cloudscape-design/components/app-layout';
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import AppLayout, {
+  AppLayoutProps,
+} from '@cloudscape-design/components/app-layout';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 import Header from '@cloudscape-design/components/header';
 import Box from '@cloudscape-design/components/box';
@@ -30,14 +39,19 @@ export default function SuggestedSigilTierPage() {
   const [content, setContent] = useState<ReactNode>(null);
   const ref = useRef<AppLayoutProps.Ref>(null);
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [
-    { text: widgetDetails.diablo.title, href: Pathname.DiabloSuggestedSigilTier },
+    {
+      text: widgetDetails.diablo.title,
+      href: Pathname.DiabloSuggestedSigilTier,
+    },
   ];
 
   const { search } = useLocation();
   const navigate = useNavigate();
   const activeTabQueryParam = useMemo((): TabId => {
     const queryParams = new URLSearchParams(search);
-    return queryParams.get(tabIdQueryParam) as TabId ?? TabId.NightmareDungeon;
+    return (
+      (queryParams.get(tabIdQueryParam) as TabId) ?? TabId.NightmareDungeon
+    );
   }, [search]);
   const [activeTabId, setActiveTabId] = useState<TabId>(activeTabQueryParam);
 
@@ -47,13 +61,16 @@ export default function SuggestedSigilTierPage() {
     }
   }, [activeTabQueryParam, activeTabId]);
 
-  const handleTabChange = useCallback((event: NonCancelableCustomEvent<TabsProps.ChangeDetail>): void => {
-    const { activeTabId, activeTabHref } = event.detail;
-    setActiveTabId(activeTabId as TabId);
-    if (activeTabHref) {
-      navigate(activeTabHref);
-    }
-  }, [navigate]);
+  const handleTabChange = useCallback(
+    (event: NonCancelableCustomEvent<TabsProps.ChangeDetail>): void => {
+      const { activeTabId, activeTabHref } = event.detail;
+      setActiveTabId(activeTabId as TabId);
+      if (activeTabHref) {
+        navigate(activeTabHref);
+      }
+    },
+    [navigate]
+  );
 
   const openPanel = useCallback((): void => {
     ref.current?.openTools();
@@ -70,7 +87,9 @@ export default function SuggestedSigilTierPage() {
               <Header
                 variant="h1"
                 description={widgetDetails.diablo.description}
-              >{widgetDetails.diablo.title}</Header>
+              >
+                {widgetDetails.diablo.title}
+              </Header>
             }
           >
             <Box margin={{ top: 's' }}>
@@ -86,11 +105,16 @@ export default function SuggestedSigilTierPage() {
                   },
                   {
                     id: TabId.PlayerStatistics,
-                    label: <span>Player statistics - <i>static preview</i></span>,
+                    label: (
+                      <span>
+                        Player statistics - <i>static preview</i>
+                      </span>
+                    ),
                     href: `${Pathname.DiabloSuggestedSigilTier}?${tabIdQueryParam}=${TabId.PlayerStatistics}`,
                     content: <PlayerStatistics />,
                   },
-                ]} />
+                ]}
+              />
             </Box>
           </ContentLayout>
         }
@@ -101,5 +125,5 @@ export default function SuggestedSigilTierPage() {
         toolsHide
       />
     </HelpPanelProvider>
-  )
+  );
 }

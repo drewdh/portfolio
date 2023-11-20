@@ -46,26 +46,51 @@ export default function useMonsterLevelCalculator(): State {
     ];
   }, []);
 
-  const [selectedSigilTierOption, setSelectedSigilTierOption] = useLocalStorage<SelectProps.Option>(LocalStorageKey.DiabloSigilTier, (sigilTierOptions[0] as SelectProps.OptionGroup).options[0]);
+  const [selectedSigilTierOption, setSelectedSigilTierOption] =
+    useLocalStorage<SelectProps.Option>(
+      LocalStorageKey.DiabloSigilTier,
+      (sigilTierOptions[0] as SelectProps.OptionGroup).options[0]
+    );
 
-  const [selectedMonsterLevelOption, setSelectedMonsterLevelOption] = useState<SelectProps.Option>(() => {
-    const newMonsterLevel = String(50 + Number(worldTier) + Number((selectedSigilTierOption as SelectProps.Option).value));
-    return { value: newMonsterLevel, label: `Level ${newMonsterLevel}` };
-  });
+  const [selectedMonsterLevelOption, setSelectedMonsterLevelOption] =
+    useState<SelectProps.Option>(() => {
+      const newMonsterLevel = String(
+        50 +
+          Number(worldTier) +
+          Number((selectedSigilTierOption as SelectProps.Option).value)
+      );
+      return { value: newMonsterLevel, label: `Level ${newMonsterLevel}` };
+    });
 
-  const handleMonsterLevelChange = useCallback((event: NonCancelableCustomEvent<SelectProps.ChangeDetail>): void => {
-    const newMonsterLevel = event.detail.selectedOption;
-    setSelectedMonsterLevelOption(newMonsterLevel);
-    const newSigilTier = String(Number(newMonsterLevel.value) - Number(50) - Number(worldTier));
-    setSelectedSigilTierOption({ value: newSigilTier, label: `Tier ${newSigilTier}` });
-  }, []);
+  const handleMonsterLevelChange = useCallback(
+    (event: NonCancelableCustomEvent<SelectProps.ChangeDetail>): void => {
+      const newMonsterLevel = event.detail.selectedOption;
+      setSelectedMonsterLevelOption(newMonsterLevel);
+      const newSigilTier = String(
+        Number(newMonsterLevel.value) - Number(50) - Number(worldTier)
+      );
+      setSelectedSigilTierOption({
+        value: newSigilTier,
+        label: `Tier ${newSigilTier}`,
+      });
+    },
+    []
+  );
 
-  const handleSigilTierChange = useCallback((event: NonCancelableCustomEvent<SelectProps.ChangeDetail>): void => {
-    const newSigilTier = event.detail.selectedOption;
-    setSelectedSigilTierOption(newSigilTier);
-    const newMonsterLevel = String(50 + Number(worldTier) + Number(newSigilTier.value));
-    setSelectedMonsterLevelOption({ value: newMonsterLevel, label: `Level ${newMonsterLevel}` });
-  }, []);
+  const handleSigilTierChange = useCallback(
+    (event: NonCancelableCustomEvent<SelectProps.ChangeDetail>): void => {
+      const newSigilTier = event.detail.selectedOption;
+      setSelectedSigilTierOption(newSigilTier);
+      const newMonsterLevel = String(
+        50 + Number(worldTier) + Number(newSigilTier.value)
+      );
+      setSelectedMonsterLevelOption({
+        value: newMonsterLevel,
+        label: `Level ${newMonsterLevel}`,
+      });
+    },
+    []
+  );
 
   return {
     handleSigilTierChange,
@@ -78,8 +103,12 @@ export default function useMonsterLevelCalculator(): State {
 }
 
 interface State {
-  handleMonsterLevelChange: (event: NonCancelableCustomEvent<SelectProps.ChangeDetail>) => void;
-  handleSigilTierChange: (event: NonCancelableCustomEvent<SelectProps.ChangeDetail>) => void;
+  handleMonsterLevelChange: (
+    event: NonCancelableCustomEvent<SelectProps.ChangeDetail>
+  ) => void;
+  handleSigilTierChange: (
+    event: NonCancelableCustomEvent<SelectProps.ChangeDetail>
+  ) => void;
   monsterLevelOptions: SelectProps.Options;
   selectedSigilTierOption: SelectProps.Option;
   selectedMonsterLevelOption: SelectProps.Option;

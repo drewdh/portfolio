@@ -41,9 +41,13 @@ export const defaultLayout: ReadonlyArray<SavedBoardItem> = [
 type SavedBoardItem = Omit<BoardProps.Item, 'data'>;
 
 export function useWidgetLayout(): State {
-  const [savedLayout, setSavedLayout] = useLocalStorage<ReadonlyArray<SavedBoardItem>>(LocalStorageKey.DashboardLayout, defaultLayout);
+  const [savedLayout, setSavedLayout] = useLocalStorage<
+    ReadonlyArray<SavedBoardItem>
+  >(LocalStorageKey.DashboardLayout, defaultLayout);
 
-  const layoutWithData = useMemo((): ReadonlyArray<BoardProps.Item<WidgetConfig>> => {
+  const layoutWithData = useMemo((): ReadonlyArray<
+    BoardProps.Item<WidgetConfig>
+  > => {
     return savedLayout.map((boardItem) => {
       return {
         ...boardItem,
@@ -56,18 +60,27 @@ export function useWidgetLayout(): State {
     setSavedLayout(defaultLayout);
   }, [setSavedLayout]);
 
-  const updateLayout = useCallback((newValue: ReadonlyArray<BoardProps.Item<WidgetConfig>>): void => {
-    const layoutWithoutData: SavedBoardItem[] = newValue.map((item: BoardProps.Item<WidgetConfig>) => {
-      const { data, ...spread } = item;
-      return spread;
-    });
-    setSavedLayout(layoutWithoutData);
-  }, [setSavedLayout]);
+  const updateLayout = useCallback(
+    (newValue: ReadonlyArray<BoardProps.Item<WidgetConfig>>): void => {
+      const layoutWithoutData: SavedBoardItem[] = newValue.map(
+        (item: BoardProps.Item<WidgetConfig>) => {
+          const { data, ...spread } = item;
+          return spread;
+        }
+      );
+      setSavedLayout(layoutWithoutData);
+    },
+    [setSavedLayout]
+  );
 
-  const paletteItems = useMemo((): ReadonlyArray<BoardProps.Item<WidgetConfig>> => {
+  const paletteItems = useMemo((): ReadonlyArray<
+    BoardProps.Item<WidgetConfig>
+  > => {
     return defaultLayout
       .filter((widget) => {
-        return !savedLayout.find((visibleWidget) => visibleWidget.id === widget.id)
+        return !savedLayout.find(
+          (visibleWidget) => visibleWidget.id === widget.id
+        );
       })
       .map((widget) => {
         return {
@@ -82,7 +95,7 @@ export function useWidgetLayout(): State {
     paletteItems,
     updateLayout,
     resetLayout,
-  }
+  };
 }
 
 interface State {

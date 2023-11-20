@@ -7,18 +7,26 @@ import styles from './styles.module.scss';
 export default function Empty({ actions, icon, title, description }: Props) {
   return (
     <div className={styles.verticalCenter}>
-      <Box margin={{ vertical: 'xs' }} textAlign="center" color="text-body-secondary">
+      <Box
+        margin={{ vertical: 'xs' }}
+        textAlign="center"
+        color="text-body-secondary"
+      >
         <SpaceBetween size="xxs">
           <div>
             {icon && <div>{icon}</div>}
-            <Box variant="strong" color="inherit">{title}</Box>
-            <Box variant="p" color="inherit">{description}</Box>
+            <Box variant="strong" color="inherit">
+              {title}
+            </Box>
+            <Box variant="p" color="inherit">
+              {description}
+            </Box>
           </div>
           {actions}
         </SpaceBetween>
       </Box>
     </div>
-  )
+  );
 }
 
 interface Props {

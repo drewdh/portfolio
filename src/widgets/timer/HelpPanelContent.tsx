@@ -15,7 +15,10 @@ export default function HelpPanelContent() {
       footer={<ExternalLinkGroup links={links} />}
       header={<Header variant="h2">Pomodoro timer</Header>}
     >
-      <p>A time management tool that uses the Pomodoro Technique to help improve productivity.</p>
+      <p>
+        A time management tool that uses the Pomodoro Technique to help improve
+        productivity.
+      </p>
     </HelpPanel>
-  )
+  );
 }

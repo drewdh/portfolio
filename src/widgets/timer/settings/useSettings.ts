@@ -10,7 +10,11 @@ type InputChangeEvent = NonCancelableCustomEvent<InputProps.ChangeDetail>;
 type ToggleChangeEvent = NonCancelableCustomEvent<ToggleProps.ChangeDetail>;
 type SelectChangeEvent = NonCancelableCustomEvent<SelectProps.ChangeDetail>;
 
-export default function useSettings({ onChange, onDismiss, settings: initialSettings }: Props): State {
+export default function useSettings({
+  onChange,
+  onDismiss,
+  settings: initialSettings,
+}: Props): State {
   const [settings, setSettings] = useState<SettingsValues>(initialSettings);
 
   const handleSave = useCallback((): void => {
@@ -34,74 +38,98 @@ export default function useSettings({ onChange, onDismiss, settings: initialSett
 
   const selectedAlarmToneOption = useMemo((): SelectProps.Option => {
     return alarmToneOptions.find(({ value }) => value === settings.alarmTone)!;
-  }, [alarmToneOptions, settings.alarmTone])
+  }, [alarmToneOptions, settings.alarmTone]);
 
-  const handleAlarmToneChange = useCallback((event: SelectChangeEvent): void => {
-    const { value } = event.detail.selectedOption;
-    setSettings((prevState) => ({
-      ...prevState,
-      alarmTone: value as AlarmTone,
-    }))
-  }, []);
+  const handleAlarmToneChange = useCallback(
+    (event: SelectChangeEvent): void => {
+      const { value } = event.detail.selectedOption;
+      setSettings((prevState) => ({
+        ...prevState,
+        alarmTone: value as AlarmTone,
+      }));
+    },
+    []
+  );
 
-  const handleAutoStartChange = useCallback((event: ToggleChangeEvent): void => {
-    const { checked } = event.detail;
-    setSettings((prevState) => ({
-      ...prevState,
-      hasAutoStart: checked,
-    }));
-  }, []);
+  const handleAutoStartChange = useCallback(
+    (event: ToggleChangeEvent): void => {
+      const { checked } = event.detail;
+      setSettings((prevState) => ({
+        ...prevState,
+        hasAutoStart: checked,
+      }));
+    },
+    []
+  );
 
-  const handleHasAlarmSoundChange = useCallback((event: ToggleChangeEvent): void => {
-    const { checked } = event.detail;
-    setSettings((prevState) => ({
-      ...prevState,
-      hasAlarmSound: checked,
-    }));
-  }, []);
+  const handleHasAlarmSoundChange = useCallback(
+    (event: ToggleChangeEvent): void => {
+      const { checked } = event.detail;
+      setSettings((prevState) => ({
+        ...prevState,
+        hasAlarmSound: checked,
+      }));
+    },
+    []
+  );
 
-  const handleHasStartAndStopSoundsChange = useCallback((event: ToggleChangeEvent): void => {
-    const { checked } = event.detail;
-    setSettings((prevState) => ({
-      ...prevState,
-      hasStartAndStopSounds: checked,
-    }));
-  }, []);
+  const handleHasStartAndStopSoundsChange = useCallback(
+    (event: ToggleChangeEvent): void => {
+      const { checked } = event.detail;
+      setSettings((prevState) => ({
+        ...prevState,
+        hasStartAndStopSounds: checked,
+      }));
+    },
+    []
+  );
 
-  const handleHasTickingChange = useCallback((event: ToggleChangeEvent): void => {
-    const { checked } = event.detail;
-    setSettings((prevState) => ({
-      ...prevState,
-      hasTickingSound: checked,
-    }));
-  }, []);
-
-  // TODO: Validation
-  const handleLongBreakLengthChange = useCallback((event: InputChangeEvent): void => {
-    const { value } = event.detail;
-    setSettings((prevState) => ({
-      ...prevState,
-      longBreakLengthSeconds: Number(value) * 60,
-    }));
-  }, []);
-
-  // TODO: Validation
-  const handlePomodoroLengthChange = useCallback((event: InputChangeEvent): void => {
-    const { value } = event.detail;
-    setSettings((prevState) => ({
-      ...prevState,
-      pomodoroLengthSeconds: Number(value) * 60,
-    }));
-  }, []);
+  const handleHasTickingChange = useCallback(
+    (event: ToggleChangeEvent): void => {
+      const { checked } = event.detail;
+      setSettings((prevState) => ({
+        ...prevState,
+        hasTickingSound: checked,
+      }));
+    },
+    []
+  );
 
   // TODO: Validation
-  const handleShortBreakLengthChange = useCallback((event: InputChangeEvent): void => {
-    const { value } = event.detail;
-    setSettings((prevState) => ({
-      ...prevState,
-      shortBreakLengthSeconds: Number(value) * 60,
-    }));
-  }, []);
+  const handleLongBreakLengthChange = useCallback(
+    (event: InputChangeEvent): void => {
+      const { value } = event.detail;
+      setSettings((prevState) => ({
+        ...prevState,
+        longBreakLengthSeconds: Number(value) * 60,
+      }));
+    },
+    []
+  );
+
+  // TODO: Validation
+  const handlePomodoroLengthChange = useCallback(
+    (event: InputChangeEvent): void => {
+      const { value } = event.detail;
+      setSettings((prevState) => ({
+        ...prevState,
+        pomodoroLengthSeconds: Number(value) * 60,
+      }));
+    },
+    []
+  );
+
+  // TODO: Validation
+  const handleShortBreakLengthChange = useCallback(
+    (event: InputChangeEvent): void => {
+      const { value } = event.detail;
+      setSettings((prevState) => ({
+        ...prevState,
+        shortBreakLengthSeconds: Number(value) * 60,
+      }));
+    },
+    []
+  );
 
   const longBreakLength = useMemo((): string => {
     return getLengthInMinutes(settings.longBreakLengthSeconds);

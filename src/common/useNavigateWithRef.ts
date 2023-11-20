@@ -6,13 +6,16 @@ type NavigateFunction = (to: To, options?: NavigateOptions) => void;
 export default function useNavigateWithRef(): NavigateFunction {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  return useCallback((to: To, options: NavigateOptions | undefined): void => {
-    navigate(to, {
-      ...options,
-      state: {
-        ...options?.state,
-        ref: pathname,
-      },
-    });
-  }, [navigate, pathname]);
+  return useCallback(
+    (to: To, options: NavigateOptions | undefined): void => {
+      navigate(to, {
+        ...options,
+        state: {
+          ...options?.state,
+          ref: pathname,
+        },
+      });
+    },
+    [navigate, pathname]
+  );
 }

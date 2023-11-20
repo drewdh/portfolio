@@ -1,5 +1,7 @@
 import SpaceBetween from '@cloudscape-design/components/space-between';
-import ItemsPalette, { ItemsPaletteProps } from '@cloudscape-design/board-components/items-palette';
+import ItemsPalette, {
+  ItemsPaletteProps,
+} from '@cloudscape-design/board-components/items-palette';
 import BoardItem from '@cloudscape-design/board-components/board-item';
 import Header from '@cloudscape-design/components/header';
 import Icon from '@cloudscape-design/components/icon';
@@ -30,7 +32,11 @@ export default function Palette({ items }: Props) {
                 />
               )}
               {!context.showPreview && (
-                <SpaceBetween size="xs" direction="horizontal" className={styles.paletteItem}>
+                <SpaceBetween
+                  size="xs"
+                  direction="horizontal"
+                  className={styles.paletteItem}
+                >
                   <Icon name={item.data.iconName} size="large" />
                   {item.data.description}
                 </SpaceBetween>

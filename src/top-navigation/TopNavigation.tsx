@@ -26,10 +26,7 @@ export default function TopNavigation() {
           utilities={utilities}
         />
       </div>
-      <Settings
-        visible={isSettingsVisible}
-        onDismiss={handleSettingsDismiss}
-      />
+      <Settings visible={isSettingsVisible} onDismiss={handleSettingsDismiss} />
       <Feedback
         isVisible={isFeedbackVisible}
         onDismiss={handleFeedbackDismiss}

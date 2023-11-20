@@ -11,15 +11,37 @@ import ColumnLayout from '@cloudscape-design/components/column-layout';
 
 export default function Settings() {
   useTitle('Settings');
-  const [monsterLevelOffset] = useLocalStorage<number>(LocalStorageKey.DiabloMonsterLevelOffset, 3);
-  const [contentDensity] = useLocalStorage<string>(LocalStorageKey.ContentDensity, 'comfortable');
-  const [visualMode] = useLocalStorage<string>(LocalStorageKey.VisualMode, 'default');
-  const contentDensityLabel = contentDensity === 'comfortable' ? 'Comfortable' : 'Compact';
-  const visualModeLabel = visualMode === 'default' ? 'Browser default' : visualMode === 'light' ? 'Light' : 'Dark';
+  const [monsterLevelOffset] = useLocalStorage<number>(
+    LocalStorageKey.DiabloMonsterLevelOffset,
+    3
+  );
+  const [contentDensity] = useLocalStorage<string>(
+    LocalStorageKey.ContentDensity,
+    'comfortable'
+  );
+  const [visualMode] = useLocalStorage<string>(
+    LocalStorageKey.VisualMode,
+    'default'
+  );
+  const contentDensityLabel =
+    contentDensity === 'comfortable' ? 'Comfortable' : 'Compact';
+  const visualModeLabel =
+    visualMode === 'default'
+      ? 'Browser default'
+      : visualMode === 'light'
+        ? 'Light'
+        : 'Dark';
 
   return (
     <ContentLayout
-      header={<Header variant="h1" description="View and edit settings for the site. Changes are only saved for this device.">Settings</Header>}
+      header={
+        <Header
+          variant="h1"
+          description="View and edit settings for the site. Changes are only saved for this device."
+        >
+          Settings
+        </Header>
+      }
     >
       <SpaceBetween size="l">
         {/*<Container*/}
