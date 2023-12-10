@@ -6,6 +6,7 @@ import widgetDetails from '../../common/widgetDetails';
 import { Pathname } from '../../routes';
 import DhSideNavigation from '../../common/side-navigation';
 import useTitle from '../../useTitle';
+import Flashbar from '@cloudscape-design/components/flashbar';
 
 export default function EcobeePage() {
   const breadcrumbItems: BreadcrumbGroupProps.Item[] = [
@@ -15,9 +16,22 @@ export default function EcobeePage() {
 
   return (
     <AppLayout
-      contentType="dashboard"
-      navigation={<DhSideNavigation />}
       breadcrumbs={<Breadcrumbs items={breadcrumbItems} />}
+      navigationHide
+      notifications={
+        <Flashbar
+          items={[
+            {
+              header: 'Static preview feature',
+              content:
+                'This tool is in static preview for demo purposes and does not use live data.',
+              dismissible: false,
+              type: 'info',
+            },
+          ]}
+        />
+      }
+      contentType="dashboard"
       content={<Ecobee />}
       toolsHide
     />

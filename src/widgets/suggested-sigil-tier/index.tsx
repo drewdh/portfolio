@@ -26,6 +26,8 @@ import { topNavSelector } from '../../top-navigation/constants';
 import { useLocation, useNavigate } from 'react-router';
 import PlayerStatistics from './PlayerStatistics';
 import useTitle from '../../useTitle';
+import Flashbar from '@cloudscape-design/components/flashbar';
+import Alert from '@cloudscape-design/components/alert';
 
 const tabIdQueryParam = 'tabId';
 
@@ -118,11 +120,24 @@ export default function SuggestedSigilTierPage() {
             </Box>
           </ContentLayout>
         }
-        navigation={<DhSideNavigation />}
         ref={ref}
         tools={content}
+        navigationHide
         headerSelector={topNavSelector}
         toolsHide
+        notifications={
+          <Flashbar
+            items={[
+              {
+                header: 'Outdated',
+                dismissible: false,
+                type: 'info',
+                content:
+                  'This tool has not been updated to include the latest changes to XP and Nightmare Dungeons.',
+              },
+            ]}
+          />
+        }
       />
     </HelpPanelProvider>
   );

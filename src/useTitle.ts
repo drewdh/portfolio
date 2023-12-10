@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const defaultTitle = "Drew's Widgets";
+const defaultTitle = 'Apps';
 
 /** Updates document title */
 export default function useTitle(title?: string) {

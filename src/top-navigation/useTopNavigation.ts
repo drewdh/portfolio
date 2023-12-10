@@ -33,6 +33,15 @@ export default function useTopNavigation(): State {
   const utilities: TopNavigationProps.Utility[] = [
     {
       type: 'button',
+      text: 'Apps',
+      href: Pathname.Home,
+      onFollow(event) {
+        event.preventDefault();
+        navigate(Pathname.Home);
+      },
+    },
+    {
+      type: 'button',
       text: 'Feedback',
       onClick() {
         setIsFeedbackVisible(true);

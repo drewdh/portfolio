@@ -132,10 +132,6 @@ export default function SuggestedSigilTier() {
 
   return (
     <SpaceBetween size="l">
-      <Alert type="warning" header="Outdated">
-        This tool has not been updated to include the latest changes to XP and
-        Nightmare Dungeons.
-      </Alert>
       <Grid
         gridDefinition={[
           { colspan: { default: 12, s: 4 } },

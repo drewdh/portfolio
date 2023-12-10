@@ -28,8 +28,7 @@ export default function OverviewPage() {
     <AppLayout
       breadcrumbs={<Breadcrumbs items={[]} />}
       content={<Overview />}
-      contentType={initialIsNewVisitor ? 'wizard' : 'default'}
-      navigation={<DhSideNavigation />}
+      navigationHide
       toolsHide
       headerSelector={topNavSelector}
     />

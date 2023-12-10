@@ -10,6 +10,7 @@ import { Pathname } from '../../routes';
 import useFollow from '../useFollow';
 import widgetDetails from '../widgetDetails';
 
+/** @deprecated Prefer per-app side navigation */
 export default function DhSideNavigation() {
   const follow = useFollow();
   const { pathname } = useLocation();
@@ -65,7 +66,7 @@ export default function DhSideNavigation() {
     <>
       <SideNavigation
         activeHref={pathname}
-        header={{ text: "Drew's Widgets", href: Pathname.Home }}
+        header={{ text: 'Apps', href: Pathname.Home }}
         items={items}
         onFollow={handleFollow}
       />

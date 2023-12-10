@@ -9,7 +9,7 @@ import { Pathname } from '../routes';
 export default function Breadcrumbs({ items }: Props) {
   const follow = useFollow();
   const allItems = useMemo((): BreadcrumbGroupProps.Item[] => {
-    return [{ text: "Drew's Widgets", href: Pathname.Home }, ...items];
+    return [{ text: 'Apps', href: Pathname.Home }, ...items];
   }, [items]);
 
   const handleFollow = useCallback(

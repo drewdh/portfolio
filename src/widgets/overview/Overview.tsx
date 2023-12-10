@@ -35,7 +35,7 @@ export default function Overview() {
     useMemo((): TableProps.ColumnDefinition<Widget>[] => {
       return [
         {
-          header: 'Widget',
+          header: 'App',
           cell: (item) => (
             <InternalLink href={item.href}>{item.title}</InternalLink>
           ),
@@ -51,10 +51,10 @@ export default function Overview() {
     <Table<Widget>
       header={
         <Header
-          description="A place where I make small, functional widgets to experiment with different user experience ideas and technologies."
+          description="Miscellaneous apps for experimenting with different user experience ideas and technologies."
           variant="awsui-h1-sticky"
         >
-          Drew's Widgets
+          Apps
         </Header>
       }
       items={widgets}
