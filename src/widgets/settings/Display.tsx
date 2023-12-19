@@ -6,7 +6,6 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import FormField from '@cloudscape-design/components/form-field';
 import Tiles, { TilesProps } from '@cloudscape-design/components/tiles';
 
-import DhSideNavigation from '../../common/side-navigation';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import { Pathname } from '../../routes';
 import useTitle from '../../useTitle';
@@ -142,7 +141,7 @@ export default function Display() {
       }
       breadcrumbs={<Breadcrumbs items={breadcrumbs} />}
       toolsHide
-      navigation={<DhSideNavigation />}
+      navigationHide
     />
   );
 }

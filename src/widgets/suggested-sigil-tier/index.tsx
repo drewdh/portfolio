@@ -19,7 +19,6 @@ import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import SuggestedSigilTier from './SuggestedSigilTier';
 import { Pathname } from '../../routes';
 import Breadcrumbs from '../../common/Breadcrumbs';
-import DhSideNavigation from '../../common/side-navigation';
 import { HelpPanelProvider } from '../../help-panel/help-panel';
 import widgetDetails from '../../common/widgetDetails';
 import { topNavSelector } from '../../top-navigation/constants';
@@ -27,7 +26,6 @@ import { useLocation, useNavigate } from 'react-router';
 import PlayerStatistics from './PlayerStatistics';
 import useTitle from '../../useTitle';
 import Flashbar from '@cloudscape-design/components/flashbar';
-import Alert from '@cloudscape-design/components/alert';
 
 const tabIdQueryParam = 'tabId';
 

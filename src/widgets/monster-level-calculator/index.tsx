@@ -3,7 +3,6 @@ import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-g
 
 import { Pathname } from '../../routes';
 import Breadcrumbs from '../../common/Breadcrumbs';
-import DhSideNavigation from '../../common/side-navigation';
 import MonsterLevelCalculator from './MonsterLevelCalculator';
 
 export default function MonsterLevelCalculatorPage() {
@@ -18,7 +17,7 @@ export default function MonsterLevelCalculatorPage() {
     <AppLayout
       breadcrumbs={<Breadcrumbs items={breadcrumbs} />}
       content={<MonsterLevelCalculator />}
-      navigation={<DhSideNavigation />}
+      navigationHide
       toolsHide
     />
   );

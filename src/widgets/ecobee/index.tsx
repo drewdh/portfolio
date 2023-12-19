@@ -4,7 +4,6 @@ import Breadcrumbs from '../../common/Breadcrumbs';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 import widgetDetails from '../../common/widgetDetails';
 import { Pathname } from '../../routes';
-import DhSideNavigation from '../../common/side-navigation';
 import useTitle from '../../useTitle';
 import Flashbar from '@cloudscape-design/components/flashbar';
 

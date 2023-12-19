@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import AppLayout from '@cloudscape-design/components/app-layout';
 
 import Breadcrumbs from '../../common/Breadcrumbs';
-import DhSideNavigation from '../../common/side-navigation';
 import Overview from './Overview';
 import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
 import { topNavSelector } from '../../top-navigation/constants';

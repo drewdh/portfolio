@@ -15,9 +15,7 @@ import { splitPanelI18nStrings } from '../i18n-strings/split-panel';
 import Palette from './Palette';
 import { BoardProps } from '@cloudscape-design/board-components/board';
 import { WidgetConfig } from '../widgets/interfaces';
-import DhSideNavigation from '../common/side-navigation';
 import Breadcrumbs from '../common/Breadcrumbs';
-import { Pathname } from '../routes';
 
 const maxPanelSize = 360;
 
@@ -78,7 +76,7 @@ export default function Dashboard() {
           />
         }
         contentType="dashboard"
-        navigation={<DhSideNavigation />}
+        navigationHide
         notifications={<Flashbar items={items} stackItems />}
         onSplitPanelResize={handleSplitPanelResize}
         onSplitPanelToggle={handleSplitPanelToggle}
