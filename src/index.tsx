@@ -29,14 +29,14 @@ const router = createBrowserRouter([
       },
       {
         path: Pathname.DiabloMonsterLevelCalculator,
-        element: <Navigate to={Pathname.DiabloSuggestedSigilTier} replace />,
+        element: <Navigate to={Pathname.Diablo} replace />,
       },
       {
         path: Pathname.DiabloSuggestedSigilTierOld,
-        element: <Navigate to={Pathname.DiabloSuggestedSigilTier} replace />,
+        element: <Navigate to={Pathname.Diablo} replace />,
       },
       {
-        path: Pathname.DiabloSuggestedSigilTier,
+        path: Pathname.Diablo,
         element: <SuggestedSigilTierPage />,
       },
       {

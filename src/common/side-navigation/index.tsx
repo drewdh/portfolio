@@ -51,7 +51,7 @@ export default function DhSideNavigation() {
       {
         type: 'link',
         text: widgetDetails.diablo.title,
-        href: Pathname.DiabloSuggestedSigilTier,
+        href: Pathname.Diablo,
       },
       // { type: 'divider' },
       // {

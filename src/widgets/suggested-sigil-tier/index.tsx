@@ -43,7 +43,7 @@ export default function SuggestedSigilTierPage() {
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [
     {
       text: widgetDetails.diablo.title,
-      href: Pathname.DiabloSuggestedSigilTier,
+      href: Pathname.Diablo,
     },
   ];
 
@@ -102,7 +102,7 @@ export default function SuggestedSigilTierPage() {
                   {
                     id: TabId.NightmareDungeon,
                     label: 'Nightmare dungeon',
-                    href: `${Pathname.DiabloSuggestedSigilTier}?${tabIdQueryParam}=${TabId.NightmareDungeon}`,
+                    href: `${Pathname.Diablo}?${tabIdQueryParam}=${TabId.NightmareDungeon}`,
                     content: <SuggestedSigilTier />,
                   },
                   {
@@ -112,7 +112,7 @@ export default function SuggestedSigilTierPage() {
                         Player statistics - <i>static preview</i>
                       </span>
                     ),
-                    href: `${Pathname.DiabloSuggestedSigilTier}?${tabIdQueryParam}=${TabId.PlayerStatistics}`,
+                    href: `${Pathname.Diablo}?${tabIdQueryParam}=${TabId.PlayerStatistics}`,
                     content: <PlayerStatistics />,
                   },
                 ]}

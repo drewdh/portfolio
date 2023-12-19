@@ -25,7 +25,7 @@ export default function Overview() {
       },
       {
         title: widgetDetails.diablo.title,
-        href: Pathname.DiabloSuggestedSigilTier,
+        href: Pathname.Diablo,
         description: widgetDetails.diablo.description,
       },
     ];
