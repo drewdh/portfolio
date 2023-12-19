@@ -1,8 +1,6 @@
 export enum Pathname {
   Home = '/',
   Fallback = '*',
-  /** @deprecated Not registered in routes */
-  Pomodoro = '/pomodoro',
   /** @deprecated Use Pathname.Diablo */
   DiabloMonsterLevelCalculator = '/diablo-monster-level-calculator',
   /** @deprecated Use Pathname.Diablo */

@@ -4,13 +4,8 @@ import { useState } from 'react';
 import without from 'lodash/without';
 import { v4 as uuidv4 } from 'uuid';
 
-import usePreviewNotification from '../usePreviewNotification';
-
-let isInit = false;
-
 export default function useNotifications(): State {
   const [items, setItems] = useState<FlashbarProps.MessageDefinition[]>([]);
-  const previewNotification = usePreviewNotification();
 
   function dismissNotification(id: string) {
     setItems((prevItems) => {
@@ -35,12 +30,6 @@ export default function useNotifications(): State {
     setItems((prevItems) => {
       return [...prevItems, newItem];
     });
-  }
-
-  // Show preview disclaimer if not already dismissed
-  if (!isInit && previewNotification) {
-    addNotification(previewNotification);
-    isInit = true;
   }
 
   return {
