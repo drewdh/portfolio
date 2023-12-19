@@ -9,8 +9,6 @@ import App from './app';
 import reportWebVitals from './reportWebVitals';
 import SuggestedSigilTierPage from './widgets/suggested-sigil-tier';
 import OverviewPage from './widgets/overview';
-import SettingsPage from './widgets/settings';
-import Display from './widgets/settings/Display';
 import CoffeeCalculatorPage from './widgets/coffee-calculator';
 import EcobeePage from './widgets/ecobee';
 
@@ -38,14 +36,6 @@ const router = createBrowserRouter([
       {
         path: Pathname.Diablo,
         element: <SuggestedSigilTierPage />,
-      },
-      {
-        path: Pathname.Settings,
-        element: <SettingsPage />,
-      },
-      {
-        path: Pathname.SettingsDisplay,
-        element: <Display />,
       },
       {
         path: Pathname.CoffeeCalculator,
