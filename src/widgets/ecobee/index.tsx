@@ -6,6 +6,7 @@ import widgetDetails from '../../common/widgetDetails';
 import { Pathname } from '../../routes';
 import useTitle from '../../useTitle';
 import Flashbar from '@cloudscape-design/components/flashbar';
+import { topNavSelector } from '../../top-navigation/constants';
 
 export default function EcobeePage() {
   const breadcrumbItems: BreadcrumbGroupProps.Item[] = [
@@ -33,6 +34,7 @@ export default function EcobeePage() {
       contentType="dashboard"
       content={<Ecobee />}
       toolsHide
+      headerSelector={topNavSelector}
     />
   );
 }

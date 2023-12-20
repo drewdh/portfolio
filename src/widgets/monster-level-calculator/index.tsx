@@ -4,6 +4,7 @@ import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-g
 import { Pathname } from '../../routes';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import MonsterLevelCalculator from './MonsterLevelCalculator';
+import { topNavSelector } from '../../top-navigation/constants';
 
 export default function MonsterLevelCalculatorPage() {
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [
@@ -18,6 +19,7 @@ export default function MonsterLevelCalculatorPage() {
       breadcrumbs={<Breadcrumbs items={breadcrumbs} />}
       content={<MonsterLevelCalculator />}
       navigationHide
+      headerSelector={topNavSelector}
       toolsHide
     />
   );
