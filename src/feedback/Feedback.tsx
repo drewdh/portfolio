@@ -113,7 +113,11 @@ export default function Feedback({ isVisible, onDismiss }: Props) {
               onChange={handleEmailChange}
             />
           </FormField>
-          {isApiError && <Alert type="error">Failed to submit feedback.</Alert>}
+          {isApiError && (
+            <Alert type="error">
+              Failed to submit feedback. Try again later.
+            </Alert>
+          )}
         </SpaceBetween>
       )}
     </Modal>
