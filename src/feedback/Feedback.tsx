@@ -14,6 +14,7 @@ import Input from '@cloudscape-design/components/input';
 
 export default function Feedback({ isVisible, onDismiss }: Props) {
   const {
+    emailRef,
     errors,
     handleDismiss,
     handleEmailChange,
@@ -25,7 +26,9 @@ export default function Feedback({ isVisible, onDismiss }: Props) {
     isSubmitting,
     isSuccess,
     messageConstraintText,
+    messageRef,
     satisfiedItems,
+    satisfiedRef,
     typeOptions,
     values,
   } = useFeedback({ onDismiss });
@@ -77,7 +80,11 @@ export default function Feedback({ isVisible, onDismiss }: Props) {
             constraintText={messageConstraintText}
             errorText={errors.message}
           >
-            <Textarea value={values.message} onChange={handleMessageChange} />
+            <Textarea
+              ref={messageRef}
+              value={values.message}
+              onChange={handleMessageChange}
+            />
           </FormField>
           <FormField
             label="Are you satisfied with your experience?"
@@ -87,6 +94,7 @@ export default function Feedback({ isVisible, onDismiss }: Props) {
               items={satisfiedItems}
               onChange={handleSatisfiedChange}
               value={values.satisfied}
+              ref={satisfiedRef}
             />
           </FormField>
           <FormField
@@ -99,6 +107,7 @@ export default function Feedback({ isVisible, onDismiss }: Props) {
             description="If you would like to be contacted about your feedback, enter your email address."
           >
             <Input
+              ref={emailRef}
               placeholder="person.doe@email.com"
               value={values.email}
               onChange={handleEmailChange}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Ref, useRef, useState } from 'react';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import { TextareaProps } from '@cloudscape-design/components/textarea';
 import { RadioGroupProps } from '@cloudscape-design/components/radio-group';
@@ -37,6 +37,9 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function useFeedback({ onDismiss }: Props): State {
+  const emailRef = useRef<InputProps.Ref>(null);
+  const messageRef = useRef<TextareaProps.Ref>(null);
+  const satisfiedRef = useRef<RadioGroupProps.Ref>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isApiError, setIsApiError] = useState<boolean>(false);
@@ -65,6 +68,7 @@ export default function useFeedback({ onDismiss }: Props): State {
     isSubmitting,
     resetForm,
     setFieldValue,
+    validateForm,
     values,
   } = useFormik<Values>({
     initialValues: {
@@ -131,9 +135,19 @@ export default function useFeedback({ onDismiss }: Props): State {
     remainingCharacters === 1 ? 'character' : 'characters';
   const messageConstraintText = `${remainingCharacters.toLocaleString()} ${characterString} remaining`;
 
-  function handleSubmitClick() {
+  async function handleSubmitClick() {
     setIsSubmitted(true);
+    const errors = await validateForm();
     handleSubmit();
+    if ('message' in errors) {
+      return messageRef.current?.focus();
+    }
+    if ('satisfied' in errors) {
+      return satisfiedRef.current?.focus();
+    }
+    if ('email' in errors) {
+      return emailRef.current?.focus();
+    }
   }
 
   function handleDismiss() {
@@ -145,6 +159,7 @@ export default function useFeedback({ onDismiss }: Props): State {
   }
 
   return {
+    emailRef,
     errors,
     handleDismiss,
     handleEmailChange,
@@ -156,7 +171,9 @@ export default function useFeedback({ onDismiss }: Props): State {
     isSubmitting,
     isSuccess,
     messageConstraintText,
+    messageRef,
     satisfiedItems,
+    satisfiedRef,
     typeOptions,
     values,
   };
@@ -167,6 +184,7 @@ interface Props {
 }
 
 interface State {
+  emailRef: Ref<InputProps.Ref>;
   errors: FormikErrors<Values>;
   handleDismiss: () => void;
   handleEmailChange: (
@@ -186,7 +204,9 @@ interface State {
   isSubmitting: boolean;
   isSuccess: boolean;
   messageConstraintText: string | undefined;
+  messageRef: Ref<TextareaProps.Ref>;
   satisfiedItems: RadioGroupProps.RadioButtonDefinition[];
+  satisfiedRef: Ref<RadioGroupProps.Ref>;
   typeOptions: SelectProps.Options;
   values: Values;
 }
