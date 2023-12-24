@@ -27,7 +27,6 @@ export default function OverviewPage() {
     <AppLayout
       breadcrumbs={<Breadcrumbs items={[]} />}
       content={<Overview />}
-      contentType="table"
       navigationHide
       toolsHide
       headerSelector={topNavSelector}

@@ -1,6 +1,5 @@
 import Header from '@cloudscape-design/components/header';
-import Table, { TableProps } from '@cloudscape-design/components/table';
-import { useMemo } from 'react';
+import Cards, { CardsProps } from '@cloudscape-design/components/cards';
 
 import useTitle from '../../useTitle';
 import { Pathname } from '../../routes';
@@ -13,42 +12,33 @@ interface Widget {
   description: string;
 }
 
+const widgets: Widget[] = [
+  {
+    title: widgetDetails.ecobee.title,
+    href: Pathname.Ecobee,
+    description: widgetDetails.ecobee.description,
+  },
+  {
+    title: widgetDetails.diablo.title,
+    href: Pathname.Diablo,
+    description: widgetDetails.diablo.description,
+  },
+];
+
+const cardDefinition: CardsProps.CardDefinition<Widget> = {
+  header: (item) => (
+    <InternalLink fontSize="heading-m" href={item.href}>
+      {item.title}
+    </InternalLink>
+  ),
+  sections: [{ content: (item) => item.description }],
+};
+
 export default function Overview() {
   useTitle();
 
-  const widgets = useMemo((): Widget[] => {
-    return [
-      {
-        title: widgetDetails.ecobee.title,
-        href: Pathname.Ecobee,
-        description: widgetDetails.ecobee.description,
-      },
-      {
-        title: widgetDetails.diablo.title,
-        href: Pathname.Diablo,
-        description: widgetDetails.diablo.description,
-      },
-    ];
-  }, []);
-
-  const columnDefinitions =
-    useMemo((): TableProps.ColumnDefinition<Widget>[] => {
-      return [
-        {
-          header: 'App',
-          cell: (item) => (
-            <InternalLink href={item.href}>{item.title}</InternalLink>
-          ),
-        },
-        {
-          header: 'Description',
-          cell: (item) => item.description,
-        },
-      ];
-    }, []);
-
   return (
-    <Table<Widget>
+    <Cards<Widget>
       header={
         <Header
           description="Miscellaneous apps for experimenting with different user experience ideas and technologies."
@@ -58,7 +48,7 @@ export default function Overview() {
         </Header>
       }
       items={widgets}
-      columnDefinitions={columnDefinitions}
+      cardDefinition={cardDefinition}
       variant="full-page"
       stickyHeader
     />

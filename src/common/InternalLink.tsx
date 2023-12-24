@@ -5,6 +5,7 @@ import useFollow from './useFollow';
 export default function InternalLink({
   children,
   href,
+  ...rest
 }: PropsWithChildren<Props>) {
   const follow = useFollow();
 
@@ -16,12 +17,12 @@ export default function InternalLink({
   );
 
   return (
-    <Link onFollow={handleFollow} href={href}>
+    <Link {...rest} onFollow={handleFollow} href={href}>
       {children}
     </Link>
   );
 }
 
-interface Props {
+interface Props extends LinkProps {
   href: string;
 }
