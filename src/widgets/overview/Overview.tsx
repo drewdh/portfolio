@@ -41,7 +41,7 @@ export default function Overview() {
     <Cards<Widget>
       header={
         <Header
-          description="Miscellaneous apps for experimenting with different user experience ideas and technologies."
+          description="Mini apps for experimenting with different user experience ideas and technologies."
           variant="awsui-h1-sticky"
         >
           Apps
