@@ -14,6 +14,7 @@ import Input from '@cloudscape-design/components/input';
 
 export default function Feedback({ isVisible, onDismiss }: Props) {
   const {
+    alertRef,
     emailRef,
     errors,
     handleDismiss,
@@ -114,7 +115,7 @@ export default function Feedback({ isVisible, onDismiss }: Props) {
             />
           </FormField>
           {isApiError && (
-            <Alert type="error">
+            <Alert ref={alertRef} type="error">
               Failed to submit feedback. Try again later.
             </Alert>
           )}

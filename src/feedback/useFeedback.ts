@@ -1,5 +1,8 @@
 import { Ref, useRef, useState } from 'react';
-import { NonCancelableCustomEvent } from '@cloudscape-design/components';
+import {
+  AlertProps,
+  NonCancelableCustomEvent,
+} from '@cloudscape-design/components';
 import { TextareaProps } from '@cloudscape-design/components/textarea';
 import { RadioGroupProps } from '@cloudscape-design/components/radio-group';
 import { SelectProps } from '@cloudscape-design/components/select';
@@ -37,6 +40,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function useFeedback({ onDismiss }: Props): State {
+  const alertRef = useRef<AlertProps.Ref>(null);
   const emailRef = useRef<InputProps.Ref>(null);
   const messageRef = useRef<TextareaProps.Ref>(null);
   const satisfiedRef = useRef<RadioGroupProps.Ref>(null);
@@ -79,7 +83,7 @@ export default function useFeedback({ onDismiss }: Props): State {
     },
     validateOnChange: isSubmitted,
     validationSchema,
-    onSubmit: async (values, formikHelpers) => {
+    onSubmit: async (values) => {
       setIsApiError(false);
       try {
         await sendFeedback({
@@ -91,6 +95,7 @@ export default function useFeedback({ onDismiss }: Props): State {
         setIsSuccess(true);
       } catch {
         setIsApiError(true);
+        alertRef.current?.focus();
       }
     },
   });
@@ -159,6 +164,7 @@ export default function useFeedback({ onDismiss }: Props): State {
   }
 
   return {
+    alertRef,
     emailRef,
     errors,
     handleDismiss,
@@ -184,6 +190,7 @@ interface Props {
 }
 
 interface State {
+  alertRef: Ref<AlertProps.Ref>;
   emailRef: Ref<InputProps.Ref>;
   errors: FormikErrors<Values>;
   handleDismiss: () => void;
