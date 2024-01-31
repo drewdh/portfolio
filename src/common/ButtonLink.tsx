@@ -6,6 +6,7 @@ import useFollow from './useFollow';
 export default function ButtonLink({
   children,
   href,
+  ...props
 }: PropsWithChildren<Props>) {
   const follow = useFollow();
 
@@ -17,12 +18,12 @@ export default function ButtonLink({
   );
 
   return (
-    <Button href={href} onFollow={handleFollow}>
+    <Button {...props} href={href} onFollow={handleFollow}>
       {children}
     </Button>
   );
 }
 
-interface Props {
+interface Props extends ButtonProps {
   href: string;
 }

@@ -7,9 +7,9 @@ import { Pathname } from './routes';
 import './index.scss';
 import App from './app';
 import reportWebVitals from './reportWebVitals';
-import SuggestedSigilTierPage from './widgets/suggested-sigil-tier';
-import OverviewPage from './widgets/overview';
-import EcobeePage from './widgets/ecobee';
+import SuggestedSigilTierPage from './apps/suggested-sigil-tier';
+import OverviewPage from './apps/overview';
+import EcobeePage from './apps/ecobee';
 
 const router = createBrowserRouter([
   {
@@ -44,9 +44,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />
