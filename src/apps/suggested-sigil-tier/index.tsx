@@ -1,31 +1,22 @@
-import {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import AppLayout, {
-  AppLayoutProps,
-} from '@cloudscape-design/components/app-layout';
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AppLayoutProps } from '@cloudscape-design/components/app-layout';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 import Header from '@cloudscape-design/components/header';
 import Box from '@cloudscape-design/components/box';
 import Tabs, { TabsProps } from '@cloudscape-design/components/tabs';
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
+import Flashbar from '@cloudscape-design/components/flashbar';
 
 import SuggestedSigilTier from './SuggestedSigilTier';
 import { Pathname } from '../../routes';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import { HelpPanelProvider } from '../../help-panel/help-panel';
 import widgetDetails from '../../common/widgetDetails';
-import { topNavSelector } from '../../top-navigation/constants';
 import { useLocation, useNavigate } from 'react-router';
 import PlayerStatistics from './PlayerStatistics';
 import useTitle from '../../useTitle';
-import Flashbar from '@cloudscape-design/components/flashbar';
+import DhAppLayout from '../../common/dh-app-layout';
 
 const tabIdQueryParam = 'tabId';
 
@@ -49,9 +40,7 @@ export default function SuggestedSigilTierPage() {
   const navigate = useNavigate();
   const activeTabQueryParam = useMemo((): TabId => {
     const queryParams = new URLSearchParams(search);
-    return (
-      (queryParams.get(tabIdQueryParam) as TabId) ?? TabId.NightmareDungeon
-    );
+    return (queryParams.get(tabIdQueryParam) as TabId) ?? TabId.NightmareDungeon;
   }, [search]);
   const [activeTabId, setActiveTabId] = useState<TabId>(activeTabQueryParam);
 
@@ -78,16 +67,13 @@ export default function SuggestedSigilTierPage() {
 
   return (
     <HelpPanelProvider config={{ content, setContent, openPanel }}>
-      <AppLayout
+      <DhAppLayout
         breadcrumbs={<Breadcrumbs items={breadcrumbs} />}
         content={
           <ContentLayout
             disableOverlap
             header={
-              <Header
-                variant="h1"
-                description={widgetDetails.diablo.description}
-              >
+              <Header variant="h1" description={widgetDetails.diablo.description}>
                 {widgetDetails.diablo.title}
               </Header>
             }
@@ -121,7 +107,6 @@ export default function SuggestedSigilTierPage() {
         ref={ref}
         tools={content}
         navigationHide
-        headerSelector={topNavSelector}
         toolsHide
         notifications={
           <Flashbar

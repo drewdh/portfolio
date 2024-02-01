@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
-import AppLayout from '@cloudscape-design/components/app-layout';
 
 import Breadcrumbs from '../../common/Breadcrumbs';
 import Overview from './Overview';
 import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
-import { topNavSelector } from '../../top-navigation/constants';
+import DhAppLayout from '../../common/dh-app-layout';
 
 let initialIsNewVisitor: boolean | undefined;
 
@@ -24,12 +23,11 @@ export default function OverviewPage() {
   }, [isNewVisitor, setIsNewVisitor]);
 
   return (
-    <AppLayout
+    <DhAppLayout
       breadcrumbs={<Breadcrumbs items={[]} />}
       content={<Overview />}
       navigationHide
       toolsHide
-      headerSelector={topNavSelector}
     />
   );
 }

@@ -1,0 +1,19 @@
+@use '@cloudscape-design/design-tokens' as awsui;
+
+.container {
+  position: sticky;
+  // https://cloudscape.design/get-started/dev-guides/z-index/
+  z-index: 1999;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: awsui.$color-background-container-content;
+  height: awsui.$space-scaled-xxxl;
+  padding: 0 awsui.$space-scaled-m;
+  color: awsui.$color-text-home-header-default;
+  display: flex;
+  align-items: center;
+  * {
+    font-size: 12px !important;
+  }
+}

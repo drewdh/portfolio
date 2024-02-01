@@ -1,12 +1,12 @@
-import AppLayout from '@cloudscape-design/components/app-layout';
+import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
+import Flashbar from '@cloudscape-design/components/flashbar';
+
 import Ecobee from './Ecobee';
 import Breadcrumbs from '../../common/Breadcrumbs';
-import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 import widgetDetails from '../../common/widgetDetails';
 import { Pathname } from '../../routes';
 import useTitle from '../../useTitle';
-import Flashbar from '@cloudscape-design/components/flashbar';
-import { topNavSelector } from '../../top-navigation/constants';
+import DhAppLayout from '../../common/dh-app-layout';
 
 export default function EcobeePage() {
   const breadcrumbItems: BreadcrumbGroupProps.Item[] = [
@@ -15,7 +15,7 @@ export default function EcobeePage() {
   useTitle(widgetDetails.ecobee.title);
 
   return (
-    <AppLayout
+    <DhAppLayout
       breadcrumbs={<Breadcrumbs items={breadcrumbItems} />}
       navigationHide
       notifications={
@@ -34,7 +34,6 @@ export default function EcobeePage() {
       contentType="dashboard"
       content={<Ecobee />}
       toolsHide
-      headerSelector={topNavSelector}
     />
   );
 }

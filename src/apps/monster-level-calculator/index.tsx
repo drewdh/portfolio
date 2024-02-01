@@ -1,10 +1,9 @@
-import AppLayout from '@cloudscape-design/components/app-layout';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 
 import { Pathname } from '../../routes';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import MonsterLevelCalculator from './MonsterLevelCalculator';
-import { topNavSelector } from '../../top-navigation/constants';
+import DhAppLayout from '../../common/dh-app-layout';
 
 export default function MonsterLevelCalculatorPage() {
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [
@@ -15,11 +14,10 @@ export default function MonsterLevelCalculatorPage() {
   ];
 
   return (
-    <AppLayout
+    <DhAppLayout
       breadcrumbs={<Breadcrumbs items={breadcrumbs} />}
       content={<MonsterLevelCalculator />}
       navigationHide
-      headerSelector={topNavSelector}
       toolsHide
     />
   );
