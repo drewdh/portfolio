@@ -1,6 +1,5 @@
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import Header from '@cloudscape-design/components/header';
-import widgetDetails from '../../common/widgetDetails';
 import Container from '@cloudscape-design/components/container';
 import Grid from '@cloudscape-design/components/grid';
 import Box from '@cloudscape-design/components/box';
@@ -11,13 +10,27 @@ import { faHeat } from '@fortawesome/pro-solid-svg-icons/faHeat';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { colorTextStatusWarning } from '@cloudscape-design/design-tokens';
 import Table from '@cloudscape-design/components/table';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from '@cloudscape-design/components/link';
 import Button from '@cloudscape-design/components/button';
+
+import widgetDetails from '../../common/widgetDetails';
 import useEcobee from './useEcobee';
+import useAddNotification from '../../common/app-layout/use-add-notification';
 
 export default function Ecobee() {
   const { handleRefresh, isFetching } = useEcobee();
+  const addNotification = useAddNotification();
+
+  useEffect((): void => {
+    addNotification({
+      id: 'ecobeePreview',
+      header: 'Static preview feature',
+      content: 'This tool is in static preview for demo purposes and does not use live data.',
+      dismissible: false,
+      type: 'info',
+    });
+  }, [addNotification]);
 
   return (
     <ContentLayout
@@ -27,11 +40,7 @@ export default function Ecobee() {
           description={widgetDetails.ecobee.description}
           actions={
             <SpaceBetween size="xs" direction="horizontal" alignItems="center">
-              <Button
-                loading={isFetching}
-                onClick={handleRefresh}
-                iconName="refresh"
-              />
+              <Button loading={isFetching} onClick={handleRefresh} iconName="refresh" />
               <Box variant="small" color="text-status-inactive">
                 {isFetching ? 'Updating...' : 'Updated 3 minutes ago'}
               </Box>
@@ -93,9 +102,7 @@ export default function Ecobee() {
             </SpaceBetween>
           </ColumnLayout>
         </Container>
-        <Container
-          header={<Header description="Seattle, WA">Current conditions</Header>}
-        >
+        <Container header={<Header description="Seattle, WA">Current conditions</Header>}>
           <SpaceBetween size="l">
             <div>
               <Box variant="awsui-key-label">Temperature</Box>

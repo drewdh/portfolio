@@ -4,7 +4,7 @@ import StatusIndicator from '@cloudscape-design/components/status-indicator';
 import Header from '@cloudscape-design/components/header';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import FormField from '@cloudscape-design/components/form-field';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Select, { SelectProps } from '@cloudscape-design/components/select';
 import Box from '@cloudscape-design/components/box';
@@ -14,6 +14,7 @@ import Input, { InputProps } from '@cloudscape-design/components/input';
 import Alert from '@cloudscape-design/components/alert';
 
 import useLocalStorage, { LocalStorageKey } from '../../utilities/useLocalStorage';
+import useAddNotification from '../../common/app-layout/use-add-notification';
 
 const worldTierItems: TilesProps.TilesDefinition[] = [
   { value: '3', label: 'Nightmare', description: 'World Tier 3' },
@@ -21,6 +22,7 @@ const worldTierItems: TilesProps.TilesDefinition[] = [
 ];
 
 export default function SuggestedSigilTier() {
+  const addNotification = useAddNotification();
   const [monsterLevelOffset, setMonsterLevelOffset] = useLocalStorage<number>(
     LocalStorageKey.DiabloMonsterLevelOffset,
     3
@@ -29,6 +31,17 @@ export default function SuggestedSigilTier() {
     LocalStorageKey.DiabloWorldTier,
     '3'
   );
+
+  useEffect(() => {
+    addNotification({
+      id: 'outdated',
+      header: 'Outdated',
+      dismissible: false,
+      type: 'info',
+      content:
+        'This tool has not been updated to include the latest changes to XP and Nightmare Dungeons.',
+    });
+  }, [addNotification]);
 
   const playerLevelOptions = useMemo((): SelectProps.Option[] => {
     const options: SelectProps.Option[] = [];

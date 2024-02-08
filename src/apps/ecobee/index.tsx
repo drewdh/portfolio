@@ -1,12 +1,11 @@
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
-import Flashbar from '@cloudscape-design/components/flashbar';
 
 import Ecobee from './Ecobee';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import widgetDetails from '../../common/widgetDetails';
 import { Pathname } from '../../routes';
 import useTitle from '../../utilities/use-title';
-import DhAppLayout from '../../common/dh-app-layout';
+import DhAppLayout from '../../common/app-layout/dh-app-layout';
 
 export default function EcobeePage() {
   const breadcrumbItems: BreadcrumbGroupProps.Item[] = [
@@ -18,19 +17,6 @@ export default function EcobeePage() {
     <DhAppLayout
       breadcrumbs={<Breadcrumbs items={breadcrumbItems} />}
       navigationHide
-      notifications={
-        <Flashbar
-          items={[
-            {
-              header: 'Static preview feature',
-              content:
-                'This tool is in static preview for demo purposes and does not use live data.',
-              dismissible: false,
-              type: 'info',
-            },
-          ]}
-        />
-      }
       contentType="dashboard"
       content={<Ecobee />}
       toolsHide

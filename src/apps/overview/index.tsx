@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import Overview from './Overview';
 import useLocalStorage, { LocalStorageKey } from '../../utilities/useLocalStorage';
-import DhAppLayout from '../../common/dh-app-layout';
+import DhAppLayout from '../../common/app-layout/dh-app-layout';
 
 let initialIsNewVisitor: boolean | undefined;
 

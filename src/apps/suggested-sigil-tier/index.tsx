@@ -6,7 +6,6 @@ import Box from '@cloudscape-design/components/box';
 import Tabs, { TabsProps } from '@cloudscape-design/components/tabs';
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
-import Flashbar from '@cloudscape-design/components/flashbar';
 
 import SuggestedSigilTier from './SuggestedSigilTier';
 import { Pathname } from '../../routes';
@@ -16,7 +15,7 @@ import widgetDetails from '../../common/widgetDetails';
 import { useLocation, useNavigate } from 'react-router';
 import PlayerStatistics from './PlayerStatistics';
 import useTitle from '../../utilities/use-title';
-import DhAppLayout from '../../common/dh-app-layout';
+import DhAppLayout from '../../common/app-layout/dh-app-layout';
 
 const tabIdQueryParam = 'tabId';
 
@@ -108,19 +107,6 @@ export default function SuggestedSigilTierPage() {
         tools={content}
         navigationHide
         toolsHide
-        notifications={
-          <Flashbar
-            items={[
-              {
-                header: 'Outdated',
-                dismissible: false,
-                type: 'info',
-                content:
-                  'This tool has not been updated to include the latest changes to XP and Nightmare Dungeons.',
-              },
-            ]}
-          />
-        }
       />
     </HelpPanelProvider>
   );
