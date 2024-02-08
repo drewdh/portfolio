@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { RouterProvider } from 'react-router';
+import { I18nProvider, importMessages } from '@cloudscape-design/components/i18n';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { Pathname } from './routes';
 import './index.scss';
@@ -63,12 +65,16 @@ const router = createBrowserRouter([
 ]);
 
 const queryClient = new QueryClient();
+const locale = document.documentElement.lang;
+const messages = await importMessages(locale);
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <I18nProvider locale={locale} messages={messages}>
+        <RouterProvider router={router} />
+      </I18nProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );
