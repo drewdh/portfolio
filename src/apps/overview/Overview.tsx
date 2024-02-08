@@ -1,7 +1,7 @@
 import Header from '@cloudscape-design/components/header';
 import Cards, { CardsProps } from '@cloudscape-design/components/cards';
 
-import useTitle from '../../useTitle';
+import useTitle from '../../utilities/use-title';
 import { Pathname } from '../../routes';
 import InternalLink from '../../common/InternalLink';
 import widgetDetails from '../../common/widgetDetails';
@@ -22,6 +22,11 @@ const widgets: Widget[] = [
     title: widgetDetails.diablo.title,
     href: Pathname.Diablo,
     description: widgetDetails.diablo.description,
+  },
+  {
+    title: widgetDetails.feedback.title,
+    href: Pathname.Feedback,
+    description: widgetDetails.feedback.description,
   },
 ];
 

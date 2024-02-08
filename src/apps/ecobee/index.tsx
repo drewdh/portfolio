@@ -5,7 +5,7 @@ import Ecobee from './Ecobee';
 import Breadcrumbs from '../../common/Breadcrumbs';
 import widgetDetails from '../../common/widgetDetails';
 import { Pathname } from '../../routes';
-import useTitle from '../../useTitle';
+import useTitle from '../../utilities/use-title';
 import DhAppLayout from '../../common/dh-app-layout';
 
 export default function EcobeePage() {

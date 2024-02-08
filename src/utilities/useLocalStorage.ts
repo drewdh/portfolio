@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 
 export enum LocalStorageKey {
   GlobalSettings = 'globalSettings',
@@ -23,10 +17,7 @@ export enum LocalStorageKey {
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */
-export default function useLocalStorage<T>(
-  key: LocalStorageKey,
-  defaultValue: T
-): State<T> {
+export default function useLocalStorage<T>(key: LocalStorageKey, defaultValue: T): State<T> {
   const [item, setItem] = useState<T>(() => {
     try {
       const value = localStorage.getItem(key);
@@ -38,8 +29,7 @@ export default function useLocalStorage<T>(
 
   const updateItem = useCallback(
     (updater: T | ((prevValue: T) => T)): void => {
-      const newValue =
-        typeof updater === 'function' ? (updater as Function)(item) : updater;
+      const newValue = typeof updater === 'function' ? (updater as Function)(item) : updater;
       try {
         const stringifiedValue = JSON.stringify(newValue);
         localStorage.setItem(key, stringifiedValue);

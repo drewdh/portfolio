@@ -12,9 +12,11 @@ export default function Footer() {
   return (
     <>
       <div className={clsx(styles.container, 'awsui-context-top-navigation')} id={footerId}>
-        <Link variant="secondary" color="inverted" onFollow={() => setIsFeedbackVisible(true)}>
-          Send feedback
-        </Link>
+        <div>
+          <Link variant="secondary" color="inverted" onFollow={() => setIsFeedbackVisible(true)}>
+            Send feedback
+          </Link>
+        </div>
       </div>
       <Feedback isVisible={isFeedbackVisible} onDismiss={() => setIsFeedbackVisible(false)} />
     </>

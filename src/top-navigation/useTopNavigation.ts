@@ -3,10 +3,16 @@ import { useState } from 'react';
 
 import { Pathname } from '../routes';
 import useNavigateWithRef from '../common/useNavigateWithRef';
+import useGetCurrentUser from '../auth/use-get-current-user';
+import useSignOut from '../auth/use-sign-out';
 
 export default function useTopNavigation(): State {
   const navigate = useNavigateWithRef();
   const [isSettingsVisible, setIsSettingsVisible] = useState<boolean>(false);
+
+  const { isLoading: isLoadingUser, data: currentUser } = useGetCurrentUser();
+  console.log(currentUser);
+  const { mutate: signOut } = useSignOut();
 
   function handleSettingsDismiss() {
     setIsSettingsVisible(false);
@@ -36,6 +42,20 @@ export default function useTopNavigation(): State {
       },
     },
   ];
+
+  if (!isLoadingUser && currentUser) {
+    utilities.push({
+      type: 'button',
+      text: 'Sign out',
+      onClick: () => signOut(),
+    });
+  } else if (!isLoadingUser && !currentUser) {
+    utilities.push({
+      type: 'button',
+      text: 'Sign in',
+      href: Pathname.Signin,
+    });
+  }
 
   return {
     handleSettingsDismiss,

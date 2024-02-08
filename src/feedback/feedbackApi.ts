@@ -1,4 +1,4 @@
-const apiUrl = 'https://1qi8uc9jyf.execute-api.us-east-1.amazonaws.com/prod';
+const apiUrl = 'https://api.drewhanberry.com/feedback/create';
 
 interface SendFeedbackRequest {
   email: string;
@@ -9,9 +9,7 @@ interface SendFeedbackRequest {
 
 type SendFeedbackResponse = unknown;
 
-export async function sendFeedback(
-  request: SendFeedbackRequest
-): Promise<SendFeedbackResponse> {
+export async function sendFeedback(request: SendFeedbackRequest): Promise<SendFeedbackResponse> {
   const resp = await fetch(apiUrl, {
     method: 'POST',
     headers: {

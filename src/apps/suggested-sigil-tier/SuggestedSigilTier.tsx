@@ -13,7 +13,7 @@ import Tiles, { TilesProps } from '@cloudscape-design/components/tiles';
 import Input, { InputProps } from '@cloudscape-design/components/input';
 import Alert from '@cloudscape-design/components/alert';
 
-import useLocalStorage, { LocalStorageKey } from '../../useLocalStorage';
+import useLocalStorage, { LocalStorageKey } from '../../utilities/useLocalStorage';
 
 const worldTierItems: TilesProps.TilesDefinition[] = [
   { value: '3', label: 'Nightmare', description: 'World Tier 3' },
@@ -40,10 +40,7 @@ export default function SuggestedSigilTier() {
   }, []);
 
   const [selectedPlayerLevelOption, setSelectedPlayerLevelOption] =
-    useLocalStorage<SelectProps.Option>(
-      LocalStorageKey.DiabloPlayerLevel,
-      playerLevelOptions[50]
-    );
+    useLocalStorage<SelectProps.Option>(LocalStorageKey.DiabloPlayerLevel, playerLevelOptions[50]);
 
   const suggestedMonsterLevel = useMemo((): number => {
     const worldTierNumber = Number(playerWorldTier);
@@ -62,8 +59,7 @@ export default function SuggestedSigilTier() {
     return Math.max(minSigilTier, suggestedMonsterLevel - 50 - worldTierNumber);
   }, [playerWorldTier, suggestedMonsterLevel]);
 
-  const monsterLevelDiff =
-    suggestedMonsterLevel - Number(selectedPlayerLevelOption?.value);
+  const monsterLevelDiff = suggestedMonsterLevel - Number(selectedPlayerLevelOption?.value);
 
   const xpMultiplier = useMemo((): number => {
     if (monsterLevelDiff === 1) {
@@ -121,22 +117,14 @@ export default function SuggestedSigilTier() {
   }, [monsterLevelOffset, selectedPlayerLevelOption, suggestedMonsterLevel]);
 
   const statusMessage = useMemo((): string => {
-    const plusSign =
-      suggestedMonsterLevel > Number(selectedPlayerLevelOption?.value)
-        ? '+'
-        : '';
-    return `${plusSign}${monsterLevelDiff} level${
-      monsterLevelDiff === 1 ? '' : 's'
-    }`;
+    const plusSign = suggestedMonsterLevel > Number(selectedPlayerLevelOption?.value) ? '+' : '';
+    return `${plusSign}${monsterLevelDiff} level${monsterLevelDiff === 1 ? '' : 's'}`;
   }, [monsterLevelDiff, selectedPlayerLevelOption, suggestedMonsterLevel]);
 
   return (
     <SpaceBetween size="l">
       <Grid
-        gridDefinition={[
-          { colspan: { default: 12, s: 4 } },
-          { colspan: { default: 12, s: 8 } },
-        ]}
+        gridDefinition={[{ colspan: { default: 12, s: 4 } }, { colspan: { default: 12, s: 8 } }]}
       >
         <Container header={<Header>Configuration</Header>}>
           <SpaceBetween size="l">
@@ -186,9 +174,7 @@ export default function SuggestedSigilTier() {
                 <Box variant="awsui-key-label">Monster level offset</Box>
                 {statusType && (
                   <div>
-                    <StatusIndicator type={statusType}>
-                      {statusMessage}
-                    </StatusIndicator>
+                    <StatusIndicator type={statusType}>{statusMessage}</StatusIndicator>
                   </div>
                 )}
                 {!statusType && <div>{statusMessage}</div>}
@@ -200,9 +186,7 @@ export default function SuggestedSigilTier() {
               </Box>
               <div>
                 <Box variant="awsui-key-label">Monster XP multiplier</Box>
-                <StatusIndicator
-                  type={xpMultiplier > 0 ? 'success' : 'warning'}
-                >
+                <StatusIndicator type={xpMultiplier > 0 ? 'success' : 'warning'}>
                   {xpMultiplierLabel} XP {xpMultiplier === 0.25 && '(max)'}
                 </StatusIndicator>
               </div>

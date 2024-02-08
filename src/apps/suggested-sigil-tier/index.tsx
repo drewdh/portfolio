@@ -15,7 +15,7 @@ import { HelpPanelProvider } from '../../help-panel/help-panel';
 import widgetDetails from '../../common/widgetDetails';
 import { useLocation, useNavigate } from 'react-router';
 import PlayerStatistics from './PlayerStatistics';
-import useTitle from '../../useTitle';
+import useTitle from '../../utilities/use-title';
 import DhAppLayout from '../../common/dh-app-layout';
 
 const tabIdQueryParam = 'tabId';

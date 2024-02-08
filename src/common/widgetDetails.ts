@@ -12,6 +12,10 @@ const widgetDetails: Record<string, WidgetDetail> = {
     title: 'Ecobee dashboard',
     description: 'A dashboard for viewing statistics for an Ecobee thermostat.',
   },
+  feedback: {
+    title: 'Feedback',
+    description: 'A dashboard for viewing site feedback. Requires an administrator account.',
+  },
 };
 
 interface WidgetDetail {

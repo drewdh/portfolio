@@ -4,14 +4,12 @@ import Box from '@cloudscape-design/components/box';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Button from '@cloudscape-design/components/button';
 import FormField from '@cloudscape-design/components/form-field';
-import RadioGroup, {
-  RadioGroupProps,
-} from '@cloudscape-design/components/radio-group';
+import RadioGroup, { RadioGroupProps } from '@cloudscape-design/components/radio-group';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { Appearance, SettingsValues } from './types';
 import { handleMatchChange, setDarkMode } from './utilities';
-import useLocalStorage, { LocalStorageKey } from '../useLocalStorage';
+import useLocalStorage, { LocalStorageKey } from '../utilities/useLocalStorage';
 import { defaultSettings } from './constants';
 
 let isInitialized = false;
@@ -47,23 +45,22 @@ export default function Settings({ onDismiss, visible }: Props) {
     [setAppearance, settings]
   );
 
-  const appearanceItems =
-    useMemo((): RadioGroupProps.RadioButtonDefinition[] => {
-      return [
-        {
-          label: 'System default',
-          value: Appearance.Automatic,
-        },
-        {
-          label: 'Dark',
-          value: Appearance.Dark,
-        },
-        {
-          label: 'Light',
-          value: Appearance.Light,
-        },
-      ];
-    }, []);
+  const appearanceItems = useMemo((): RadioGroupProps.RadioButtonDefinition[] => {
+    return [
+      {
+        label: 'System default',
+        value: Appearance.Automatic,
+      },
+      {
+        label: 'Dark',
+        value: Appearance.Dark,
+      },
+      {
+        label: 'Light',
+        value: Appearance.Light,
+      },
+    ];
+  }, []);
 
   // Clean up dark mode listener
   useEffect((): (() => void) => {

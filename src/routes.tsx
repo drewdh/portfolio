@@ -8,4 +8,8 @@ export enum Pathname {
   Diablo = '/diablo',
   CoffeeCalculator = '/coffee',
   Ecobee = '/ecobee',
+  Auth = '/auth',
+  Signin = '/auth/signin',
+  PasswordReset = '/auth/reset',
+  Feedback = '/feedback',
 }

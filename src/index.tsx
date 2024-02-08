@@ -10,6 +10,10 @@ import reportWebVitals from './reportWebVitals';
 import SuggestedSigilTierPage from './apps/suggested-sigil-tier';
 import OverviewPage from './apps/overview';
 import EcobeePage from './apps/ecobee';
+import Login from './auth/login';
+import AuthPage from './auth/auth-page';
+import PasswordReset from './auth/password-reset';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const router = createBrowserRouter([
   {
@@ -42,12 +46,30 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    element: <AuthPage />,
+    path: Pathname.Auth,
+    children: [
+      {
+        path: Pathname.Signin,
+        element: <Login />,
+      },
+      {
+        path: Pathname.PasswordReset,
+        element: <PasswordReset />,
+      },
+    ],
+  },
 ]);
+
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
