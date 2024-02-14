@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import Breadcrumbs from '../../common/Breadcrumbs';
+import DhBreadcrumbs from '../../common/DhBreadcrumbs';
 import Overview from './Overview';
 import useLocalStorage, { LocalStorageKey } from '../../utilities/useLocalStorage';
 import DhAppLayout from '../../common/app-layout/dh-app-layout';
@@ -24,7 +24,7 @@ export default function OverviewPage() {
 
   return (
     <DhAppLayout
-      breadcrumbs={<Breadcrumbs items={[]} />}
+      breadcrumbs={<DhBreadcrumbs items={[]} />}
       content={<Overview />}
       navigationHide
       toolsHide

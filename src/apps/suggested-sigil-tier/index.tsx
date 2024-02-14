@@ -9,7 +9,7 @@ import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import SuggestedSigilTier from './SuggestedSigilTier';
 import { Pathname } from '../../routes';
-import Breadcrumbs from '../../common/Breadcrumbs';
+import DhBreadcrumbs from '../../common/DhBreadcrumbs';
 import { HelpPanelProvider } from '../../help-panel/help-panel';
 import widgetDetails from '../../common/widgetDetails';
 import { useLocation, useNavigate } from 'react-router';
@@ -67,7 +67,7 @@ export default function SuggestedSigilTierPage() {
   return (
     <HelpPanelProvider config={{ content, setContent, openPanel }}>
       <DhAppLayout
-        breadcrumbs={<Breadcrumbs items={breadcrumbs} />}
+        breadcrumbs={<DhBreadcrumbs items={breadcrumbs} />}
         content={
           <ContentLayout
             disableOverlap

@@ -1,7 +1,7 @@
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 
 import Ecobee from './Ecobee';
-import Breadcrumbs from '../../common/Breadcrumbs';
+import DhBreadcrumbs from '../../common/DhBreadcrumbs';
 import widgetDetails from '../../common/widgetDetails';
 import { Pathname } from '../../routes';
 import useTitle from '../../utilities/use-title';
@@ -15,7 +15,7 @@ export default function EcobeePage() {
 
   return (
     <DhAppLayout
-      breadcrumbs={<Breadcrumbs items={breadcrumbItems} />}
+      breadcrumbs={<DhBreadcrumbs items={breadcrumbItems} />}
       navigationHide
       contentType="dashboard"
       content={<Ecobee />}

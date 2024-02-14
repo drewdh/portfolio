@@ -6,7 +6,7 @@ import BreadcrumbGroup, {
 import useFollow from './useFollow';
 import { Pathname } from '../routes';
 
-export default function Breadcrumbs({ items }: Props) {
+export default function DhBreadcrumbs({ items }: Props) {
   const follow = useFollow();
   const allItems = useMemo((): BreadcrumbGroupProps.Item[] => {
     return [{ text: 'Apps', href: Pathname.Home }, ...items];
