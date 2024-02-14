@@ -4,7 +4,8 @@
   "private": true,
   "dependencies": {
     "@cloudscape-design/board-components": "^3.0.43",
-    "@cloudscape-design/components": "^3.0.513",
+    "@cloudscape-design/collection-hooks": "^1.0.36",
+    "@cloudscape-design/components": "^3.0.526",
     "@cloudscape-design/design-tokens": "^3.0.28",
     "@cloudscape-design/global-styles": "^1.0.15",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
@@ -19,6 +20,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "clsx": "^2.1.0",
+    "date-fns": "^3.3.1",
     "formik": "^2.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
