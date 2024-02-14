@@ -15,7 +15,6 @@ import EcobeePage from './apps/ecobee';
 import Login from './auth/login';
 import AuthPage from './auth/auth-page';
 import PasswordReset from './auth/password-reset';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const router = createBrowserRouter([
   {
