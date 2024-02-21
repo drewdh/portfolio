@@ -8,6 +8,7 @@ import { NotificationsContext, NotificationsProvider } from './internal/notifica
 
 const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutProps.Ref>) {
   const notifications = useContext(NotificationsContext);
+
   return (
     <AppLayout
       {...props}

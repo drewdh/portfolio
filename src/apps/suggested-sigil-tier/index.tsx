@@ -2,7 +2,6 @@ import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 're
 import { AppLayoutProps } from '@cloudscape-design/components/app-layout';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 import Header from '@cloudscape-design/components/header';
-import Box from '@cloudscape-design/components/box';
 import Tabs, { TabsProps } from '@cloudscape-design/components/tabs';
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
@@ -70,37 +69,34 @@ export default function SuggestedSigilTierPage() {
         breadcrumbs={<DhBreadcrumbs items={breadcrumbs} />}
         content={
           <ContentLayout
-            disableOverlap
             header={
               <Header variant="h1" description={widgetDetails.diablo.description}>
                 {widgetDetails.diablo.title}
               </Header>
             }
           >
-            <Box margin={{ top: 's' }}>
-              <Tabs
-                activeTabId={activeTabId}
-                onChange={handleTabChange}
-                tabs={[
-                  {
-                    id: TabId.NightmareDungeon,
-                    label: 'Nightmare dungeon',
-                    href: `${Pathname.Diablo}?${tabIdQueryParam}=${TabId.NightmareDungeon}`,
-                    content: <SuggestedSigilTier />,
-                  },
-                  {
-                    id: TabId.PlayerStatistics,
-                    label: (
-                      <span>
-                        Player statistics - <i>static preview</i>
-                      </span>
-                    ),
-                    href: `${Pathname.Diablo}?${tabIdQueryParam}=${TabId.PlayerStatistics}`,
-                    content: <PlayerStatistics />,
-                  },
-                ]}
-              />
-            </Box>
+            <Tabs
+              activeTabId={activeTabId}
+              onChange={handleTabChange}
+              tabs={[
+                {
+                  id: TabId.NightmareDungeon,
+                  label: 'Nightmare dungeon',
+                  href: `${Pathname.Diablo}?${tabIdQueryParam}=${TabId.NightmareDungeon}`,
+                  content: <SuggestedSigilTier />,
+                },
+                {
+                  id: TabId.PlayerStatistics,
+                  label: (
+                    <span>
+                      Player statistics - <i>static preview</i>
+                    </span>
+                  ),
+                  href: `${Pathname.Diablo}?${tabIdQueryParam}=${TabId.PlayerStatistics}`,
+                  content: <PlayerStatistics />,
+                },
+              ]}
+            />
           </ContentLayout>
         }
         ref={ref}
