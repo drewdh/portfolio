@@ -40,10 +40,11 @@ export default function Ecobee() {
           description={widgetDetails.ecobee.description}
           actions={
             <SpaceBetween size="xs" direction="horizontal" alignItems="center">
-              <Button loading={isFetching} onClick={handleRefresh} iconName="refresh" />
-              <Box variant="small" color="text-status-inactive">
-                {isFetching ? 'Updating...' : 'Updated 3 minutes ago'}
+              <Box fontSize="body-s" color="text-status-inactive" textAlign="right">
+                Last updated
+                <br />3 minutes ago
               </Box>
+              <Button loading={isFetching} onClick={handleRefresh} iconName="refresh" />
             </SpaceBetween>
           }
         >
