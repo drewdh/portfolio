@@ -123,7 +123,7 @@ export default function SuggestedSigilTier() {
 
   return (
     <SpaceBetween size="l">
-      <Alert header="Outdated">
+      <Alert header="Outdated" type="warning">
         This tool has not been updated to include the latest changes to XP and Nightmare Dungeons.
       </Alert>
       <Grid
