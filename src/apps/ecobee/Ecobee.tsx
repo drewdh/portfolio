@@ -25,8 +25,8 @@ export default function Ecobee() {
   useEffect((): void => {
     addNotification({
       id: 'ecobeePreview',
-      header: 'Static preview feature',
-      content: 'This tool is in static preview for demo purposes and does not use live data.',
+      header: 'Prototype app',
+      content: 'This app is a prototype for demo purposes and does not use live data.',
       dismissible: false,
       type: 'info',
     });

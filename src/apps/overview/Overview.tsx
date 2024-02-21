@@ -1,5 +1,8 @@
 import Header from '@cloudscape-design/components/header';
 import Cards, { CardsProps } from '@cloudscape-design/components/cards';
+import SpaceBetween from '@cloudscape-design/components/space-between';
+import Box from '@cloudscape-design/components/box';
+import Popover from '@cloudscape-design/components/popover';
 
 import useTitle from '../../utilities/use-title';
 import { Pathname } from '../../routes';
@@ -10,6 +13,7 @@ interface Widget {
   title: string;
   href: string;
   description: string;
+  isPrototype?: boolean;
 }
 
 const widgets: Widget[] = [
@@ -17,6 +21,7 @@ const widgets: Widget[] = [
     title: widgetDetails.ecobee.title,
     href: Pathname.Ecobee,
     description: widgetDetails.ecobee.description,
+    isPrototype: true,
   },
   {
     title: widgetDetails.diablo.title,
@@ -32,9 +37,26 @@ const widgets: Widget[] = [
 
 const cardDefinition: CardsProps.CardDefinition<Widget> = {
   header: (item) => (
-    <InternalLink fontSize="heading-m" href={item.href}>
-      {item.title}
-    </InternalLink>
+    <SpaceBetween size="xs" direction="horizontal">
+      <InternalLink fontSize="heading-m" href={item.href}>
+        {item.title}
+      </InternalLink>
+      {item.isPrototype && (
+        <Box color="text-status-info" display="inline">
+          <Popover
+            header="Preview app"
+            size="medium"
+            triggerType="text"
+            renderWithPortal
+            content="This app is in preview. Functionality is limited and can change at any time."
+          >
+            <Box fontSize="body-s" color="text-status-info" fontWeight="bold">
+              Preview
+            </Box>
+          </Popover>
+        </Box>
+      )}
+    </SpaceBetween>
   ),
   sections: [{ content: (item) => item.description }],
 };
