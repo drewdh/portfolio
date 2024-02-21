@@ -6,12 +6,15 @@ import useNavigateWithRef from '../common/useNavigateWithRef';
 import useGetCurrentUser from '../auth/use-get-current-user';
 import useSignOut from '../auth/use-sign-out';
 
+enum ProfileMenuItemId {
+  SignOut = 'signOut',
+}
+
 export default function useTopNavigation(): State {
   const navigate = useNavigateWithRef();
   const [isSettingsVisible, setIsSettingsVisible] = useState<boolean>(false);
 
-  const { isLoading: isLoadingUser, data: currentUser } = useGetCurrentUser();
-  console.log(currentUser);
+  const { data: currentUser } = useGetCurrentUser();
   const { mutate: signOut } = useSignOut();
 
   function handleSettingsDismiss() {
@@ -43,17 +46,34 @@ export default function useTopNavigation(): State {
     },
   ];
 
-  if (!isLoadingUser && currentUser) {
+  if (currentUser) {
     utilities.push({
-      type: 'button',
-      text: 'Sign out',
-      onClick: () => signOut(),
+      type: 'menu-dropdown',
+      text: currentUser.Username,
+      iconName: 'user-profile-active',
+      onItemClick: (event) => {
+        switch (event.detail.id) {
+          case ProfileMenuItemId.SignOut: {
+            signOut();
+          }
+        }
+      },
+      items: [
+        {
+          id: ProfileMenuItemId.SignOut,
+          text: 'Sign out',
+        },
+      ],
     });
-  } else if (!isLoadingUser && !currentUser) {
+  } else {
     utilities.push({
       type: 'button',
       text: 'Sign in',
       href: Pathname.Signin,
+      onFollow: (event) => {
+        event.preventDefault();
+        navigate(Pathname.Signin);
+      },
     });
   }
 

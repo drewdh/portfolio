@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
-interface GetCurrentUserResponse {}
+interface GetCurrentUserResponse {
+  Username: string;
+}
 
 async function getCurrentUser(): Promise<GetCurrentUserResponse> {
   const resp = await fetch('https://api.drewhanberry.com/auth/?action=GET_USER', {
