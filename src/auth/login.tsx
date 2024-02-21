@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { useLocation, useNavigate } from 'react-router';
 
-import ButtonLink from '../common/ButtonLink';
 import { Pathname } from '../routes';
 import FormikInput from '../common/formik/input';
 import FormikFormField from '../common/formik/form-field';
@@ -74,7 +73,6 @@ export default function Login() {
           <Form
             actions={
               <SpaceBetween size="xs" direction="horizontal">
-                <ButtonLink href={Pathname.Home}>Cancel</ButtonLink>
                 <Button
                   variant="primary"
                   onClick={() => {
