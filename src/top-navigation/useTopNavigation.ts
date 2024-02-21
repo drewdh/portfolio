@@ -24,7 +24,7 @@ export default function useTopNavigation(): State {
   };
 
   const identity: TopNavigationProps.Identity = {
-    title: 'Drew Hanberry',
+    title: 'DH',
     href: Pathname.Home,
     onFollow: (event) => {
       event.preventDefault();
