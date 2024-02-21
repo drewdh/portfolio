@@ -69,6 +69,7 @@ export default function useTopNavigation(): State {
     utilities.push({
       type: 'button',
       text: 'Sign in',
+      iconName: 'user-profile',
       href: Pathname.Signin,
       onFollow: (event) => {
         event.preventDefault();
