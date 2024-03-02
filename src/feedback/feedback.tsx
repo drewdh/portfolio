@@ -10,7 +10,7 @@ import Textarea from '@cloudscape-design/components/textarea';
 import RadioGroup from '@cloudscape-design/components/radio-group';
 import Input from '@cloudscape-design/components/input';
 
-import useFeedback from './useFeedback';
+import useFeedback from './use-feedback';
 
 export default function Feedback({ isVisible, onDismiss }: Props) {
   const {

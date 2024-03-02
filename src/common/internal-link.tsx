@@ -1,12 +1,8 @@
 import { PropsWithChildren, useCallback } from 'react';
 import Link, { LinkProps } from '@cloudscape-design/components/link';
-import useFollow from './useFollow';
+import useFollow from './use-follow';
 
-export default function InternalLink({
-  children,
-  href,
-  ...rest
-}: PropsWithChildren<Props>) {
+export default function InternalLink({ children, href, ...rest }: PropsWithChildren<Props>) {
   const follow = useFollow();
 
   const handleFollow = useCallback(

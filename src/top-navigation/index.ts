@@ -1,3 +1,3 @@
-import TopNavigation from './TopNavigation';
+import TopNavigation from './top-navigation';
 
 export default TopNavigation;

@@ -4,7 +4,7 @@ import Link from '@cloudscape-design/components/link';
 
 import styles from './styles.module.scss';
 import { footerId } from './constants';
-import Feedback from '../feedback/Feedback';
+import Feedback from '../feedback/feedback';
 
 export default function Footer() {
   const [isFeedbackVisible, setIsFeedbackVisible] = useState<boolean>(false);

@@ -3,7 +3,7 @@ import { SelectProps } from '@cloudscape-design/components/select';
 import { useCallback, useMemo, useState } from 'react';
 
 import useTitle from '../../utilities/use-title';
-import useLocalStorage, { LocalStorageKey } from '../../utilities/useLocalStorage';
+import useLocalStorage, { LocalStorageKey } from '../../utilities/use-local-storage';
 
 export default function useMonsterLevelCalculator(): State {
   // TODO: Infer from selected sigil tier

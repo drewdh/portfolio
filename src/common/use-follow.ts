@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router';
 import { useCallback } from 'react';
-import useNavigateWithRef from './useNavigateWithRef';
+import useNavigateWithRef from './use-navigate-with-ref';
 
 export default function useFollow(): State {
   const navigate = useNavigateWithRef();

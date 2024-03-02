@@ -1,13 +1,9 @@
 import Button, { ButtonProps } from '@cloudscape-design/components/button';
 import { PropsWithChildren, useCallback } from 'react';
 
-import useFollow from './useFollow';
+import useFollow from './use-follow';
 
-export default function ButtonLink({
-  children,
-  href,
-  ...props
-}: PropsWithChildren<Props>) {
+export default function ButtonLink({ children, href, ...props }: PropsWithChildren<Props>) {
   const follow = useFollow();
 
   const handleFollow = useCallback(

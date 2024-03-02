@@ -4,7 +4,7 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import FormField from '@cloudscape-design/components/form-field';
 import Select from '@cloudscape-design/components/select';
 
-import useMonsterLevelCalculator from './useMonsterLevelCalculator';
+import useMonsterLevelCalculator from './use-monster-level-calculator';
 import ContentLayout from '@cloudscape-design/components/content-layout';
 
 export default function MonsterLevelCalculator() {

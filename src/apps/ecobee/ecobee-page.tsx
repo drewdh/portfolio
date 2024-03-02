@@ -1,8 +1,8 @@
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 
-import Ecobee from './Ecobee';
-import DhBreadcrumbs from '../../common/DhBreadcrumbs';
-import widgetDetails from '../../common/widgetDetails';
+import Ecobee from './ecobee';
+import DhBreadcrumbs from '../../common/dh-breadcrumbs';
+import widgetDetails from '../../common/widget-details';
 import { Pathname } from '../../routes';
 import useTitle from '../../utilities/use-title';
 import DhAppLayout from '../../common/app-layout/dh-app-layout';

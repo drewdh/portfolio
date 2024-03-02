@@ -11,31 +11,22 @@ import Select from '@cloudscape-design/components/select';
 import Alert from '@cloudscape-design/components/alert';
 import { useState } from 'react';
 
-import Feedback from '../../feedback/Feedback';
+import Feedback from '../../feedback/feedback';
 
 export default function PlayerStatistics() {
-  const [isFeedbackModalVisible, setIsFeedbackModalVisible] =
-    useState<boolean>(false);
+  const [isFeedbackModalVisible, setIsFeedbackModalVisible] = useState<boolean>(false);
 
   return (
     <SpaceBetween size="l">
       <Alert
         type="info"
-        action={
-          <Button onClick={() => setIsFeedbackModalVisible(true)}>
-            Send feedback
-          </Button>
-        }
+        action={<Button onClick={() => setIsFeedbackModalVisible(true)}>Send feedback</Button>}
       >
-        This widget is static. BattleTag search does not work, and all data is
-        hard-coded. If you would use a functioning version of this widget, send
-        feedback and let me know.
+        This widget is static. BattleTag search does not work, and all data is hard-coded. If you
+        would use a functioning version of this widget, send feedback and let me know.
       </Alert>
       <Grid
-        gridDefinition={[
-          { colspan: { default: 12, s: 3 } },
-          { colspan: { default: 12, s: 9 } },
-        ]}
+        gridDefinition={[{ colspan: { default: 12, s: 3 } }, { colspan: { default: 12, s: 9 } }]}
       >
         <Container header={<Header>Search</Header>}>
           <SpaceBetween size="l">
@@ -89,9 +80,7 @@ export default function PlayerStatistics() {
             variant="h1"
             headingTagOverride="h2"
             actions={
-              <div
-                style={{ display: 'flex', gap: '8px', alignItems: 'center' }}
-              >
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <Box variant="small">Updated 5 minutes ago</Box>
                 <Button iconName="refresh" />
               </div>

@@ -6,13 +6,13 @@ import Tabs, { TabsProps } from '@cloudscape-design/components/tabs';
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
-import SuggestedSigilTier from './SuggestedSigilTier';
+import SuggestedSigilTier from './suggested-sigil-tier';
 import { Pathname } from '../../routes';
-import DhBreadcrumbs from '../../common/DhBreadcrumbs';
+import DhBreadcrumbs from '../../common/dh-breadcrumbs';
 import { HelpPanelProvider } from '../../help-panel/help-panel';
-import widgetDetails from '../../common/widgetDetails';
+import widgetDetails from '../../common/widget-details';
 import { useLocation, useNavigate } from 'react-router';
-import PlayerStatistics from './PlayerStatistics';
+import PlayerStatistics from './player-statistics';
 import useTitle from '../../utilities/use-title';
 import DhAppLayout from '../../common/app-layout/dh-app-layout';
 
