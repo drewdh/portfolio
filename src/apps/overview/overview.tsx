@@ -6,8 +6,8 @@ import Popover from '@cloudscape-design/components/popover';
 
 import useTitle from '../../utilities/use-title';
 import { Pathname } from '../../routes';
-import InternalLink from '../../common/internal-link';
-import widgetDetails from '../../common/widget-details';
+import InternalLink from '@common/internal-link';
+import widgetDetails from '@common/widget-details';
 
 interface Widget {
   title: string;

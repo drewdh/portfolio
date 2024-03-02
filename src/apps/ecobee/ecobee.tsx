@@ -14,9 +14,9 @@ import React, { useEffect } from 'react';
 import Link from '@cloudscape-design/components/link';
 import Button from '@cloudscape-design/components/button';
 
-import widgetDetails from '../../common/widget-details';
+import widgetDetails from '@common/widget-details';
 import useEcobee from './use-ecobee';
-import useAddNotification from '../../common/app-layout/use-add-notification';
+import useAddNotification from '@common/use-add-notification';
 
 export default function Ecobee() {
   const { handleRefresh, isFetching } = useEcobee();

@@ -2,9 +2,9 @@ import AppLayout, { AppLayoutProps } from '@cloudscape-design/components/app-lay
 import { forwardRef, Ref, useContext } from 'react';
 import Flashbar from '@cloudscape-design/components/flashbar';
 
-import { footerSelector } from '../../footer/constants';
-import { topNavSelector } from '../../top-navigation/constants';
-import { NotificationsContext, NotificationsProvider } from './internal/notifications';
+import { footerSelector } from '../footer/constants';
+import { topNavSelector } from '../top-navigation/constants';
+import { NotificationsContext, NotificationsProvider } from '@common/internal/notifications';
 
 const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutProps.Ref>) {
   const notifications = useContext(NotificationsContext);

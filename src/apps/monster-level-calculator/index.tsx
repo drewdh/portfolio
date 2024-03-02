@@ -1,9 +1,9 @@
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 
 import { Pathname } from '../../routes';
-import DhBreadcrumbs from '../../common/dh-breadcrumbs';
+import DhBreadcrumbs from '@common/dh-breadcrumbs';
 import MonsterLevelCalculator from './monster-level-calculator';
-import DhAppLayout from '../../common/app-layout/dh-app-layout';
+import DhAppLayout from '@common/dh-app-layout';
 
 export default function MonsterLevelCalculatorPage() {
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [

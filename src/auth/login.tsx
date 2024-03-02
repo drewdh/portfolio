@@ -9,8 +9,8 @@ import * as yup from 'yup';
 import { useLocation, useNavigate } from 'react-router';
 
 import { Pathname } from '../routes';
-import FormikInput from '../common/formik/input';
-import FormikFormField from '../common/formik/form-field';
+import FormikInput from '@common/formik/input';
+import FormikFormField from '@common/formik/form-field';
 import userAuth from '../utilities/user-auth';
 import useGetCurrentUser from './use-get-current-user';
 
