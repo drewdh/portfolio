@@ -5,7 +5,7 @@ import { RouterProvider } from 'react-router';
 import { I18nProvider, importMessages } from '@cloudscape-design/components/i18n';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { Pathname } from './routes';
+import { Pathname } from '@utilities/routes';
 import './index.scss';
 import App from './app';
 import reportWebVitals from './reportWebVitals';

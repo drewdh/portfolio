@@ -1,6 +1,6 @@
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 
-import { Pathname } from '../../routes';
+import { Pathname } from '@utilities/routes';
 import DhBreadcrumbs from '@common/dh-breadcrumbs';
 import MonsterLevelCalculator from './monster-level-calculator';
 import DhAppLayout from '@common/dh-app-layout';

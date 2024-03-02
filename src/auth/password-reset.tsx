@@ -10,8 +10,8 @@ import { useLocation, useNavigate } from 'react-router';
 
 import FormikInput from '@common/formik/input';
 import FormikFormField from '@common/formik/form-field';
-import userAuth from '../utilities/user-auth';
-import { Pathname } from '../routes';
+import userAuth from '@utilities/user-auth';
+import { Pathname } from '@utilities/routes';
 
 interface Values {
   password: string;

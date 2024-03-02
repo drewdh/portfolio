@@ -4,8 +4,8 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import Box from '@cloudscape-design/components/box';
 import Popover from '@cloudscape-design/components/popover';
 
-import useTitle from '../../utilities/use-title';
-import { Pathname } from '../../routes';
+import useTitle from '@utilities/use-title';
+import { Pathname } from '@utilities/routes';
 import InternalLink from '@common/internal-link';
 import widgetDetails from '@common/widget-details';
 

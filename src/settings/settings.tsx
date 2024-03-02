@@ -9,7 +9,7 @@ import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 
 import { Appearance, SettingsValues } from './types';
 import { handleMatchChange, setDarkMode } from './utilities';
-import useLocalStorage, { LocalStorageKey } from '../utilities/use-local-storage';
+import useLocalStorage, { LocalStorageKey } from '@utilities/use-local-storage';
 import { defaultSettings } from './constants';
 
 let isInitialized = false;

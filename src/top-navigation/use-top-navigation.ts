@@ -1,7 +1,7 @@
 import { TopNavigationProps } from '@cloudscape-design/components/top-navigation';
 import { useState } from 'react';
 
-import { Pathname } from '../routes';
+import { Pathname } from '@utilities/routes';
 import useNavigateWithRef from '@common/use-navigate-with-ref';
 import useGetCurrentUser from '../auth/use-get-current-user';
 import useSignOut from '../auth/use-sign-out';

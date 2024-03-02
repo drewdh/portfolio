@@ -4,7 +4,7 @@ import BreadcrumbGroup, {
 } from '@cloudscape-design/components/breadcrumb-group';
 
 import useFollow from './use-follow';
-import { Pathname } from '../routes';
+import { Pathname } from '@utilities/routes';
 
 export default function DhBreadcrumbs({ items }: Props) {
   const follow = useFollow();
