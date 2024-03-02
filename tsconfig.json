@@ -16,8 +16,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "@common/*": ["./src/common/*"],
-      "@utilities/*": ["./src/utilities/*"],
+      "common/*": ["./src/common/*"],
+      "utilities/*": ["./src/utilities/*"],
     }
   },
   "include": ["src"]

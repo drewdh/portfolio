@@ -4,7 +4,7 @@ import Flashbar from '@cloudscape-design/components/flashbar';
 
 import { footerSelector } from '../footer/constants';
 import { topNavSelector } from '../top-navigation/constants';
-import { NotificationsContext, NotificationsProvider } from '@common/internal/notifications';
+import { NotificationsContext, NotificationsProvider } from 'common/internal/notifications';
 
 const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutProps.Ref>) {
   const notifications = useContext(NotificationsContext);
