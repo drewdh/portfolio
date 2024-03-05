@@ -1,10 +1,11 @@
-import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { AppLayoutProps } from '@cloudscape-design/components/app-layout';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 import Header from '@cloudscape-design/components/header';
 import Tabs, { TabsProps } from '@cloudscape-design/components/tabs';
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
+import { useLocation, useNavigate } from 'react-router';
 
 import DhBreadcrumbs from 'common/dh-breadcrumbs';
 import widgetDetails from 'common/widget-details';
@@ -12,16 +13,17 @@ import DhAppLayout from 'common/dh-app-layout';
 import SuggestedSigilTier from './suggested-sigil-tier';
 import { Pathname } from 'utilities/routes';
 import { HelpPanelProvider } from '../../help-panel/help-panel';
-import { useLocation, useNavigate } from 'react-router';
 import PlayerStatistics from './player-statistics';
 import useTitle from 'utilities/use-title';
 
-const tabIdQueryParam = 'tabId';
+const tabIdQueryParam = 't';
 
 enum TabId {
-  NightmareDungeon = 'nightmare-dungeon',
-  PlayerStatistics = 'player-statistics',
+  NightmareDungeon = 'nd',
+  PlayerStatistics = 'ps',
 }
+
+const defaultTab = TabId.NightmareDungeon;
 
 export default function SuggestedSigilTierPage() {
   useTitle(widgetDetails.diablo.title);
@@ -35,33 +37,39 @@ export default function SuggestedSigilTierPage() {
   ];
 
   const { search } = useLocation();
+  const queryParams = useMemo(() => new URLSearchParams(search), [search]);
   const navigate = useNavigate();
-  const activeTabQueryParam = useMemo((): TabId => {
-    const queryParams = new URLSearchParams(search);
-    return (queryParams.get(tabIdQueryParam) as TabId) ?? TabId.NightmareDungeon;
-  }, [search]);
-  const [activeTabId, setActiveTabId] = useState<TabId>(activeTabQueryParam);
 
-  useEffect((): void => {
-    if (activeTabQueryParam && activeTabQueryParam !== activeTabId) {
-      setActiveTabId(activeTabQueryParam);
+  // Set default query param if not already set
+  useEffect(() => {
+    const qpValue = queryParams.get(tabIdQueryParam) as TabId;
+    if (!qpValue) {
+      navigate(
+        { pathname: Pathname.Diablo, search: `?${tabIdQueryParam}=${defaultTab}` },
+        { replace: true }
+      );
     }
-  }, [activeTabQueryParam, activeTabId]);
+  }, [navigate, queryParams]);
 
-  const handleTabChange = useCallback(
-    (event: NonCancelableCustomEvent<TabsProps.ChangeDetail>): void => {
-      const { activeTabId, activeTabHref } = event.detail;
-      setActiveTabId(activeTabId as TabId);
-      if (activeTabHref) {
-        navigate(activeTabHref);
-      }
-    },
-    [navigate]
+  // Set active tab ID from query param
+  useEffect(() => {
+    setActiveTabId(queryParams.get(tabIdQueryParam) as TabId);
+  }, [queryParams]);
+
+  const [activeTabId, setActiveTabId] = useState<TabId>(
+    (queryParams.get(tabIdQueryParam) as TabId) ?? defaultTab
   );
 
-  const openPanel = useCallback((): void => {
+  function handleTabChange(event: NonCancelableCustomEvent<TabsProps.ChangeDetail>): void {
+    const { activeTabHref } = event.detail;
+    if (activeTabHref) {
+      navigate(activeTabHref);
+    }
+  }
+
+  function openPanel() {
     ref.current?.openTools();
-  }, [ref]);
+  }
 
   return (
     <HelpPanelProvider config={{ content, setContent, openPanel }}>
