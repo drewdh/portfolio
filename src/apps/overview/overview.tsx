@@ -18,6 +18,11 @@ interface Widget {
 
 const widgets: Widget[] = [
   {
+    title: widgetDetails.twitch.title,
+    href: Pathname.Twitch,
+    description: widgetDetails.twitch.description,
+  },
+  {
     title: widgetDetails.ecobee.title,
     href: Pathname.Ecobee,
     description: widgetDetails.ecobee.description,

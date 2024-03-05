@@ -16,6 +16,10 @@ const widgetDetails: Record<string, WidgetDetail> = {
     title: 'Feedback',
     description: 'A dashboard for viewing site feedback. Requires an administrator account.',
   },
+  twitch: {
+    title: 'Twitch player',
+    description: 'A customized video player for Twitch.',
+  },
 };
 
 interface WidgetDetail {
