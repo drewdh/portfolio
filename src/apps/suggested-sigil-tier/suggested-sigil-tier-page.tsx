@@ -109,7 +109,6 @@ export default function SuggestedSigilTierPage() {
         }
         ref={ref}
         tools={content}
-        navigationHide
         toolsHide
       />
     </HelpPanelProvider>

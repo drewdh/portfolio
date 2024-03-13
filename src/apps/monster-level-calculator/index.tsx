@@ -17,7 +17,6 @@ export default function MonsterLevelCalculatorPage() {
     <DhAppLayout
       breadcrumbs={<DhBreadcrumbs items={breadcrumbs} />}
       content={<MonsterLevelCalculator />}
-      navigationHide
       toolsHide
     />
   );

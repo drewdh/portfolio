@@ -1,0 +1,16 @@
+@use '@cloudscape-design/design-tokens' as awsui;
+
+.profile {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 12px;
+}
+.actionWrapper {
+  a {
+    width: 100%;
+  }
+  display: flex;
+  justify-content: space-between;
+}

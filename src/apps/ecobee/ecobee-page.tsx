@@ -16,7 +16,6 @@ export default function EcobeePage() {
   return (
     <DhAppLayout
       breadcrumbs={<DhBreadcrumbs items={breadcrumbItems} />}
-      navigationHide
       contentType="dashboard"
       content={<Ecobee />}
       toolsHide

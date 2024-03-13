@@ -23,11 +23,6 @@ export default function OverviewPage() {
   }, [isNewVisitor, setIsNewVisitor]);
 
   return (
-    <DhAppLayout
-      breadcrumbs={<DhBreadcrumbs items={[]} />}
-      content={<Overview />}
-      navigationHide
-      toolsHide
-    />
+    <DhAppLayout breadcrumbs={<DhBreadcrumbs items={[]} />} content={<Overview />} toolsHide />
   );
 }

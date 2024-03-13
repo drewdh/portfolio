@@ -28,15 +28,23 @@
   background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
 }
 .controls {
+  display: flex;
   position: absolute;
   bottom: 0;
   padding-left: 12px;
   padding-right: 12px;
+  z-index: 2;
 }
 .button {
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60px;
-  width: 60px;
+  height: 48px;
+  width: 48px;
+  opacity: 0.87;
+  transition: opacity 150ms;
+  &:hover {
+    opacity: 1;
+  }
 }

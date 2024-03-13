@@ -3,6 +3,11 @@ import TwitchComponent from './twitch';
 
 export default function TwitchPage() {
   return (
-    <DhAppLayout navigationHide toolsHide disableContentPaddings content={<TwitchComponent />} />
+    <DhAppLayout
+      toolsHide
+      contentType="wizard"
+      maxContentWidth={Infinity}
+      content={<TwitchComponent />}
+    />
   );
 }
