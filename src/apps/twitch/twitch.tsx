@@ -15,12 +15,12 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import Input from '@cloudscape-design/components/input';
 import Alert from '@cloudscape-design/components/alert';
 import { Big } from 'big.js';
-
-import styles from './styles.module.scss';
+import Grid from '@cloudscape-design/components/grid';
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import Header from '@cloudscape-design/components/header';
+
+import styles from './styles.module.scss';
 import widgetDetails from 'common/widget-details';
-import Grid from '@cloudscape-design/components/grid';
 
 export default function TwitchComponent() {
   const player = useRef<any>(null);
@@ -41,6 +41,7 @@ export default function TwitchComponent() {
   }, [user]);
 
   const options = {
+    allowfullscreen: false,
     width: '100%',
     height: '100%',
     controls: false,

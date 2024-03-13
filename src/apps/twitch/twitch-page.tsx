@@ -15,7 +15,7 @@ export default function TwitchPage() {
         <DhBreadcrumbs items={[{ text: widgetDetails.twitch.title, href: Pathname.Twitch }]} />
       }
       maxContentWidth={1700}
-      // contentType="wizard"
+      contentType="wizard"
       content={<TwitchComponent />}
     />
   );
