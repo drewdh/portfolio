@@ -1,43 +1,62 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState, MouseEvent } from 'react';
-
-import styles from './styles.module.scss';
-import clsx from 'clsx';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { faPlay } from '@fortawesome/pro-solid-svg-icons/faPlay';
 import { faPause } from '@fortawesome/pro-solid-svg-icons/faPause';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { faVolume } from '@fortawesome/pro-solid-svg-icons/faVolume';
 import { faVolumeLow } from '@fortawesome/pro-solid-svg-icons/faVolumeLow';
 import { faVolumeSlash } from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
+import Container from '@cloudscape-design/components/container';
+import Button from '@cloudscape-design/components/button';
+import Box from '@cloudscape-design/components/box';
+import Icon from '@cloudscape-design/components/icon';
+import FormField from '@cloudscape-design/components/form-field';
+import SpaceBetween from '@cloudscape-design/components/space-between';
+import Input from '@cloudscape-design/components/input';
+import Alert from '@cloudscape-design/components/alert';
+import { Big } from 'big.js';
 
-let player: any;
+import styles from './styles.module.scss';
+import ContentLayout from '@cloudscape-design/components/content-layout';
+import Header from '@cloudscape-design/components/header';
+import widgetDetails from 'common/widget-details';
+import Grid from '@cloudscape-design/components/grid';
 
 export default function TwitchComponent() {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [isMouseActive, setIsMouseActive] = useState<boolean>(false);
+  const player = useRef<any>(null);
+  const navigate = useNavigate();
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [mouseTimeoutId, setMouseTimeoutId] = useState<NodeJS.Timeout>();
   const [isMuted, setIsMuted] = useState<boolean>(false);
-  const [volumeLevel, setVolumeLevel] = useState<number>(1);
+  const [volumeLevel, setVolumeLevel] = useState<Big>(new Big(1));
+  const playerWrapperRef = useRef<HTMLDivElement>(null);
+  const [playerWidth, setPlayerWidth] = useState<string>('10px');
+  const [playerHeight, setPlayerHeight] = useState<string>('10px');
+  const [isMutedAlertVisible, setIsMutedAlertVisible] = useState<boolean>(false);
   const { user } = useParams();
+  const [channelValue, setChannelValue] = useState<string>(user ?? '');
+
+  // Force player to update channel when URL changes
+  useEffect(() => {
+    player.current?.setChannel(user);
+  }, [user]);
 
   const options = {
-    width: 1280,
-    height: 720,
+    width: '100%',
+    height: '100%',
     controls: false,
     channel: user,
-    autoplay: false,
+    autoplay: true,
     muted: false,
   };
 
   function togglePlayback() {
-    if (player.isPaused()) {
-      player.play();
-      // There is a slight delay between clicking unpause and the video resuming, so immediately show the correct icon to show the customer's click was registered
+    if (player.current?.isPaused()) {
+      player.current?.play();
+      // There is a slight delay between clicking unpause and the video resuming, so immediately
+      // show the correct icon to show the customer's click was registered
       setIsPaused(false);
     } else {
-      player.pause();
+      player.current?.pause();
     }
   }
 
@@ -48,20 +67,34 @@ export default function TwitchComponent() {
       return event.preventDefault();
     }
     if (event.code === 'ArrowDown') {
-      const newVolume = player.getVolume() - 0.05;
-      player.setVolume(newVolume);
-      setVolumeLevel(newVolume);
+      setVolumeLevel((prevVolume) => {
+        if (prevVolume.toNumber() === 0) {
+          return prevVolume;
+        }
+        const newVolume = prevVolume.minus(0.05);
+        console.log(Number(newVolume));
+        player.current?.setVolume(Number(newVolume));
+        console.log(player.current?.getVolume());
+        return newVolume;
+      });
       return event.preventDefault();
     }
     if (event.code === 'ArrowUp') {
-      const newVolume = player.getVolume() + 0.05;
-      player.setVolume(newVolume);
-      setVolumeLevel(newVolume);
+      setVolumeLevel((prevVolume) => {
+        if (prevVolume.toNumber() === 1) {
+          return prevVolume;
+        }
+        const newVolume = prevVolume.plus(0.05);
+        console.log(Number(newVolume));
+        player.current?.setVolume(Number(newVolume));
+        console.log(player.current?.getVolume());
+        return newVolume;
+      });
       return event.preventDefault();
     }
     if (event.code === 'KeyM') {
-      const newIsMuted = !player.getMuted();
-      player.setMuted(newIsMuted);
+      const newIsMuted = !player.current?.getMuted();
+      player.current?.setMuted(newIsMuted);
       setIsMuted(newIsMuted);
       return event.preventDefault();
     }
@@ -75,94 +108,138 @@ export default function TwitchComponent() {
   }, [keyboardShortcutListener]);
 
   useLayoutEffect(() => {
-    if (player) {
+    if (!playerWrapperRef.current) {
       return;
     }
-    // @ts-ignore
-    player = new Twitch.Player('twitch-player', options);
-    // @ts-ignore
-    player.addEventListener(Twitch.Player.PAUSE, () => setIsPaused(true));
-    // @ts-ignore
-    player.addEventListener(Twitch.Player.PLAY, () => {
-      setIsLoading(false);
-      setIsPaused(false);
+    const playerObserver = new ResizeObserver((entries, observer) => {
+      const { width } = entries[0].contentRect;
+      setPlayerWidth(`${width}px`);
+      setPlayerHeight(`${(width * 9) / 16}px`);
     });
-    // @ts-ignore
-    player.addEventListener(Twitch.Player.READY, () => {
-      player.play();
-      player.setMuted(false);
-      setVolumeLevel(player.getVolume());
-    });
+    playerObserver.observe(playerWrapperRef.current);
+    return () => playerObserver.disconnect();
   }, []);
 
-  function handleVolumeClick(event: MouseEvent) {
-    const newIsMuted = !player.getMuted();
-    player.setMuted(newIsMuted);
+  useLayoutEffect(() => {
+    if (!player.current) {
+      // @ts-ignore
+      player.current = new Twitch.Player('twitch-player', options);
+    }
+    // @ts-ignore
+    player.current?.addEventListener(Twitch.Player.PAUSE, () => setIsPaused(true));
+    // @ts-ignore
+    player.current?.addEventListener(Twitch.Player.PLAYBACK_BLOCKED, function () {
+      console.log('PLAYBACK BLOCKED', arguments);
+    });
+    // @ts-ignore
+    player.current?.addEventListener(Twitch.Player.PLAY, () => {
+      setIsPaused(false);
+      player.current?.setMuted(false);
+      setIsMuted(player.current?.getMuted());
+      console.log(player.current?.getPlayerState());
+      console.log(player.current?.getQualities());
+    });
+    // @ts-ignore
+    player.current?.addEventListener(Twitch.Player.READY, () => {
+      player.current?.play();
+      console.log(player.current?.getPlaybackStats());
+      console.log(player);
+      console.log(player.current?.getVideo());
+      console.log(player.current?.getPlayerState());
+      player.current?.setMuted(false);
+      setVolumeLevel(new Big(player.current?.getVolume()));
+    });
+    // return () => (player = undefined);
+  }, []);
+
+  function handleVolumeClick() {
+    if (player.current?.getVolume() === 0) {
+      console.log('hello');
+      player.current?.setVolume(1);
+      return setVolumeLevel(Big(1));
+    }
+    const newIsMuted = !player.current?.getMuted();
+    player.current?.setMuted(newIsMuted);
     setIsMuted(newIsMuted);
-    event.stopPropagation();
   }
 
-  function handleClick() {
-    togglePlayback();
+  function handleLoadStreamer() {
+    navigate(`/twitch/${channelValue}`);
   }
 
-  function handleMouseEnter() {
-    setIsHovered(true);
-  }
-
-  function handleMouseLeave() {
-    setIsHovered(false);
-  }
-
-  function handleMouseMove() {
-    clearTimeout(mouseTimeoutId);
-    setIsMouseActive(true);
-    const newTimeoutId = setTimeout(() => setIsMouseActive(false), 3000);
-    setMouseTimeoutId(newTimeoutId);
-  }
-
-  const shouldShowControls = !isLoading && (isPaused || (isHovered && isMouseActive));
-
-  console.log(player?.getVolume());
+  const volumeIcon =
+    isMuted || Number(volumeLevel) === 0
+      ? faVolumeSlash
+      : Number(volumeLevel) < 0.5
+        ? faVolumeLow
+        : faVolume;
 
   return (
-    <div className={styles.pageWrapper}>
-      <div id="twitch-player" className={styles.playerWrapper}>
-        <div
-          className={clsx(styles.overlayWrapper, shouldShowControls && styles.visible)}
-          onClick={handleClick}
-          onMouseMove={handleMouseMove}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <div className={styles.overlay}>
-            <div className={styles.controls}>
-              <div className={styles.button} onClick={handleClick}>
-                <FontAwesomeIcon
-                  style={{ width: '22px', height: '22px' }}
-                  fixedWidth
-                  icon={isPaused ? faPlay : faPause}
-                  color="white"
-                />
-              </div>
-              <div className={styles.button} onClick={handleVolumeClick}>
-                <FontAwesomeIcon
-                  style={{ width: '22px', height: '22px' }}
-                  fixedWidth
-                  icon={
-                    player?.getVolume() === 0 || isMuted
-                      ? faVolumeSlash
-                      : volumeLevel > 0.5
-                        ? faVolume
-                        : faVolumeLow
-                  }
-                  color="white"
-                />
-              </div>
-            </div>
+    <ContentLayout
+      header={
+        <Header variant="h1" description={widgetDetails.twitch.description}>
+          {widgetDetails.twitch.title}
+        </Header>
+      }
+    >
+      <Grid
+        gridDefinition={[
+          { colspan: { default: 12, m: 3 }, push: { default: 0, m: 9 } },
+          { colspan: { default: 12, m: 9 }, pull: { default: 0, m: 3 } },
+        ]}
+      >
+        <form onSubmit={(e) => e.preventDefault()}>
+          <FormField
+            label="Channel"
+            description="Only livestreams are supported at this time."
+            constraintText="Enter the exact name of a Twitch channel."
+            secondaryControl={
+              <Button formAction="submit" onClick={handleLoadStreamer}>
+                Watch channel
+              </Button>
+            }
+          >
+            <Input
+              type="search"
+              // Don't bubble up to keyboard shortcuts
+              onKeyDown={(e) => e.stopPropagation()}
+              onChange={(e) => setChannelValue(e.detail.value)}
+              value={channelValue}
+            />
+          </FormField>
+        </form>
+        <SpaceBetween size="l">
+          <div
+            id="twitch-player"
+            ref={playerWrapperRef}
+            style={{ height: playerHeight }}
+            className={styles.playerWrapper}
+          />
+          <div className={styles.overlayWrapper} style={{ width: playerWidth }}>
+            <Container disableContentPaddings>
+              <Button variant="inline-link" onClick={togglePlayback}>
+                <Box padding="s" color="text-body-secondary">
+                  <Icon
+                    alt="Toggle playback"
+                    size="big"
+                    svg={<FontAwesomeIcon icon={isPaused ? faPlay : faPause} />}
+                  />
+                </Box>
+              </Button>
+              <Button variant="inline-link" onClick={handleVolumeClick}>
+                <Box padding="s" color="text-body-secondary">
+                  <Icon alt="Volume" size="big" svg={<FontAwesomeIcon icon={volumeIcon} />} />
+                </Box>
+              </Button>
+            </Container>
           </div>
-        </div>
-      </div>
-    </div>
+          {isMutedAlertVisible && (
+            <Alert type="warning" dismissible onDismiss={() => setIsMutedAlertVisible(false)}>
+              Failed to unmute. Click on the video player to unmute.
+            </Alert>
+          )}
+        </SpaceBetween>
+      </Grid>
+    </ContentLayout>
   );
 }

@@ -1,9 +1,7 @@
 import AppLayout, { AppLayoutProps } from '@cloudscape-design/components/app-layout';
 import { forwardRef, Ref, useContext, useState } from 'react';
 import Flashbar from '@cloudscape-design/components/flashbar';
-import Box from '@cloudscape-design/components/box';
 import { useLocation } from 'react-router';
-import Container from '@cloudscape-design/components/container';
 import SideNavigation, { SideNavigationProps } from '@cloudscape-design/components/side-navigation';
 import ButtonDropdown, { ButtonDropdownProps } from '@cloudscape-design/components/button-dropdown';
 
@@ -14,10 +12,10 @@ import { Pathname } from 'utilities/routes';
 import widgetDetails from 'common/widget-details';
 import useFollow from 'common/use-follow';
 import styles from './internal/side-navigation.module.scss';
-import ButtonLink from 'common/button-link';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import Settings from '../settings/settings';
 import Feedback from '../feedback/feedback';
+import { ButtonProps } from '@cloudscape-design/components/button';
 
 enum ProfileMenuId {
   Settings = 'settings',
@@ -31,8 +29,14 @@ const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutP
   const { pathname } = useLocation();
   const follow = useFollow();
 
-  function handleFollow(event: CustomEvent<SideNavigationProps.FollowDetail>) {
-    follow({ href: event.detail.href, event });
+  function handleFollow(
+    event: CustomEvent<SideNavigationProps.FollowDetail | ButtonProps.FollowDetail>
+  ) {
+    const { href } = event.detail;
+    if (!href) {
+      return;
+    }
+    follow({ href, event });
   }
 
   function handleProfileItemClick(
@@ -66,7 +70,7 @@ const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutP
                   text: 'Apps',
                   href: Pathname.Home,
                   items: [
-                    { type: 'link', text: widgetDetails.twitch.title, href: Pathname.Twitch },
+                    { type: 'link', text: widgetDetails.twitch.title, href: '/twitch/skiesti' },
                     { type: 'link', text: widgetDetails.ecobee.title, href: Pathname.Ecobee },
                     { type: 'link', text: widgetDetails.diablo.title, href: Pathname.Diablo },
                     { type: 'link', text: widgetDetails.feedback.title, href: Pathname.Feedback },
@@ -76,27 +80,17 @@ const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutP
               ]}
             />
             <div className={styles.profile}>
-              <Container disableContentPaddings>
-                <Box padding="s" color="text-body-secondary">
-                  <div className={styles.actionWrapper}>
-                    <ButtonLink
-                      href={Pathname.Signin}
-                      iconName="user-profile"
-                      variant="inline-link"
-                    >
-                      Sign in
-                    </ButtonLink>
-                    <ButtonDropdown
-                      onItemClick={handleProfileItemClick}
-                      items={[
-                        { id: ProfileMenuId.Feedback, text: 'Send feedback', iconName: 'contact' },
-                        { id: ProfileMenuId.Settings, text: 'Settings', iconName: 'settings' },
-                      ]}
-                      variant="inline-icon"
-                    />
-                  </div>
-                </Box>
-              </Container>
+              <ButtonDropdown
+                items={[
+                  { id: ProfileMenuId.Feedback, text: 'Send feedback', iconName: 'contact' },
+                  { id: ProfileMenuId.Settings, text: 'Settings', iconName: 'settings' },
+                ]}
+                onItemFollow={handleFollow}
+                mainAction={{ text: 'Sign in', href: Pathname.Signin, iconName: 'user-profile' }}
+                onItemClick={handleProfileItemClick}
+              >
+                Sign in
+              </ButtonDropdown>
             </div>
           </>
         }
