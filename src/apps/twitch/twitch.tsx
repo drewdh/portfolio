@@ -20,6 +20,9 @@ import Header from '@cloudscape-design/components/header';
 import styles from './styles.module.scss';
 import widgetDetails from 'common/widget-details';
 import useTitle from 'utilities/use-title';
+import ButtonDropdown from '@cloudscape-design/components/button-dropdown';
+import { faCog } from '@fortawesome/pro-solid-svg-icons/faCog';
+import clsx from 'clsx';
 
 export default function TwitchComponent() {
   const player = useRef<any>(null);
@@ -174,51 +177,81 @@ export default function TwitchComponent() {
           { colspan: { default: 12, m: 9 }, pull: { default: 0, m: 3 } },
         ]}
       >
-        <form onSubmit={(e) => e.preventDefault()}>
-          <FormField
-            label="Channel"
-            description="Only livestreams are supported at this time."
-            constraintText="Enter the exact name of a Twitch channel."
-            secondaryControl={
-              <Button formAction="submit" onClick={handleLoadStreamer}>
-                Watch channel
-              </Button>
-            }
-          >
-            <Input
-              type="search"
-              // Don't bubble up to keyboard shortcuts
-              onKeyDown={(e) => e.stopPropagation()}
-              onChange={(e) => setChannelValue(e.detail.value)}
-              value={channelValue}
+        <div className={styles.container}>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <FormField
+              label="Channel"
+              description="Only livestreams are supported at this time."
+              constraintText="Enter the exact name of a Twitch channel."
+              secondaryControl={
+                <Button formAction="submit" onClick={handleLoadStreamer}>
+                  Watch channel
+                </Button>
+              }
+            >
+              <Input
+                type="search"
+                // Don't bubble up to keyboard shortcuts
+                onKeyDown={(e) => e.stopPropagation()}
+                onChange={(e) => setChannelValue(e.detail.value)}
+                value={channelValue}
+              />
+            </FormField>
+          </form>
+        </div>
+        <SpaceBetween size="xs">
+          <div className={clsx(styles.playerWrapper, styles.container)}>
+            <div
+              id="twitch-player"
+              ref={playerWrapperRef}
+              style={{ height: playerHeight }}
+              className={styles.player}
             />
-          </FormField>
-        </form>
-        <SpaceBetween size="xxs">
-          <div
-            id="twitch-player"
-            ref={playerWrapperRef}
-            style={{ height: playerHeight }}
-            className={styles.playerWrapper}
-          />
-          <div className={styles.controlsPositioner}>
-            <div className={styles.controlsContainer}>
-              <Button variant="inline-link" onClick={togglePlayback}>
-                <div className={styles.icon}>
-                  <Icon
-                    alt="Toggle playback"
-                    svg={<FontAwesomeIcon icon={isPaused ? faPlay : faPause} />}
-                  />
-                </div>
-              </Button>
-              <Button variant="inline-link" onClick={handleVolumeClick}>
-                <div className={styles.icon}>
-                  <Icon alt="Volume" svg={<FontAwesomeIcon icon={volumeIcon} />} />
-                </div>
-              </Button>
-              <Box color="text-status-inactive" fontSize="body-s">
-                {isMuted ? 'Muted' : `${volumeLevel.times(100).toNumber()}%`}
-              </Box>
+            <div className={styles.controlsPositioner}>
+              <div className={styles.controlsContainer}>
+                <Button variant="inline-link" onClick={togglePlayback}>
+                  <div className={styles.icon}>
+                    <Icon
+                      alt="Toggle playback"
+                      svg={<FontAwesomeIcon icon={isPaused ? faPlay : faPause} />}
+                    />
+                  </div>
+                </Button>
+                <Button variant="inline-link" onClick={handleVolumeClick}>
+                  <div className={styles.icon}>
+                    <Icon alt="Volume" svg={<FontAwesomeIcon icon={volumeIcon} />} />
+                  </div>
+                </Button>
+                <Box color="text-status-inactive" fontSize="body-s">
+                  {isMuted ? 'Muted' : `${volumeLevel.times(100).toNumber()}%`}
+                </Box>
+              </div>
+              <div>
+                <ButtonDropdown
+                  expandToViewport
+                  expandableGroups
+                  items={[
+                    {
+                      text: 'Quality',
+                      items:
+                        player.current?.getQualities()?.map((quality: any) => {
+                          // TODO: Take out of loop
+                          const current = player.current?.getQuality();
+                          return {
+                            iconName: current === quality.name ? 'check' : undefined,
+                            text: quality.name,
+                            id: quality.name,
+                          };
+                        }) ?? [],
+                    },
+                  ]}
+                  variant="icon"
+                >
+                  <div className={styles.icon}>
+                    <Icon alt="Settings" svg={<FontAwesomeIcon icon={faCog} />} />
+                  </div>
+                </ButtonDropdown>
+              </div>
             </div>
           </div>
         </SpaceBetween>
