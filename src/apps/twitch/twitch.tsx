@@ -24,6 +24,7 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import widgetDetails from 'common/widget-details';
 import useTitle from 'utilities/use-title';
+import Container from '@cloudscape-design/components/container';
 
 export default function TwitchComponent() {
   const player = useRef<any>(null);
@@ -186,7 +187,7 @@ export default function TwitchComponent() {
           { colspan: { default: 12, m: 9 }, pull: { default: 0, m: 3 } },
         ]}
       >
-        <div className={styles.container}>
+        <Container>
           <form onSubmit={(e) => e.preventDefault()}>
             <SpaceBetween size="l">
               <FormField
@@ -207,7 +208,7 @@ export default function TwitchComponent() {
               </Button>
             </SpaceBetween>
           </form>
-        </div>
+        </Container>
         <SpaceBetween size="xs">
           <div className={clsx(styles.playerWrapper, styles.container)}>
             <div

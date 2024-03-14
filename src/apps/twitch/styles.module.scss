@@ -2,7 +2,7 @@
 
 .container {
   padding: 16px 20px;
-  border-radius: 12px;
+  border-radius: 16px;
   position: relative;
   border: 1px solid awsui.$color-border-divider-default;
 }
@@ -11,7 +11,7 @@
 }
 .player {
   border-bottom: 1px solid awsui.$color-border-divider-default;
-  border-radius: 12px 12px 0 0;
+  border-radius: 16px 16px 0 0;
   overflow: hidden;
 }
 .controlsPositioner {
