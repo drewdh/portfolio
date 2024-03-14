@@ -2,22 +2,24 @@
 
 .container {
   padding: 16px 20px;
-  border-radius: 28px;
+  border-radius: 12px;
   position: relative;
   border: 1px solid awsui.$color-border-divider-default;
 }
 .playerWrapper {
-  padding: 16px 16px 0 16px;
+  padding: 0;
+  background-color: awsui.$color-background-button-normal-hover;
 }
 .player {
-  border-radius: 12px;
+  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   overflow: hidden;
 }
 .controlsPositioner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: awsui.$space-scaled-s 0;
+  padding: awsui.$space-scaled-s;
   overflow: hidden;
   text-align: center;
 }
