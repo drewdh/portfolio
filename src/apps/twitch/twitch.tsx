@@ -6,14 +6,12 @@ import { useNavigate, useParams } from 'react-router';
 import { faVolume } from '@fortawesome/pro-solid-svg-icons/faVolume';
 import { faVolumeLow } from '@fortawesome/pro-solid-svg-icons/faVolumeLow';
 import { faVolumeSlash } from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
-import Container from '@cloudscape-design/components/container';
 import Button from '@cloudscape-design/components/button';
 import Box from '@cloudscape-design/components/box';
 import Icon from '@cloudscape-design/components/icon';
 import FormField from '@cloudscape-design/components/form-field';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Input from '@cloudscape-design/components/input';
-import Alert from '@cloudscape-design/components/alert';
 import { Big } from 'big.js';
 import Grid from '@cloudscape-design/components/grid';
 import ContentLayout from '@cloudscape-design/components/content-layout';
@@ -21,6 +19,7 @@ import Header from '@cloudscape-design/components/header';
 
 import styles from './styles.module.scss';
 import widgetDetails from 'common/widget-details';
+import useTitle from 'utilities/use-title';
 
 export default function TwitchComponent() {
   const player = useRef<any>(null);
@@ -31,8 +30,8 @@ export default function TwitchComponent() {
   const playerWrapperRef = useRef<HTMLDivElement>(null);
   const [playerWidth, setPlayerWidth] = useState<string>('10px');
   const [playerHeight, setPlayerHeight] = useState<string>('10px');
-  const [isMutedAlertVisible, setIsMutedAlertVisible] = useState<boolean>(false);
   const { user } = useParams();
+  useTitle(user, { isNested: true });
   const [channelValue, setChannelValue] = useState<string>(user ?? '');
 
   // Force player to update channel when URL changes
@@ -62,7 +61,6 @@ export default function TwitchComponent() {
   }
 
   const keyboardShortcutListener = useCallback((event: KeyboardEvent): void => {
-    console.log(event.code);
     if (event.code === 'KeyK') {
       togglePlayback();
       return event.preventDefault();
@@ -73,9 +71,7 @@ export default function TwitchComponent() {
           return prevVolume;
         }
         const newVolume = prevVolume.minus(0.05);
-        console.log(Number(newVolume));
         player.current?.setVolume(Number(newVolume));
-        console.log(player.current?.getVolume());
         return newVolume;
       });
       return event.preventDefault();
@@ -86,9 +82,7 @@ export default function TwitchComponent() {
           return prevVolume;
         }
         const newVolume = prevVolume.plus(0.05);
-        console.log(Number(newVolume));
         player.current?.setVolume(Number(newVolume));
-        console.log(player.current?.getVolume());
         return newVolume;
       });
       return event.preventDefault();
@@ -129,10 +123,6 @@ export default function TwitchComponent() {
     // @ts-ignore
     player.current?.addEventListener(Twitch.Player.PAUSE, () => setIsPaused(true));
     // @ts-ignore
-    player.current?.addEventListener(Twitch.Player.PLAYBACK_BLOCKED, function () {
-      console.log('PLAYBACK BLOCKED', arguments);
-    });
-    // @ts-ignore
     player.current?.addEventListener(Twitch.Player.PLAY, () => {
       setIsPaused(false);
       player.current?.setMuted(false);
@@ -143,10 +133,6 @@ export default function TwitchComponent() {
     // @ts-ignore
     player.current?.addEventListener(Twitch.Player.READY, () => {
       player.current?.play();
-      console.log(player.current?.getPlaybackStats());
-      console.log(player);
-      console.log(player.current?.getVideo());
-      console.log(player.current?.getPlayerState());
       player.current?.setMuted(false);
       setVolumeLevel(new Big(player.current?.getVolume()));
     });
@@ -155,7 +141,6 @@ export default function TwitchComponent() {
 
   function handleVolumeClick() {
     if (player.current?.getVolume() === 0) {
-      console.log('hello');
       player.current?.setVolume(1);
       return setVolumeLevel(Big(1));
     }
@@ -174,6 +159,8 @@ export default function TwitchComponent() {
       : Number(volumeLevel) < 0.5
         ? faVolumeLow
         : faVolume;
+
+  const status = isPaused ? 'Paused' : isMuted ? 'Muted' : 'Playing';
 
   return (
     <ContentLayout
@@ -209,36 +196,37 @@ export default function TwitchComponent() {
             />
           </FormField>
         </form>
-        <SpaceBetween size="l">
+        <SpaceBetween size="xs">
           <div
             id="twitch-player"
             ref={playerWrapperRef}
             style={{ height: playerHeight }}
             className={styles.playerWrapper}
           />
-          <div className={styles.overlayWrapper} style={{ width: playerWidth }}>
-            <Container disableContentPaddings>
-              <Button variant="inline-link" onClick={togglePlayback}>
-                <Box padding="s" color="text-body-secondary">
-                  <Icon
-                    alt="Toggle playback"
-                    size="big"
-                    svg={<FontAwesomeIcon icon={isPaused ? faPlay : faPause} />}
-                  />
+          <div className={styles.controlsPositioner} style={{ width: playerWidth }}>
+            <div className={styles.controlsContainer}>
+              <div>
+                <Button variant="inline-link" onClick={togglePlayback}>
+                  <div className={styles.icon}>
+                    <Icon
+                      alt="Toggle playback"
+                      svg={<FontAwesomeIcon icon={isPaused ? faPlay : faPause} />}
+                    />
+                  </div>
+                </Button>
+                <Button variant="inline-link" onClick={handleVolumeClick}>
+                  <div className={styles.icon}>
+                    <Icon alt="Volume" svg={<FontAwesomeIcon icon={volumeIcon} />} />
+                  </div>
+                </Button>
+              </div>
+              {status && (
+                <Box padding={{ bottom: 'xs' }} color="text-status-inactive" fontSize="body-s">
+                  {status}
                 </Box>
-              </Button>
-              <Button variant="inline-link" onClick={handleVolumeClick}>
-                <Box padding="s" color="text-body-secondary">
-                  <Icon alt="Volume" size="big" svg={<FontAwesomeIcon icon={volumeIcon} />} />
-                </Box>
-              </Button>
-            </Container>
+              )}
+            </div>
           </div>
-          {isMutedAlertVisible && (
-            <Alert type="warning" dismissible onDismiss={() => setIsMutedAlertVisible(false)}>
-              Failed to unmute. Click on the video player to unmute.
-            </Alert>
-          )}
         </SpaceBetween>
       </Grid>
     </ContentLayout>

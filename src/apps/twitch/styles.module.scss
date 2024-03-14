@@ -1,20 +1,27 @@
+@use '@cloudscape-design/design-tokens' as awsui;
+
 .playerWrapper {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
 }
-.overlayWrapper {
+.controlsPositioner {
   display: flex;
   justify-content: center;
 }
-.overlay {
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 5px 10px rgba(255, 255, 255, 0.2);
-  border-radius: 500px;
+.controlsContainer {
+  padding: 0 awsui.$space-scaled-s;
+  background-color: awsui.$color-background-button-normal-hover;
   overflow: hidden;
-  z-index: 200;
-  background: rgba(128, 128, 128, 0.5);
-  backdrop-filter: blur(20px) saturate(115%);
-  transition: opacity 250ms;
+  border-radius: awsui.$border-radius-button;
+  border: 1px solid awsui.$color-border-divider-default;
+  text-align: center;
+}
+.icon {
+  padding: awsui.$space-scaled-xs awsui.$space-scaled-s;
+  color: awsui.$color-text-body-secondary;
+  transition: color 150ms;
+  &:hover {
+    color: awsui.$color-text-interactive-hover;
+  }
 }
