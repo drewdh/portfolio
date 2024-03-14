@@ -137,6 +137,7 @@ export default function TwitchComponent() {
     player.current?.addEventListener(Twitch.Player.READY, () => {
       player.current?.play();
       player.current?.setMuted(false);
+      player.current?.setVolume(volumeLevel.toNumber());
       setVolumeLevel(new Big(player.current?.getVolume()));
     });
     // return () => (player = undefined);
