@@ -8,9 +8,9 @@
 }
 .playerWrapper {
   padding: 0;
-  background-color: awsui.$color-background-button-normal-hover;
 }
 .player {
+  border-bottom: 1px solid awsui.$color-border-divider-default;
   border-radius: 12px 12px 0 0;
   overflow: hidden;
 }
