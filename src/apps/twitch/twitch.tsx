@@ -160,8 +160,6 @@ export default function TwitchComponent() {
         ? faVolumeLow
         : faVolume;
 
-  const status = isPaused ? 'Paused' : isMuted ? 'Muted' : 'Playing';
-
   return (
     <ContentLayout
       header={
@@ -196,35 +194,31 @@ export default function TwitchComponent() {
             />
           </FormField>
         </form>
-        <SpaceBetween size="xs">
+        <SpaceBetween size="xxs">
           <div
             id="twitch-player"
             ref={playerWrapperRef}
             style={{ height: playerHeight }}
             className={styles.playerWrapper}
           />
-          <div className={styles.controlsPositioner} style={{ width: playerWidth }}>
+          <div className={styles.controlsPositioner}>
             <div className={styles.controlsContainer}>
-              <div>
-                <Button variant="inline-link" onClick={togglePlayback}>
-                  <div className={styles.icon}>
-                    <Icon
-                      alt="Toggle playback"
-                      svg={<FontAwesomeIcon icon={isPaused ? faPlay : faPause} />}
-                    />
-                  </div>
-                </Button>
-                <Button variant="inline-link" onClick={handleVolumeClick}>
-                  <div className={styles.icon}>
-                    <Icon alt="Volume" svg={<FontAwesomeIcon icon={volumeIcon} />} />
-                  </div>
-                </Button>
-              </div>
-              {status && (
-                <Box padding={{ bottom: 'xs' }} color="text-status-inactive" fontSize="body-s">
-                  {status}
-                </Box>
-              )}
+              <Button variant="inline-link" onClick={togglePlayback}>
+                <div className={styles.icon}>
+                  <Icon
+                    alt="Toggle playback"
+                    svg={<FontAwesomeIcon icon={isPaused ? faPlay : faPause} />}
+                  />
+                </div>
+              </Button>
+              <Button variant="inline-link" onClick={handleVolumeClick}>
+                <div className={styles.icon}>
+                  <Icon alt="Volume" svg={<FontAwesomeIcon icon={volumeIcon} />} />
+                </div>
+              </Button>
+              <Box color="text-status-inactive" fontSize="body-s">
+                {isMuted ? 'Muted' : `${volumeLevel.times(100).toNumber()}%`}
+              </Box>
             </div>
           </div>
         </SpaceBetween>

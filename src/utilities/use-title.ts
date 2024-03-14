@@ -9,7 +9,7 @@ export default function useTitle(title?: string, { isNested }: UseTitleOptions =
       // TODO: A parent component can overwrite this. Fix this.
       const titleParts = isNested ? document.title.split(' - ') : [];
       if (title) {
-        titleParts.push(title);
+        titleParts.splice(0, 0, title);
       }
       titleParts.push(defaultTitle);
       document.title = titleParts.join(' - ');
