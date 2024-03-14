@@ -16,13 +16,14 @@ import { Big } from 'big.js';
 import Grid from '@cloudscape-design/components/grid';
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import Header from '@cloudscape-design/components/header';
+import { NonCancelableCustomEvent } from '@cloudscape-design/components';
+import ButtonDropdown, { ButtonDropdownProps } from '@cloudscape-design/components/button-dropdown';
+import { faCog } from '@fortawesome/pro-solid-svg-icons/faCog';
+import clsx from 'clsx';
 
 import styles from './styles.module.scss';
 import widgetDetails from 'common/widget-details';
 import useTitle from 'utilities/use-title';
-import ButtonDropdown from '@cloudscape-design/components/button-dropdown';
-import { faCog } from '@fortawesome/pro-solid-svg-icons/faCog';
-import clsx from 'clsx';
 
 export default function TwitchComponent() {
   const player = useRef<any>(null);
@@ -31,8 +32,8 @@ export default function TwitchComponent() {
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [volumeLevel, setVolumeLevel] = useState<Big>(new Big(1));
   const playerWrapperRef = useRef<HTMLDivElement>(null);
-  const [playerWidth, setPlayerWidth] = useState<string>('10px');
   const [playerHeight, setPlayerHeight] = useState<string>('10px');
+  const [quality, setQuality] = useState<string>('auto');
   const { user } = useParams();
   useTitle(user, { isNested: true });
   const [channelValue, setChannelValue] = useState<string>(user ?? '');
@@ -111,7 +112,6 @@ export default function TwitchComponent() {
     }
     const playerObserver = new ResizeObserver((entries, observer) => {
       const { width } = entries[0].contentRect;
-      setPlayerWidth(`${width}px`);
       setPlayerHeight(`${(width * 9) / 16}px`);
     });
     playerObserver.observe(playerWrapperRef.current);
@@ -156,6 +156,14 @@ export default function TwitchComponent() {
     navigate(`/twitch/${channelValue}`);
   }
 
+  function handleSettingsClick(
+    event: NonCancelableCustomEvent<ButtonDropdownProps.ItemClickDetails>
+  ) {
+    const newQuality = event.detail.id;
+    setQuality(newQuality);
+    player.current?.setQuality(newQuality);
+  }
+
   const volumeIcon =
     isMuted || Number(volumeLevel) === 0
       ? faVolumeSlash
@@ -179,24 +187,24 @@ export default function TwitchComponent() {
       >
         <div className={styles.container}>
           <form onSubmit={(e) => e.preventDefault()}>
-            <FormField
-              label="Channel"
-              description="Only livestreams are supported at this time."
-              constraintText="Enter the exact name of a Twitch channel."
-              secondaryControl={
-                <Button formAction="submit" onClick={handleLoadStreamer}>
-                  Watch channel
-                </Button>
-              }
-            >
-              <Input
-                type="search"
-                // Don't bubble up to keyboard shortcuts
-                onKeyDown={(e) => e.stopPropagation()}
-                onChange={(e) => setChannelValue(e.detail.value)}
-                value={channelValue}
-              />
-            </FormField>
+            <SpaceBetween size="l">
+              <FormField
+                label="Channel"
+                description="Only livestreams are supported at this time."
+                constraintText="Enter the exact name of a Twitch channel."
+              >
+                <Input
+                  type="search"
+                  // Don't bubble up to keyboard shortcuts
+                  onKeyDown={(e) => e.stopPropagation()}
+                  onChange={(e) => setChannelValue(e.detail.value)}
+                  value={channelValue}
+                />
+              </FormField>
+              <Button formAction="submit" onClick={handleLoadStreamer}>
+                Watch channel
+              </Button>
+            </SpaceBetween>
           </form>
         </div>
         <SpaceBetween size="xs">
@@ -230,17 +238,16 @@ export default function TwitchComponent() {
                 <ButtonDropdown
                   expandToViewport
                   expandableGroups
+                  onItemClick={handleSettingsClick}
                   items={[
                     {
                       text: 'Quality',
                       items:
-                        player.current?.getQualities()?.map((quality: any) => {
-                          // TODO: Take out of loop
-                          const current = player.current?.getQuality();
+                        player.current?.getQualities()?.map((option: any) => {
                           return {
-                            iconName: current === quality.name ? 'check' : undefined,
-                            text: quality.name,
-                            id: quality.name,
+                            iconName: quality === option.name ? 'check' : undefined,
+                            text: option.name,
+                            id: option.name,
                           };
                         }) ?? [],
                     },
