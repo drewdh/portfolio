@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const defaultTitle = 'Apps';
+const defaultTitle = 'DH';
 
 /** Updates document title */
 export default function useTitle(title?: string, { isNested }: UseTitleOptions = {}) {

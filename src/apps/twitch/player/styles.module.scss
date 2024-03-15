@@ -1,0 +1,35 @@
+@use '../../../../node_modules/@cloudscape-design/design-tokens/index' as awsui;
+
+.container {
+  padding: 16px 20px;
+  border-radius: 16px;
+  position: relative;
+  border: 1px solid awsui.$color-border-divider-default;
+}
+.playerWrapper {
+  padding: 0;
+}
+.player {
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
+}
+.controlsPositioner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: awsui.$space-scaled-s;
+  overflow: hidden;
+  text-align: center;
+}
+.controlsContainer {
+  display: flex;
+  align-items: center;
+}
+.icon {
+  padding: awsui.$space-scaled-xs awsui.$space-scaled-s;
+  color: awsui.$color-text-body-secondary;
+  transition: color 150ms;
+  &:hover {
+    color: awsui.$color-text-interactive-hover;
+  }
+}

@@ -15,7 +15,8 @@ import EcobeePage from './apps/ecobee/ecobee-page';
 import Login from './auth/login';
 import AuthPage from './auth/auth-page';
 import PasswordReset from './auth/password-reset';
-import TwitchPage from './apps/twitch/twitch-page';
+import TwitchPlayerPage from './apps/twitch/player/twitch-page';
+import TwitchPage from './apps/twitch/page';
 
 interface GlobalFlags {
   removeHighContrastHeader?: boolean;
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: Pathname.Ecobee,
         element: <EcobeePage />,
+      },
+      {
+        path: Pathname.TwitchChannel,
+        element: <TwitchPlayerPage />,
       },
       {
         path: Pathname.Twitch,

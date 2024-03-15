@@ -14,8 +14,8 @@ export default function useTopNavigation(): State {
   const navigate = useNavigateWithRef();
   const [isSettingsVisible, setIsSettingsVisible] = useState<boolean>(false);
 
-  const { data: currentUser } = useGetCurrentUser();
-  const { mutate: signOut } = useSignOut();
+  // const { data: currentUser } = useGetCurrentUser();
+  // const { mutate: signOut } = useSignOut();
 
   function handleSettingsDismiss() {
     setIsSettingsVisible(false);
@@ -46,37 +46,37 @@ export default function useTopNavigation(): State {
     },
   ];
 
-  if (currentUser) {
-    utilities.push({
-      type: 'menu-dropdown',
-      text: currentUser.Username,
-      iconName: 'user-profile-active',
-      onItemClick: (event) => {
-        switch (event.detail.id) {
-          case ProfileMenuItemId.SignOut: {
-            signOut();
-          }
-        }
-      },
-      items: [
-        {
-          id: ProfileMenuItemId.SignOut,
-          text: 'Sign out',
-        },
-      ],
-    });
-  } else {
-    utilities.push({
-      type: 'button',
-      text: 'Sign in',
-      iconName: 'user-profile',
-      href: Pathname.Signin,
-      onFollow: (event) => {
-        event.preventDefault();
-        navigate(Pathname.Signin);
-      },
-    });
-  }
+  // if (currentUser) {
+  //   utilities.push({
+  //     type: 'menu-dropdown',
+  //     text: currentUser.Username,
+  //     iconName: 'user-profile-active',
+  //     onItemClick: (event) => {
+  //       switch (event.detail.id) {
+  //         case ProfileMenuItemId.SignOut: {
+  //           signOut();
+  //         }
+  //       }
+  //     },
+  //     items: [
+  //       {
+  //         id: ProfileMenuItemId.SignOut,
+  //         text: 'Sign out',
+  //       },
+  //     ],
+  //   });
+  // } else {
+  //   utilities.push({
+  //     type: 'button',
+  //     text: 'Sign in',
+  //     iconName: 'user-profile',
+  //     href: Pathname.Signin,
+  //     onFollow: (event) => {
+  //       event.preventDefault();
+  //       navigate(Pathname.Signin);
+  //     },
+  //   });
+  // }
 
   return {
     handleSettingsDismiss,

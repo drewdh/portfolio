@@ -16,7 +16,7 @@ import { Big } from 'big.js';
 import Grid from '@cloudscape-design/components/grid';
 import ContentLayout from '@cloudscape-design/components/content-layout';
 import Header from '@cloudscape-design/components/header';
-import { NonCancelableCustomEvent } from '@cloudscape-design/components';
+import { Badge, NonCancelableCustomEvent } from '@cloudscape-design/components';
 import ButtonDropdown, { ButtonDropdownProps } from '@cloudscape-design/components/button-dropdown';
 import { faCog } from '@fortawesome/pro-solid-svg-icons/faCog';
 import clsx from 'clsx';
@@ -25,6 +25,8 @@ import styles from './styles.module.scss';
 import widgetDetails from 'common/widget-details';
 import useTitle from 'utilities/use-title';
 import Container from '@cloudscape-design/components/container';
+import Link from '@cloudscape-design/components/link';
+import Alert from '@cloudscape-design/components/alert';
 
 export default function TwitchComponent() {
   const player = useRef<any>(null);
@@ -39,8 +41,8 @@ export default function TwitchComponent() {
   useTitle(user, { isNested: true });
   const [channelValue, setChannelValue] = useState<string>(user ?? '');
 
-  // Force player to update channel when URL changes
   useEffect(() => {
+    // Force player to update channel when URL changes
     player.current?.setChannel(user);
   }, [user]);
 
@@ -174,42 +176,19 @@ export default function TwitchComponent() {
         : faVolume;
 
   return (
-    <ContentLayout
-      header={
-        <Header variant="h1" description={widgetDetails.twitch.description}>
-          {widgetDetails.twitch.title}
-        </Header>
-      }
-    >
+    <ContentLayout>
       <Grid
         gridDefinition={[
           { colspan: { default: 12, m: 3 }, push: { default: 0, m: 9 } },
           { colspan: { default: 12, m: 9 }, pull: { default: 0, m: 3 } },
         ]}
       >
-        <Container>
-          <form onSubmit={(e) => e.preventDefault()}>
-            <SpaceBetween size="l">
-              <FormField
-                label="Channel"
-                description="Only livestreams are supported at this time."
-                constraintText="Enter the exact name of a Twitch channel."
-              >
-                <Input
-                  type="search"
-                  // Don't bubble up to keyboard shortcuts
-                  onKeyDown={(e) => e.stopPropagation()}
-                  onChange={(e) => setChannelValue(e.detail.value)}
-                  value={channelValue}
-                />
-              </FormField>
-              <Button formAction="submit" onClick={handleLoadStreamer}>
-                Watch channel
-              </Button>
-            </SpaceBetween>
-          </form>
-        </Container>
-        <SpaceBetween size="xs">
+        <SpaceBetween size="l">
+          <Container header={<Header variant="h2">Chat</Header>}>
+            <Alert>Coming soon</Alert>
+          </Container>
+        </SpaceBetween>
+        <SpaceBetween size="l">
           <div className={clsx(styles.playerWrapper, styles.container)}>
             <div
               id="twitch-player"

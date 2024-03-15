@@ -1,35 +1,20 @@
 @use '@cloudscape-design/design-tokens' as awsui;
 
-.container {
-  padding: 16px 20px;
-  border-radius: 16px;
-  position: relative;
-  border: 1px solid awsui.$color-border-divider-default;
-}
-.playerWrapper {
-  padding: 0;
-}
-.player {
-  border-radius: 16px 16px 0 0;
+.header {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
-.controlsPositioner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.thumbnailWrapper {
   padding: awsui.$space-scaled-s;
-  overflow: hidden;
-  text-align: center;
-}
-.controlsContainer {
   display: flex;
-  align-items: center;
+  gap: awsui.$space-scaled-s;
+  flex-wrap: nowrap;
 }
-.icon {
-  padding: awsui.$space-scaled-xs awsui.$space-scaled-s;
-  color: awsui.$color-text-body-secondary;
-  transition: color 150ms;
-  &:hover {
-    color: awsui.$color-text-interactive-hover;
-  }
+.avatar {
+  border-radius: 35px;
+  width: 35px;
+  height: 35px;
 }

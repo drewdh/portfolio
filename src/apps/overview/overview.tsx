@@ -19,7 +19,7 @@ interface Widget {
 const widgets: Widget[] = [
   {
     title: widgetDetails.twitch.title,
-    href: '/twitch/skiesti',
+    href: Pathname.Twitch,
     description: widgetDetails.twitch.description,
     isPrototype: true,
   },
