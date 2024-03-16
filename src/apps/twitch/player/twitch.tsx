@@ -18,7 +18,7 @@ import ContentLayout from '@cloudscape-design/components/content-layout';
 import Header from '@cloudscape-design/components/header';
 import { Badge, NonCancelableCustomEvent } from '@cloudscape-design/components';
 import ButtonDropdown, { ButtonDropdownProps } from '@cloudscape-design/components/button-dropdown';
-import { faCog } from '@fortawesome/pro-solid-svg-icons/faCog';
+import { faExpand, faCog, faCompress } from '@fortawesome/pro-solid-svg-icons';
 import clsx from 'clsx';
 
 import styles from './styles.module.scss';
@@ -29,13 +29,16 @@ import Link from '@cloudscape-design/components/link';
 import Alert from '@cloudscape-design/components/alert';
 import { useGetStreamByUserLogin, useGetUser } from '../api';
 import Avatar from '../avatar';
+import RelativeTime from 'common/relative-time';
 
 export default function TwitchComponent() {
   const player = useRef<any>(null);
   const navigate = useNavigate();
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [volumeLevel, setVolumeLevel] = useState<Big>(new Big(1));
+  const twitchPlayerRef = useRef<HTMLDivElement>(null);
   const playerWrapperRef = useRef<HTMLDivElement>(null);
   const [playerHeight, setPlayerHeight] = useState<string>('10px');
   const [quality, setQuality] = useState<string>('auto');
@@ -48,10 +51,9 @@ export default function TwitchComponent() {
     player.current?.setChannel(user);
   }, [user]);
 
-  const { data } = useGetStreamByUserLogin(user);
+  // Viewer count seems to be updated every 60 seconds, so let's refetch that often
+  const { data } = useGetStreamByUserLogin(user, { refetchInterval: 1000 * 60 });
   const streamData = data?.data[0];
-
-  const { data: userData } = useGetUser(user);
 
   const options = {
     allowfullscreen: false,
@@ -74,40 +76,65 @@ export default function TwitchComponent() {
     }
   }
 
-  const keyboardShortcutListener = useCallback((event: KeyboardEvent): void => {
-    if (event.code === 'KeyK') {
-      togglePlayback();
-      return event.preventDefault();
+  const toggleFullscreen = useCallback(() => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      playerWrapperRef.current?.requestFullscreen();
     }
-    if (event.code === 'ArrowDown') {
-      setVolumeLevel((prevVolume) => {
-        if (prevVolume.toNumber() === 0) {
-          return prevVolume;
-        }
-        const newVolume = prevVolume.minus(0.05);
-        player.current?.setVolume(Number(newVolume));
-        return newVolume;
-      });
-      return event.preventDefault();
-    }
-    if (event.code === 'ArrowUp') {
-      setVolumeLevel((prevVolume) => {
-        if (prevVolume.toNumber() === 1) {
-          return prevVolume;
-        }
-        const newVolume = prevVolume.plus(0.05);
-        player.current?.setVolume(Number(newVolume));
-        return newVolume;
-      });
-      return event.preventDefault();
-    }
-    if (event.code === 'KeyM') {
-      const newIsMuted = !player.current?.getMuted();
-      player.current?.setMuted(newIsMuted);
-      setIsMuted(newIsMuted);
-      return event.preventDefault();
-    }
+    setIsFullscreen(!document.fullscreenElement);
   }, []);
+
+  const keyboardShortcutListener = useCallback(
+    (event: KeyboardEvent): void => {
+      if (event.code === 'KeyK') {
+        togglePlayback();
+        return event.preventDefault();
+      }
+      if (event.code === 'ArrowDown') {
+        setVolumeLevel((prevVolume) => {
+          if (prevVolume.toNumber() === 0) {
+            return prevVolume;
+          }
+          const newVolume = prevVolume.minus(0.05);
+          player.current?.setVolume(Number(newVolume));
+          return newVolume;
+        });
+        return event.preventDefault();
+      }
+      if (event.code === 'ArrowUp') {
+        setVolumeLevel((prevVolume) => {
+          if (prevVolume.toNumber() === 1) {
+            return prevVolume;
+          }
+          const newVolume = prevVolume.plus(0.05);
+          player.current?.setVolume(Number(newVolume));
+          return newVolume;
+        });
+        return event.preventDefault();
+      }
+      if (event.code === 'KeyM') {
+        const newIsMuted = !player.current?.getMuted();
+        player.current?.setMuted(newIsMuted);
+        setIsMuted(newIsMuted);
+        return event.preventDefault();
+      }
+      if (event.code === 'KeyF') {
+        toggleFullscreen();
+      }
+    },
+    [playerWrapperRef, toggleFullscreen]
+  );
+
+  const updateFullscreen = useCallback((): void => {
+    setIsFullscreen(!!document.fullscreenElement);
+  }, []);
+
+  useEffect(() => {
+    const current = playerWrapperRef.current;
+    current?.addEventListener('fullscreenchange', updateFullscreen);
+    return () => current?.removeEventListener('fullscreenchange', updateFullscreen);
+  }, [updateFullscreen]);
 
   useEffect(() => {
     document.addEventListener('keydown', keyboardShortcutListener);
@@ -117,14 +144,14 @@ export default function TwitchComponent() {
   }, [keyboardShortcutListener]);
 
   useLayoutEffect(() => {
-    if (!playerWrapperRef.current) {
+    if (!twitchPlayerRef.current) {
       return;
     }
     const playerObserver = new ResizeObserver((entries, observer) => {
       const { width } = entries[0].contentRect;
       setPlayerHeight(`${(width * 9) / 16}px`);
     });
-    playerObserver.observe(playerWrapperRef.current);
+    playerObserver.observe(twitchPlayerRef.current);
     return () => playerObserver.disconnect();
   }, []);
 
@@ -191,17 +218,24 @@ export default function TwitchComponent() {
         ]}
       >
         <SpaceBetween size="l">
-          <Container header={<Header variant="h2">Chat</Header>}>
-            <Alert>Coming soon</Alert>
-          </Container>
+          {/*<Container header={<Header variant="h2">Chat</Header>}>*/}
+          {/*  <Alert>Coming soon</Alert>*/}
+          {/*</Container>*/}
         </SpaceBetween>
         <SpaceBetween size="s">
-          <div className={clsx(styles.playerWrapper, styles.container)}>
+          <div
+            className={clsx(
+              styles.playerWrapper,
+              styles.container,
+              isFullscreen && styles.fullscreen
+            )}
+            ref={playerWrapperRef}
+          >
             <div
               id="twitch-player"
-              ref={playerWrapperRef}
+              ref={twitchPlayerRef}
               style={{ height: playerHeight }}
-              className={styles.player}
+              className={clsx(styles.player, isFullscreen && styles.fullscreen)}
             />
             <div className={styles.controlsPositioner}>
               <div className={styles.controlsContainer}>
@@ -223,15 +257,6 @@ export default function TwitchComponent() {
                 </Box>
               </div>
               <SpaceBetween size="s" direction="horizontal" alignItems="center">
-                <div>
-                  <Box color="text-status-error" textAlign="right">
-                    <Icon name="user-profile" /> {Number(streamData?.viewer_count).toLocaleString()}{' '}
-                    watching now
-                  </Box>
-                  <Box color="text-status-inactive" fontSize="body-s" textAlign="right">
-                    Started x minutes ago
-                  </Box>
-                </div>
                 <ButtonDropdown
                   expandToViewport
                   expandableGroups
@@ -255,25 +280,39 @@ export default function TwitchComponent() {
                     <Icon alt="Settings" svg={<FontAwesomeIcon icon={faCog} />} />
                   </div>
                 </ButtonDropdown>
+                <Button variant="inline-link" onClick={toggleFullscreen}>
+                  <div className={styles.icon}>
+                    <Icon
+                      alt="Toggle fullscreen"
+                      svg={<FontAwesomeIcon icon={isFullscreen ? faCompress : faExpand} />}
+                    />
+                  </div>
+                </Button>
               </SpaceBetween>
             </div>
           </div>
-          <Box fontSize="heading-m" fontWeight="bold">
-            {streamData?.title}
-          </Box>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box fontSize="heading-m" fontWeight="bold">
+              {streamData?.title}
+            </Box>
+            <Box padding={{ left: 's' }}>
+              <Box fontWeight="bold" textAlign="right">
+                {Number(streamData?.viewer_count).toLocaleString()} watching now
+              </Box>
+              <Box color="text-status-inactive" fontSize="body-s" textAlign="right">
+                Started <RelativeTime date={streamData?.started_at} inline />
+              </Box>
+            </Box>
+          </div>
           <SpaceBetween size="s" direction="horizontal" alignItems="center">
             <Avatar userName={user ?? ''} />
             <Box variant="h3" padding="n">
               {streamData?.user_name}
             </Box>
           </SpaceBetween>
-          <Container
-            header={
-              <Box fontSize="heading-xs" fontWeight="bold" color="inherit">
-                {streamData?.game_name}
-              </Box>
-            }
-          ></Container>
+          <span>
+            Streaming <b>{streamData?.game_name}</b>
+          </span>
         </SpaceBetween>
       </Grid>
     </ContentLayout>

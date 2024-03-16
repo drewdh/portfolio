@@ -8,10 +8,16 @@
 }
 .playerWrapper {
   padding: 0;
+  &.fullscreen {
+    border: none;
+  }
 }
 .player {
   border-radius: 16px 16px 0 0;
   overflow: hidden;
+  &.fullscreen {
+    border-radius: 0;
+  }
 }
 .controlsPositioner {
   display: flex;

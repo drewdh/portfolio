@@ -110,11 +110,11 @@ export default function TwitchPage() {
                         <Avatar userName={stream.user_login} />
                         <div>
                           <div className={styles.header}>
-                            <Box variant="h3" padding={{ top: 'n' }}>
-                              <InternalLink fontSize="heading-s" href={href}>
+                            <InternalLink fontSize="heading-s" href={href}>
+                              <Box variant="h3" padding={{ top: 'n' }}>
                                 {stream.title}
-                              </InternalLink>
-                            </Box>
+                              </Box>
+                            </InternalLink>
                           </div>
                           <Box color="text-status-inactive" fontSize="body-s">
                             <div>{stream.user_name}</div>

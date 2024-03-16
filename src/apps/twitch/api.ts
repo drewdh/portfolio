@@ -1,4 +1,4 @@
-import { InfiniteData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { InfiniteData, useInfiniteQuery, useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 function getCommonHeaders() {
   const accessToken = localStorage.getItem('access_token');
@@ -143,10 +143,12 @@ async function getStreams(request: GetStreamsRequest): Promise<GetStreamsRespons
   return resp.json();
 }
 
-export function useGetStreamByUserLogin(userLogin?: string) {
+type SafeOptions = Omit<UseQueryOptions<GetStreamsResponse>, 'queryFn' | 'queryKey' | 'enabled'>;
+export function useGetStreamByUserLogin(userLogin?: string, options: SafeOptions = {}) {
   return useQuery({
     queryFn: () => getStreams({ userLogins: [userLogin!] }),
     queryKey: [QueryKey.GetUserStream, userLogin],
     enabled: !!userLogin,
+    ...options,
   });
 }
