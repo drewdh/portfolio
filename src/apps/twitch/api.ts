@@ -1,6 +1,6 @@
 import { InfiniteData, useInfiniteQuery, useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-function getCommonHeaders() {
+export function getCommonHeaders() {
   const accessToken = localStorage.getItem('access_token');
   return {
     Authorization: `Bearer ${accessToken}`,

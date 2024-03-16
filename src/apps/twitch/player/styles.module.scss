@@ -9,6 +9,9 @@
 .playerWrapper {
   padding: 0;
   &.fullscreen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     border: none;
   }
 }

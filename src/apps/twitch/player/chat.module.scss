@@ -1,0 +1,16 @@
+@use '@cloudscape-design/design-tokens' as awsui;
+
+.username {
+  color: awsui.$color-text-status-inactive;
+  font-size: 13px;
+  padding-right: awsui.$space-scaled-xxs;
+}
+.message {
+  font-size: 13px;
+}
+.messageWrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: awsui.$space-scaled-s;
+  padding-top: awsui.$space-scaled-s;
+}

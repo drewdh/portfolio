@@ -5,6 +5,8 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  // Add padding so underline is shown on bottom line of text
+  padding-bottom: 2px;
   text-overflow: ellipsis;
 }
 .thumbnailWrapper {
@@ -15,6 +17,4 @@
 }
 .avatar {
   border-radius: 35px;
-  width: 35px;
-  height: 35px;
 }

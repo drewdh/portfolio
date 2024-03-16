@@ -30,6 +30,7 @@ import Alert from '@cloudscape-design/components/alert';
 import { useGetStreamByUserLogin, useGetUser } from '../api';
 import Avatar from '../avatar';
 import RelativeTime from 'common/relative-time';
+import Chat from './chat';
 
 export default function TwitchComponent() {
   const isFullscreenSupported = document.fullscreenEnabled;
@@ -152,6 +153,7 @@ export default function TwitchComponent() {
       return;
     }
     const playerObserver = new ResizeObserver((entries, observer) => {
+      console.log(entries);
       const { width } = entries[0].contentRect;
       setPlayerHeight(`${(width * 9) / 16}px`);
     });
@@ -217,15 +219,10 @@ export default function TwitchComponent() {
     <ContentLayout>
       <Grid
         gridDefinition={[
-          { colspan: { default: 12, m: 3 }, push: { default: 0, m: 9 } },
-          { colspan: { default: 12, m: 9 }, pull: { default: 0, m: 3 } },
+          { colspan: { default: 12, l: 9, m: 8, s: 7 } },
+          { colspan: { default: 12, l: 3, m: 4, s: 5 } },
         ]}
       >
-        <SpaceBetween size="l">
-          {/*<Container header={<Header variant="h2">Chat</Header>}>*/}
-          {/*  <Alert>Coming soon</Alert>*/}
-          {/*</Container>*/}
-        </SpaceBetween>
         <SpaceBetween size="s">
           <div
             className={clsx(
@@ -261,29 +258,31 @@ export default function TwitchComponent() {
                 </Box>
               </div>
               <SpaceBetween size="s" direction="horizontal" alignItems="center">
-                <ButtonDropdown
-                  expandToViewport
-                  expandableGroups
-                  onItemClick={handleSettingsClick}
-                  items={[
-                    {
-                      text: 'Quality',
-                      items:
-                        player.current?.getQualities()?.map((option: any) => {
-                          return {
-                            iconName: quality === option.name ? 'check' : undefined,
-                            text: option.name,
-                            id: option.name,
-                          };
-                        }) ?? [],
-                    },
-                  ]}
-                  variant="icon"
-                >
-                  <div className={styles.icon}>
-                    <Icon alt="Settings" svg={<FontAwesomeIcon icon={faCog} />} />
-                  </div>
-                </ButtonDropdown>
+                {!isFullscreen && (
+                  <ButtonDropdown
+                    expandToViewport
+                    expandableGroups
+                    onItemClick={handleSettingsClick}
+                    items={[
+                      {
+                        text: 'Quality',
+                        items:
+                          player.current?.getQualities()?.map((option: any) => {
+                            return {
+                              iconName: quality === option.name ? 'check' : undefined,
+                              text: option.name,
+                              id: option.name,
+                            };
+                          }) ?? [],
+                      },
+                    ]}
+                    variant="icon"
+                  >
+                    <div className={styles.icon}>
+                      <Icon alt="Settings" svg={<FontAwesomeIcon icon={faCog} />} />
+                    </div>
+                  </ButtonDropdown>
+                )}
                 {isFullscreenSupported && (
                   <Button variant="inline-link" onClick={toggleFullscreen}>
                     <div className={styles.icon}>
@@ -323,6 +322,12 @@ export default function TwitchComponent() {
               {streamData?.user_name}
             </Box>
           </SpaceBetween>
+        </SpaceBetween>
+        <SpaceBetween size="l">
+          <Chat
+            broadcasterUserId={streamData?.user_id}
+            height={playerWrapperRef.current?.offsetHeight}
+          />
         </SpaceBetween>
       </Grid>
     </ContentLayout>
