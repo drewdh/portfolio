@@ -43,6 +43,7 @@ export function useGetUser(userName?: string) {
   return useQuery({
     queryFn: () => getUser(userName),
     queryKey: [QueryKey.GetUser, userName ?? 'self'],
+    staleTime: Infinity,
   });
 }
 

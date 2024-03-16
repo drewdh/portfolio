@@ -1,9 +1,6 @@
-import Box from '@cloudscape-design/components/box';
-
 import styles from './chat.module.scss';
 import { SimpleMessage } from './chat';
 import Avatar from '../avatar';
-import SpaceBetween from '@cloudscape-design/components/space-between';
 
 export default function ChatMessage({ message }: Props) {
   return (

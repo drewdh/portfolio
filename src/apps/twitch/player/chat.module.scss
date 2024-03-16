@@ -14,3 +14,7 @@
   gap: awsui.$space-scaled-s;
   padding-top: awsui.$space-scaled-s;
 }
+.messagesContainer {
+  border-top: 1px solid awsui.$color-border-divider-default;
+  padding: awsui.$space-scaled-xxs awsui.$space-scaled-l awsui.$space-scaled-l;
+}

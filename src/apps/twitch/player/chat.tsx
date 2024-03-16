@@ -198,13 +198,14 @@ export default function Chat({ broadcasterUserId, height }: Props) {
 
   return (
     <>
-      <Container header={<Header variant="h2">Chat</Header>}>
+      <Container disableContentPaddings header={<Header variant="h2">Chat</Header>}>
         <div
           style={{
             height: heightString,
             maxHeight: heightString,
             overflow: 'auto',
           }}
+          className={styles.messagesContainer}
           ref={scrollContainerRef}
         >
           {isReconnectVisible && (
