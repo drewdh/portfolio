@@ -17,7 +17,6 @@ import Box from '@cloudscape-design/components/box';
 import styles from './styles.module.scss';
 import { useGetFollowedStreams } from './api';
 import Avatar from './avatar';
-import Input from '@cloudscape-design/components/input';
 
 export default function TwitchPage() {
   useTitle(widgetDetails.twitch.title);
@@ -71,7 +70,9 @@ export default function TwitchPage() {
               type="info"
               header="Connect to Twitch"
               action={
-                <Button href="https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=w9wdgvpv3h3m957julwgkn25hxsr38&redirect_uri=https://localhost:3000/twitch/&scope=user%3Aread%3Afollows">
+                <Button
+                  href={`https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=w9wdgvpv3h3m957julwgkn25hxsr38&redirect_uri=${window.location.origin}/twitch/&scope=user%3Aread%3Afollows`}
+                >
                   Connect
                 </Button>
               }
