@@ -127,8 +127,8 @@ export default function Chat({ broadcasterUserId, height }: Props) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<SimpleMessage[]>([]);
   const { data: user } = useGetUser();
-  // subtract border (1px + 1px), container heading height (48px), and content padding (4px top, 20px bottom)
-  const heightString = `${(height ?? 1) - 74}px`;
+  // subtract border (1px + 1px), container heading height (53px), and content padding (4px top, 20px bottom)
+  const heightString = `${(height ?? 1) - 79}px`;
 
   useEffect(() => {
     if (!broadcasterUserId || !user?.id) {
