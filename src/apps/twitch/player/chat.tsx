@@ -12,6 +12,8 @@ import Link from '@cloudscape-design/components/link';
 import Button from '@cloudscape-design/components/button';
 import { connectHref } from '../page';
 import Feedback from '../../../feedback/feedback';
+import StatusIndicator from '@cloudscape-design/components/status-indicator';
+import clsx from 'clsx';
 
 interface Message {
   metadata: {
@@ -119,7 +121,7 @@ function deleteSubscription(subscriptionId: string): Promise<unknown> {
 
 export default function Chat({ broadcasterUserId, height }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isReconnectVisible, setIsReconnectVisible] = useState<boolean>(false);
+  const [isReconnectError, setIsReconnectError] = useState<boolean>(false);
   const [isFeedbackVisible, setIsFeedbackVisible] = useState<boolean>(false);
   const [error, setError] = useState<object | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -142,7 +144,7 @@ export default function Chat({ broadcasterUserId, height }: Props) {
       const message: WelcomeMessage | ChatMessage = JSON.parse(event.data);
       if (message.metadata.message_type === 'session_welcome') {
         setError(null);
-        setIsReconnectVisible(false);
+        setIsReconnectError(false);
         subscribe({
           sessionId: (message as WelcomeMessage).payload.session.id,
           broadcasterUserId,
@@ -151,7 +153,7 @@ export default function Chat({ broadcasterUserId, height }: Props) {
           .then((resp) => (subscriptionId = resp.data[0].id))
           .catch((error) => {
             if (error.message === 'subscription missing proper authorization') {
-              setIsReconnectVisible(true);
+              setIsReconnectError(true);
             } else {
               setError(error);
             }
@@ -216,7 +218,15 @@ export default function Chat({ broadcasterUserId, height }: Props) {
           className={styles.messagesContainer}
           ref={scrollContainerRef}
         >
-          {isReconnectVisible && (
+          {isLoading && (
+            <div className={styles.statusContainer}>
+              <StatusIndicator type="loading">Loading chat</StatusIndicator>
+            </div>
+          )}
+          {!isLoading && !error && !isReconnectError && !messages.length && (
+            <div className={clsx(styles.statusContainer, styles.empty)}>No new messages</div>
+          )}
+          {isReconnectError && (
             <Alert
               header="Chat not enabled"
               action={
@@ -260,6 +270,7 @@ export default function Chat({ broadcasterUserId, height }: Props) {
             </Alert>
           )}
           {!error &&
+            !isLoading &&
             messages.map((message) => <ChatMessage message={message} key={message.message_id} />)}
         </div>
       </Container>

@@ -21,3 +21,14 @@
 .chatHeader {
   padding: awsui.$space-scaled-s awsui.$space-scaled-l;
 }
+.statusContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: awsui.$space-scaled-l 0;
+}
+.empty {
+  font-weight: bold;
+  color: awsui.$color-text-empty;
+}
