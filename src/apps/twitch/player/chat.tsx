@@ -6,6 +6,12 @@ import Box from '@cloudscape-design/components/box';
 import styles from './chat.module.scss';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import ChatMessage from './chat-message';
+import Alert from '@cloudscape-design/components/alert';
+import { ExpandableSection } from '@cloudscape-design/components';
+import Link from '@cloudscape-design/components/link';
+import Button from '@cloudscape-design/components/button';
+import { connectHref } from '../page';
+import Feedback from '../../../feedback/feedback';
 
 interface Message {
   metadata: {
@@ -97,7 +103,12 @@ async function subscribe(request: SubscribeRequest): Promise<SubscribeResponse> 
     },
     body: JSON.stringify(requestBody),
   });
-  return resp.json();
+  const respBody = resp.json();
+  if (!resp.ok) {
+    throw respBody;
+  } else {
+    return respBody;
+  }
 }
 function deleteSubscription(subscriptionId: string): Promise<unknown> {
   return fetch(`https://api.twitch.tv/helix/eventsub/subscriptions?id=${subscriptionId}`, {
@@ -108,6 +119,9 @@ function deleteSubscription(subscriptionId: string): Promise<unknown> {
 
 export default function Chat({ broadcasterUserId, height }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isReconnectVisible, setIsReconnectVisible] = useState<boolean>(false);
+  const [isFeedbackVisible, setIsFeedbackVisible] = useState<boolean>(false);
+  const [error, setError] = useState<object | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<SimpleMessage[]>([]);
   const { data: user } = useGetUser();
@@ -127,12 +141,21 @@ export default function Chat({ broadcasterUserId, height }: Props) {
     ws.onmessage = function (event) {
       const message: WelcomeMessage | ChatMessage = JSON.parse(event.data);
       if (message.metadata.message_type === 'session_welcome') {
+        setError(null);
+        setIsReconnectVisible(false);
         subscribe({
           sessionId: (message as WelcomeMessage).payload.session.id,
           broadcasterUserId,
           userId: user.id,
         })
           .then((resp) => (subscriptionId = resp.data[0].id))
+          .catch((error) => {
+            if (error.message === 'subscription missing proper authorization') {
+              setIsReconnectVisible(true);
+            } else {
+              setError(error);
+            }
+          })
           .finally(() => setIsLoading(false));
         return;
       }
@@ -174,20 +197,65 @@ export default function Chat({ broadcasterUserId, height }: Props) {
   }, [messages, scrollContainerRef]);
 
   return (
-    <Container header={<Header variant="h2">Chat</Header>}>
-      <div
-        style={{
-          height: heightString,
-          maxHeight: heightString,
-          overflow: 'auto',
-        }}
-        ref={scrollContainerRef}
-      >
-        {messages.map((message) => (
-          <ChatMessage message={message} key={message.message_id} />
-        ))}
-      </div>
-    </Container>
+    <>
+      <Container header={<Header variant="h2">Chat</Header>}>
+        <div
+          style={{
+            height: heightString,
+            maxHeight: heightString,
+            overflow: 'auto',
+          }}
+          ref={scrollContainerRef}
+        >
+          {isReconnectVisible && (
+            <Alert
+              header="Chat not enabled"
+              action={
+                <Button
+                  onClick={() => localStorage.setItem('access_token', '')}
+                  href={connectHref}
+                  iconName="external"
+                  iconAlign="right"
+                  target="_blank"
+                >
+                  Reconnect
+                </Button>
+              }
+            >
+              This site's Twitch permissions have changed. Reconnect to Twitch and reload the page
+              to enable chat.
+            </Alert>
+          )}
+          {error && (
+            <Alert type="error" header="Failed to load chat">
+              <SpaceBetween size="m">
+                <div>
+                  Reload the page or try again later.{' '}
+                  <Link
+                    href="#"
+                    onFollow={(e) => {
+                      e.preventDefault();
+                      setIsFeedbackVisible(true);
+                    }}
+                    variant="primary"
+                    color="inverted"
+                  >
+                    Send feedback
+                  </Link>{' '}
+                  and share more details.
+                </div>
+                <ExpandableSection headerText="Error details">
+                  <Box variant="pre">{JSON.stringify(error, null, 2)}</Box>
+                </ExpandableSection>
+              </SpaceBetween>
+            </Alert>
+          )}
+          {!error &&
+            messages.map((message) => <ChatMessage message={message} key={message.message_id} />)}
+        </div>
+      </Container>
+      <Feedback visible={isFeedbackVisible} onDismiss={() => setIsFeedbackVisible(false)} />
+    </>
   );
 }
 

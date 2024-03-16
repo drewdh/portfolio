@@ -55,7 +55,7 @@ export default function TwitchComponent() {
 
   // Viewer count seems to be updated every 60 seconds, so let's refetch that often
   const { data } = useGetStreamByUserLogin(user, { refetchInterval: 1000 * 60 });
-  const streamData = data?.data[0];
+  const streamData = data?.data?.[0];
 
   const options = {
     allowfullscreen: false,
