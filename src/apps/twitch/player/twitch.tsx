@@ -32,6 +32,7 @@ import Avatar from '../avatar';
 import RelativeTime from 'common/relative-time';
 
 export default function TwitchComponent() {
+  const isFullscreenSupported = document.fullscreenEnabled;
   const player = useRef<any>(null);
   const navigate = useNavigate();
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
@@ -77,13 +78,16 @@ export default function TwitchComponent() {
   }
 
   const toggleFullscreen = useCallback(() => {
+    if (!isFullscreenSupported) {
+      return;
+    }
     if (document.fullscreenElement) {
       document.exitFullscreen();
     } else {
       playerWrapperRef.current?.requestFullscreen();
     }
     setIsFullscreen(!document.fullscreenElement);
-  }, []);
+  }, [isFullscreenSupported]);
 
   const keyboardShortcutListener = useCallback(
     (event: KeyboardEvent): void => {
@@ -123,7 +127,7 @@ export default function TwitchComponent() {
         toggleFullscreen();
       }
     },
-    [playerWrapperRef, toggleFullscreen]
+    [toggleFullscreen]
   );
 
   const updateFullscreen = useCallback((): void => {
@@ -280,29 +284,38 @@ export default function TwitchComponent() {
                     <Icon alt="Settings" svg={<FontAwesomeIcon icon={faCog} />} />
                   </div>
                 </ButtonDropdown>
-                <Button variant="inline-link" onClick={toggleFullscreen}>
-                  <div className={styles.icon}>
-                    <Icon
-                      alt="Toggle fullscreen"
-                      svg={<FontAwesomeIcon icon={isFullscreen ? faCompress : faExpand} />}
-                    />
-                  </div>
-                </Button>
+                {isFullscreenSupported && (
+                  <Button variant="inline-link" onClick={toggleFullscreen}>
+                    <div className={styles.icon}>
+                      <Icon
+                        alt="Toggle fullscreen"
+                        svg={<FontAwesomeIcon icon={isFullscreen ? faCompress : faExpand} />}
+                      />
+                    </div>
+                  </Button>
+                )}
               </SpaceBetween>
             </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Box fontSize="heading-m" fontWeight="bold">
-              {streamData?.title}
-            </Box>
-            <Box padding={{ left: 's' }}>
-              <Box fontWeight="bold" textAlign="right">
-                {Number(streamData?.viewer_count).toLocaleString()} watching now
+            <div>
+              <Box fontSize="heading-m" fontWeight="bold">
+                {streamData?.title}
               </Box>
-              <Box color="text-status-inactive" fontSize="body-s" textAlign="right">
-                Started <RelativeTime date={streamData?.started_at} inline />
+              <Box padding={{ top: 'xxs' }}>
+                Streaming <b>{streamData?.game_name}</b>
               </Box>
-            </Box>
+            </div>
+            <div style={{ whiteSpace: 'nowrap' }}>
+              <Box padding={{ left: 's', top: 'xxs' }}>
+                <Box fontWeight="bold" textAlign="right">
+                  {Number(streamData?.viewer_count).toLocaleString()} watching now
+                </Box>
+                <Box color="text-status-inactive" fontSize="body-s" textAlign="right">
+                  Started <RelativeTime date={streamData?.started_at} inline />
+                </Box>
+              </Box>
+            </div>
           </div>
           <SpaceBetween size="s" direction="horizontal" alignItems="center">
             <Avatar userName={user ?? ''} />
@@ -310,9 +323,6 @@ export default function TwitchComponent() {
               {streamData?.user_name}
             </Box>
           </SpaceBetween>
-          <span>
-            Streaming <b>{streamData?.game_name}</b>
-          </span>
         </SpaceBetween>
       </Grid>
     </ContentLayout>
