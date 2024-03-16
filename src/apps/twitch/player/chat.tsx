@@ -103,7 +103,7 @@ async function subscribe(request: SubscribeRequest): Promise<SubscribeResponse> 
     },
     body: JSON.stringify(requestBody),
   });
-  const respBody = resp.json();
+  const respBody = await resp.json();
   if (!resp.ok) {
     throw respBody;
   } else {
