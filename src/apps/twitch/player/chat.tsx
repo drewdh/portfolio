@@ -198,7 +198,15 @@ export default function Chat({ broadcasterUserId, height }: Props) {
 
   return (
     <>
-      <Container disableContentPaddings header={<Header variant="h2">Chat</Header>}>
+      <Container
+        disableHeaderPaddings
+        disableContentPaddings
+        header={
+          <div className={styles.chatHeader}>
+            <Header variant="h2">Chat</Header>
+          </div>
+        }
+      >
         <div
           style={{
             height: heightString,
