@@ -164,7 +164,7 @@ export default function PlayerStatistics() {
         </SpaceBetween>
       </Grid>
       <Feedback
-        isVisible={isFeedbackModalVisible}
+        visible={isFeedbackModalVisible}
         onDismiss={() => setIsFeedbackModalVisible(false)}
       />
     </SpaceBetween>

@@ -27,6 +27,8 @@ import useTitle from 'utilities/use-title';
 import Container from '@cloudscape-design/components/container';
 import Link from '@cloudscape-design/components/link';
 import Alert from '@cloudscape-design/components/alert';
+import { useGetStreamByUserLogin, useGetUser } from '../api';
+import Avatar from '../avatar';
 
 export default function TwitchComponent() {
   const player = useRef<any>(null);
@@ -45,6 +47,11 @@ export default function TwitchComponent() {
     // Force player to update channel when URL changes
     player.current?.setChannel(user);
   }, [user]);
+
+  const { data } = useGetStreamByUserLogin(user);
+  const streamData = data?.data[0];
+
+  const { data: userData } = useGetUser(user);
 
   const options = {
     allowfullscreen: false,
@@ -188,7 +195,7 @@ export default function TwitchComponent() {
             <Alert>Coming soon</Alert>
           </Container>
         </SpaceBetween>
-        <SpaceBetween size="l">
+        <SpaceBetween size="s">
           <div className={clsx(styles.playerWrapper, styles.container)}>
             <div
               id="twitch-player"
@@ -215,7 +222,16 @@ export default function TwitchComponent() {
                   {isMuted ? 'Muted' : `${volumeLevel.times(100).toNumber()}%`}
                 </Box>
               </div>
-              <div>
+              <SpaceBetween size="s" direction="horizontal" alignItems="center">
+                <div>
+                  <Box color="text-status-error" textAlign="right">
+                    <Icon name="user-profile" /> {Number(streamData?.viewer_count).toLocaleString()}{' '}
+                    watching now
+                  </Box>
+                  <Box color="text-status-inactive" fontSize="body-s" textAlign="right">
+                    Started x minutes ago
+                  </Box>
+                </div>
                 <ButtonDropdown
                   expandToViewport
                   expandableGroups
@@ -239,9 +255,25 @@ export default function TwitchComponent() {
                     <Icon alt="Settings" svg={<FontAwesomeIcon icon={faCog} />} />
                   </div>
                 </ButtonDropdown>
-              </div>
+              </SpaceBetween>
             </div>
           </div>
+          <Box fontSize="heading-m" fontWeight="bold">
+            {streamData?.title}
+          </Box>
+          <SpaceBetween size="s" direction="horizontal" alignItems="center">
+            <Avatar userName={user ?? ''} />
+            <Box variant="h3" padding="n">
+              {streamData?.user_name}
+            </Box>
+          </SpaceBetween>
+          <Container
+            header={
+              <Box fontSize="heading-xs" fontWeight="bold" color="inherit">
+                {streamData?.game_name}
+              </Box>
+            }
+          ></Container>
         </SpaceBetween>
       </Grid>
     </ContentLayout>

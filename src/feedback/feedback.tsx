@@ -12,7 +12,7 @@ import Input from '@cloudscape-design/components/input';
 
 import useFeedback from './use-feedback';
 
-export default function Feedback({ isVisible, onDismiss }: Props) {
+export default function Feedback({ visible, onDismiss }: Props) {
   const {
     alertRef,
     emailRef,
@@ -62,7 +62,7 @@ export default function Feedback({ isVisible, onDismiss }: Props) {
       }
       header={<Header>Feedback</Header>}
       onDismiss={handleDismiss}
-      visible={isVisible}
+      visible={visible}
     >
       <form id="feedback" onSubmit={(e) => e.preventDefault()}>
         {isSuccess && <Alert type="success">Successfully submitted feedback.</Alert>}
@@ -120,6 +120,6 @@ export default function Feedback({ isVisible, onDismiss }: Props) {
 }
 
 interface Props {
-  isVisible: boolean;
+  visible: boolean;
   onDismiss: () => void;
 }

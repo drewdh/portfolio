@@ -34,11 +34,6 @@ const widgets: Widget[] = [
     href: Pathname.Diablo,
     description: widgetDetails.diablo.description,
   },
-  {
-    title: widgetDetails.feedback.title,
-    href: Pathname.Feedback,
-    description: widgetDetails.feedback.description,
-  },
 ];
 
 const cardDefinition: CardsProps.CardDefinition<Widget> = {

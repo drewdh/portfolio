@@ -11,6 +11,26 @@ import { NotificationsContext, NotificationsProvider } from 'common/internal/not
 import { Pathname } from 'utilities/routes';
 import widgetDetails from 'common/widget-details';
 import useFollow from 'common/use-follow';
+import Box from '@cloudscape-design/components/box';
+import Popover from '@cloudscape-design/components/popover';
+
+function PreviewPopover() {
+  return (
+    <Box color="text-status-info" display="inline">
+      <Popover
+        header="Preview app"
+        size="medium"
+        triggerType="text"
+        content="This app is in preview. Functionality is limited and can change at any time."
+        renderWithPortal={true}
+      >
+        <Box color="text-status-info" fontSize="body-s" fontWeight="bold">
+          Preview
+        </Box>
+      </Popover>
+    </Box>
+  );
+}
 
 const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutProps.Ref>) {
   const notifications = useContext(NotificationsContext);
@@ -40,10 +60,19 @@ const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutP
           onFollow={handleFollow}
           header={{ href: Pathname.Home, text: 'Apps' }}
           items={[
-            { type: 'link', text: widgetDetails.twitch.title, href: Pathname.Twitch },
-            { type: 'link', text: widgetDetails.ecobee.title, href: Pathname.Ecobee },
+            {
+              type: 'link',
+              text: widgetDetails.twitch.title,
+              href: Pathname.Twitch,
+              info: <PreviewPopover />,
+            },
+            {
+              type: 'link',
+              text: widgetDetails.ecobee.title,
+              href: Pathname.Ecobee,
+              info: <PreviewPopover />,
+            },
             { type: 'link', text: widgetDetails.diablo.title, href: Pathname.Diablo },
-            { type: 'link', text: widgetDetails.feedback.title, href: Pathname.Feedback },
           ]}
         />
       }

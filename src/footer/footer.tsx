@@ -18,7 +18,7 @@ export default function Footer() {
           </Link>
         </div>
       </div>
-      <Feedback isVisible={isFeedbackVisible} onDismiss={() => setIsFeedbackVisible(false)} />
+      <Feedback visible={isFeedbackVisible} onDismiss={() => setIsFeedbackVisible(false)} />
     </>
   );
 }

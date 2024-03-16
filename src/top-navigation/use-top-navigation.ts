@@ -13,9 +13,14 @@ enum ProfileMenuItemId {
 export default function useTopNavigation(): State {
   const navigate = useNavigateWithRef();
   const [isSettingsVisible, setIsSettingsVisible] = useState<boolean>(false);
+  const [isFeedbackVisible, setIsFeedbackVisible] = useState<boolean>(false);
 
   // const { data: currentUser } = useGetCurrentUser();
   // const { mutate: signOut } = useSignOut();
+
+  function handleFeedbackDismiss() {
+    setIsFeedbackVisible(false);
+  }
 
   function handleSettingsDismiss() {
     setIsSettingsVisible(false);
@@ -36,6 +41,15 @@ export default function useTopNavigation(): State {
   };
 
   const utilities: TopNavigationProps.Utility[] = [
+    {
+      type: 'button',
+      iconName: 'contact',
+      text: 'Feedback',
+      title: 'Feedback',
+      onClick() {
+        setIsFeedbackVisible(true);
+      },
+    },
     {
       type: 'button',
       iconName: 'settings',
@@ -79,18 +93,22 @@ export default function useTopNavigation(): State {
   // }
 
   return {
+    handleFeedbackDismiss,
     handleSettingsDismiss,
     i18nStrings,
     identity,
+    isFeedbackVisible,
     isSettingsVisible,
     utilities,
   };
 }
 
 interface State {
+  handleFeedbackDismiss: () => void;
   handleSettingsDismiss: () => void;
   i18nStrings: TopNavigationProps.I18nStrings;
   identity: TopNavigationProps.Identity;
+  isFeedbackVisible: boolean;
   isSettingsVisible: boolean;
   utilities: TopNavigationProps.Utility[];
 }
