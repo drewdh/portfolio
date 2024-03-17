@@ -5,7 +5,7 @@ import Avatar from '../avatar';
 export default function ChatMessage({ message }: Props) {
   return (
     <div className={styles.messageWrapper}>
-      <Avatar userName={message.chatter_user_name} size="small" />
+      {/*<Avatar color={message.color} userName={message.chatter_user_name} size="small" />*/}
       <div>
         <b className={styles.username} style={{ color: message.color }}>
           {message.chatter_user_name}

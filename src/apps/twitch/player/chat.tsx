@@ -127,8 +127,8 @@ export default function Chat({ broadcasterUserId, height }: Props) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<SimpleMessage[]>([]);
   const { data: user } = useGetUser();
-  // subtract border (1px + 1px), container heading height (53px), and content padding (4px top, 20px bottom)
-  const heightString = `${(height ?? 1) - 79}px`;
+  // subtract border (1px + 1px), container heading height (53px), and content padding (4px top, 8px bottom)
+  const heightString = `${(height ?? 1) - 71}px`;
 
   useEffect(() => {
     if (!broadcasterUserId || !user?.id) {
@@ -178,7 +178,7 @@ export default function Chat({ broadcasterUserId, height }: Props) {
           if (wasProcessed) {
             return prevMessages;
           }
-          return [...prevMessages, newMessage];
+          return [newMessage, ...prevMessages];
         });
       }
     };
@@ -210,13 +210,12 @@ export default function Chat({ broadcasterUserId, height }: Props) {
         }
       >
         <div
+          className={styles.chatContainer}
+          ref={scrollContainerRef}
           style={{
             height: heightString,
             maxHeight: heightString,
-            overflow: 'auto',
           }}
-          className={styles.messagesContainer}
-          ref={scrollContainerRef}
         >
           {isLoading && (
             <div className={styles.statusContainer}>
@@ -224,7 +223,9 @@ export default function Chat({ broadcasterUserId, height }: Props) {
             </div>
           )}
           {!isLoading && !error && !isReconnectError && !messages.length && (
-            <div className={clsx(styles.statusContainer, styles.empty)}>No new messages</div>
+            <div className={clsx(styles.statusContainer, styles.empty)}>
+              <b>No new messages</b>
+            </div>
           )}
           {isReconnectError && (
             <Alert
@@ -269,9 +270,13 @@ export default function Chat({ broadcasterUserId, height }: Props) {
               </SpaceBetween>
             </Alert>
           )}
-          {!error &&
-            !isLoading &&
-            messages.map((message) => <ChatMessage message={message} key={message.message_id} />)}
+          {!error && !isLoading && (
+            <div className={styles.messages}>
+              {messages.map((message) => (
+                <ChatMessage message={message} key={message.message_id} />
+              ))}
+            </div>
+          )}
         </div>
       </Container>
       <Feedback visible={isFeedbackVisible} onDismiss={() => setIsFeedbackVisible(false)} />

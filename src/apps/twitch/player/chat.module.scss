@@ -14,10 +14,18 @@
   gap: awsui.$space-scaled-m;
   padding: awsui.$space-scaled-xxs 0;
 }
-.messagesContainer {
+.chatContainer {
   border-top: 1px solid awsui.$color-border-divider-default;
-  height: 300px;
-  padding: awsui.$space-scaled-xxs awsui.$space-scaled-l awsui.$space-scaled-l;
+  height: 500px;
+  min-height: 600px;
+  padding: awsui.$space-scaled-xs awsui.$space-scaled-l;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+}
+.messages {
+  display: flex;
+  flex-direction: column-reverse;
 }
 .chatHeader {
   padding: awsui.$space-scaled-s awsui.$space-scaled-l;
@@ -30,6 +38,9 @@
   padding: awsui.$space-scaled-l 0;
 }
 .empty {
-  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  gap: awsui.$space-scaled-s;
+  text-align: center;
   color: awsui.$color-text-empty;
 }
