@@ -12,7 +12,9 @@ export default function Avatar({ userName, size }: Props) {
       aria-label={userName}
       style={{ backgroundImage: `url(${data?.profile_image_url.replace('300x300', '70x70')})` }}
       className={clsx(styles.avatar, size === 'small' && styles.small)}
-    />
+    >
+      <div className={clsx(styles.spacer, size === 'small' && styles.small)} />
+    </div>
   );
 }
 

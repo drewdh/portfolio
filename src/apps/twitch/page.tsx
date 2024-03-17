@@ -88,8 +88,7 @@ export default function TwitchPage() {
           {isConnected && followedStreams?.length && (
             <>
               <Header variant="h3">Live channels you follow</Header>
-              {/* TODO: Make responsive */}
-              <ColumnLayout columns={4}>
+              <ColumnLayout columns={6} minColumnWidth={326}>
                 {followedStreams.map((stream) => {
                   const href = `/twitch/${stream.user_login}`;
                   const viewerCount = stream.viewer_count.toLocaleString(undefined, {

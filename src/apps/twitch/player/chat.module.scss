@@ -11,11 +11,12 @@
 .messageWrapper {
   display: flex;
   flex-wrap: nowrap;
-  gap: awsui.$space-scaled-s;
-  padding-top: awsui.$space-scaled-s;
+  gap: awsui.$space-scaled-m;
+  padding: awsui.$space-scaled-xxs 0;
 }
 .messagesContainer {
   border-top: 1px solid awsui.$color-border-divider-default;
+  height: 300px;
   padding: awsui.$space-scaled-xxs awsui.$space-scaled-l awsui.$space-scaled-l;
 }
 .chatHeader {
