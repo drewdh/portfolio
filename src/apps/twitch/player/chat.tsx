@@ -7,13 +7,19 @@ import styles from './chat.module.scss';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import ChatMessage from './chat-message';
 import Alert from '@cloudscape-design/components/alert';
-import { ExpandableSection } from '@cloudscape-design/components';
+import {
+  ButtonDropdown,
+  ButtonDropdownProps,
+  ExpandableSection,
+  NonCancelableCustomEvent,
+} from '@cloudscape-design/components';
 import Link from '@cloudscape-design/components/link';
 import Button from '@cloudscape-design/components/button';
 import { connectHref } from '../page';
 import Feedback from '../../../feedback/feedback';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 import clsx from 'clsx';
+import ChatRestrictions from './chat-restrictions';
 
 interface Message {
   metadata: {
@@ -119,7 +125,12 @@ function deleteSubscription(subscriptionId: string): Promise<unknown> {
   });
 }
 
+enum SettingsId {
+  Restrictions = 'restrictions',
+}
+
 export default function Chat({ broadcasterUserId, height }: Props) {
+  const [isRestrictionsModalVisible, setIsRestrictionsModalVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isReconnectError, setIsReconnectError] = useState<boolean>(false);
   const [isFeedbackVisible, setIsFeedbackVisible] = useState<boolean>(false);
@@ -198,6 +209,13 @@ export default function Chat({ broadcasterUserId, height }: Props) {
     });
   }, [messages, scrollContainerRef]);
 
+  function handleItemClick(event: NonCancelableCustomEvent<ButtonDropdownProps.ItemClickDetails>) {
+    const { id } = event.detail;
+    if (id === SettingsId.Restrictions) {
+      setIsRestrictionsModalVisible(true);
+    }
+  }
+
   return (
     <>
       <Container
@@ -205,7 +223,19 @@ export default function Chat({ broadcasterUserId, height }: Props) {
         disableContentPaddings
         header={
           <div className={styles.chatHeader}>
-            <Header variant="h2">Chat</Header>
+            <Header
+              variant="h2"
+              actions={
+                <ButtonDropdown
+                  onItemClick={handleItemClick}
+                  expandableGroups
+                  items={[{ text: 'View restrictions', id: SettingsId.Restrictions }]}
+                  variant="icon"
+                />
+              }
+            >
+              Chat
+            </Header>
           </div>
         }
       >
@@ -280,6 +310,10 @@ export default function Chat({ broadcasterUserId, height }: Props) {
         </div>
       </Container>
       <Feedback visible={isFeedbackVisible} onDismiss={() => setIsFeedbackVisible(false)} />
+      <ChatRestrictions
+        visible={isRestrictionsModalVisible}
+        onDismiss={() => setIsRestrictionsModalVisible(false)}
+      />
     </>
   );
 }

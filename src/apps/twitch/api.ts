@@ -1,4 +1,5 @@
 import { InfiniteData, useInfiniteQuery, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useParams } from 'react-router';
 
 export function getCommonHeaders() {
   const accessToken = localStorage.getItem('access_token');
@@ -12,6 +13,7 @@ export enum QueryKey {
   GetFollowedStreams = 'GetFollowedStreams',
   GetUser = 'GetUser',
   GetUserStream = 'GetUserStream',
+  GetChatSettings = 'GetChatSettings',
 }
 
 export interface User {
@@ -151,5 +153,48 @@ export function useGetStreamByUserLogin(userLogin?: string, options: SafeOptions
     queryKey: [QueryKey.GetUserStream, userLogin],
     enabled: !!userLogin,
     ...options,
+  });
+}
+
+interface GetChatSettingsRequest {
+  broadcasterId: string;
+}
+interface GetChatSettingsResponse {
+  data: Array<{
+    broadcaster_id: string;
+    emote_mode: boolean;
+    follower_mode: boolean;
+    /** Time in minutes */
+    follower_mode_duration: number;
+    slow_mode: boolean;
+    /** Time in seconds */
+    slow_mode_wait_time: number;
+    subscriber_mode: boolean;
+    unique_chat_mode: boolean;
+  }>;
+}
+async function getChatSettings(request: GetChatSettingsRequest): Promise<GetChatSettingsResponse> {
+  const resp = await fetch(
+    `https://api.twitch.tv/helix/chat/settings?broadcaster_id=${request.broadcasterId}`,
+    {
+      method: 'GET',
+      headers: getCommonHeaders(),
+    }
+  );
+  const respBody = await resp.json();
+  if (!resp.ok) {
+    throw respBody;
+  }
+  return respBody;
+}
+
+export function useGetChatSettings() {
+  const { user } = useParams();
+  const { data: userData } = useGetUser(user);
+  const broadcasterId = userData?.id;
+  return useQuery({
+    queryFn: () => getChatSettings({ broadcasterId: broadcasterId! }),
+    queryKey: [QueryKey.GetChatSettings, broadcasterId],
+    enabled: !!userData,
   });
 }
