@@ -151,7 +151,6 @@ export default function Chat({ broadcasterUserId, height }: Props) {
 
   const handleScroll = useCallback(function (this: HTMLDivElement, event: Event) {
     const isBottom = this.scrollTop >= 0;
-    console.log(event);
     setIsScrolled(!isBottom);
     if (isBottom) {
       setUnreadCount(0);
