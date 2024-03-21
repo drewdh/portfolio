@@ -1,6 +1,6 @@
 import Container from '@cloudscape-design/components/container';
 import Header from '@cloudscape-design/components/header';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { twitchClient, useGetUsers } from '../api';
 import Box from '@cloudscape-design/components/box';
 import styles from './chat.module.scss';
@@ -69,7 +69,6 @@ enum SettingsId {
 }
 
 export default function Chat({ broadcasterUserId, height }: Props) {
-  const [isScrollPaused, setIsScrollPaused] = useState<boolean>(false);
   const [isRestrictionsModalVisible, setIsRestrictionsModalVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isReconnectError, setIsReconnectError] = useState<boolean>(false);
@@ -79,6 +78,8 @@ export default function Chat({ broadcasterUserId, height }: Props) {
   const [messages, setMessages] = useState<SimpleMessage[]>([]);
   const { data: userData } = useGetUsers({});
   const user = userData?.data[0];
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
   // subtract border (1px + 1px), container heading height (53px), and content padding (4px top, 8px bottom)
   const heightString = `${(height ?? 1) - 71}px`;
 
@@ -134,27 +135,42 @@ export default function Chat({ broadcasterUserId, height }: Props) {
           if (wasProcessed) {
             return prevMessages;
           }
-          // @ts-ignore
-          // console.log(message.payload.event);
+          if (isScrolled) {
+            setUnreadCount((prev) => prev + 1);
+          }
           return [newMessage, ...prevMessages].slice(0, 500);
         });
       }
     };
+
     return () => {
       ws.close();
       subscriptionId && deleteSubscription(subscriptionId);
     };
-  }, [broadcasterUserId, user?.id]);
+  }, [broadcasterUserId, user?.id, isScrolled]);
 
-  useLayoutEffect(() => {
-    if (!scrollContainerRef.current || isScrollPaused) {
-      return;
+  const handleScroll = useCallback(function (this: HTMLDivElement, event: Event) {
+    const isBottom = this.scrollTop >= 0;
+    console.log(event);
+    setIsScrolled(!isBottom);
+    if (isBottom) {
+      setUnreadCount(0);
     }
-    scrollContainerRef.current.scrollTo({
-      top: scrollContainerRef.current.scrollTop + scrollContainerRef.current.offsetHeight,
+  }, []);
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    scrollContainer?.addEventListener('scroll', handleScroll);
+    return () => scrollContainer?.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
+  const scrollToBottom = useCallback((): void => {
+    setUnreadCount(0);
+    scrollContainerRef.current?.scrollTo({
+      top: 0,
       behavior: 'smooth',
     });
-  }, [messages, scrollContainerRef, isScrollPaused]);
+  }, []);
 
   function handleItemClick(event: NonCancelableCustomEvent<ButtonDropdownProps.ItemClickDetails>) {
     const { id } = event.detail;
@@ -179,7 +195,7 @@ export default function Chat({ broadcasterUserId, height }: Props) {
                     size="medium"
                     triggerType="text"
                     content="Chat is in beta. Some functionality may not work as expected."
-                    renderWithPortal={true}
+                    renderWithPortal
                   >
                     <Box color="text-status-info" fontSize="body-s" fontWeight="bold">
                       Beta
@@ -209,6 +225,13 @@ export default function Chat({ broadcasterUserId, height }: Props) {
             maxHeight: heightString,
           }}
         >
+          <div
+            className={clsx(styles.unreadBadge, unreadCount > 0 && isScrolled && styles.visible)}
+          >
+            <Button onClick={scrollToBottom} iconName="angle-down">
+              {unreadCount} new message{unreadCount === 1 ? '' : 's'}
+            </Button>
+          </div>
           {isLoading && (
             <div className={styles.statusContainer}>
               <StatusIndicator type="loading">Loading chat</StatusIndicator>
@@ -265,11 +288,7 @@ export default function Chat({ broadcasterUserId, height }: Props) {
           {!error && !isLoading && (
             <div className={styles.messages}>
               {messages.map((message) => (
-                <ChatMessage
-                  onScrollPause={() => setIsScrollPaused(true)}
-                  message={message}
-                  key={message.message_id}
-                />
+                <ChatMessage message={message} key={message.message_id} />
               ))}
             </div>
           )}

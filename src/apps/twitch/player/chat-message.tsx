@@ -12,7 +12,7 @@ import { faBadgeCheck } from '@fortawesome/pro-solid-svg-icons';
 import Emote from './emote';
 import Link from '@cloudscape-design/components/link';
 
-export default function ChatMessage({ message, onScrollPause }: Props) {
+export default function ChatMessage({ message }: Props) {
   const { data: userData } = useGetUsers({ ids: [message.chatter_user_id] });
   const user = userData?.data[0];
   const { data: followerData } = useGetChannelFollowers(user?.id);
@@ -21,6 +21,7 @@ export default function ChatMessage({ message, onScrollPause }: Props) {
     <div className={styles.messageWrapper}>
       <div>
         <Popover
+          fixedWidth
           triggerType="custom"
           header="Message details"
           renderWithPortal
@@ -54,7 +55,6 @@ export default function ChatMessage({ message, onScrollPause }: Props) {
             className={styles.username}
             onClick={() => {
               console.log('hey');
-              onScrollPause?.();
             }}
           >
             <b style={{ color: message.color }}>{message.chatter_user_name}</b>
@@ -81,5 +81,4 @@ export default function ChatMessage({ message, onScrollPause }: Props) {
 
 interface Props {
   message: SimpleMessage;
-  onScrollPause?: () => void;
 }
