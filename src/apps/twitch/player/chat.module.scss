@@ -1,6 +1,7 @@
 @use '@cloudscape-design/design-tokens' as awsui;
 
 .username {
+  cursor: pointer;
   color: awsui.$color-text-status-inactive;
   font-size: 13px;
   padding-right: awsui.$space-scaled-xxs;

@@ -17,6 +17,7 @@ import AuthPage from './auth/auth-page';
 import PasswordReset from './auth/password-reset';
 import TwitchPlayerPage from './apps/twitch/player/twitch-page';
 import TwitchPage from './apps/twitch/page';
+import ErrorBoundary from 'common/error-boundary';
 
 interface GlobalFlags {
   removeHighContrastHeader?: boolean;
@@ -33,6 +34,7 @@ if (!(window as FlagsHolder)[symbol]) {
 const router = createBrowserRouter([
   {
     element: <App />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: Pathname.Fallback,
@@ -85,9 +87,9 @@ const router = createBrowserRouter([
   },
 ]);
 
-const queryClient = new QueryClient();
 const locale = document.documentElement.lang;
 const messages = await importMessages(locale);
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

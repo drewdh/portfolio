@@ -62,7 +62,7 @@ export default function Feedback({ visible, onDismiss }: Props) {
       }
       header={<Header>Feedback</Header>}
       onDismiss={handleDismiss}
-      visible={visible}
+      visible={Boolean(visible)}
     >
       <form id="feedback" onSubmit={(e) => e.preventDefault()}>
         {isSuccess && <Alert type="success">Successfully submitted feedback.</Alert>}
@@ -120,6 +120,6 @@ export default function Feedback({ visible, onDismiss }: Props) {
 }
 
 interface Props {
-  visible: boolean;
+  visible: boolean | undefined;
   onDismiss: () => void;
 }

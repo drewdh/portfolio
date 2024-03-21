@@ -53,11 +53,11 @@ export default function ChatRestrictions({ visible, onDismiss }: Props) {
             <Alert header="Subscriber mode">Chat is restricted to subscribers.</Alert>
           )}
           {settings.unique_chat_mode && (
-            <Alert header="Unique chat mode">Users can't post duplicate messages.</Alert>
+            <Alert header="Unique message mode">Users can't post duplicate messages.</Alert>
           )}
           {hasNoRestrictions && (
-            <Alert header="No chat restrictions" type="success">
-              The broadcaster currently has no restrictions on chat.
+            <Alert header="No restrictions" type="success">
+              Any user may post in chat.
             </Alert>
           )}
         </SpaceBetween>

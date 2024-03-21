@@ -2,17 +2,18 @@ import clsx from 'clsx';
 import { colorBackgroundInputDisabled } from '@cloudscape-design/design-tokens';
 
 import styles from './styles.module.scss';
-import { useGetUser } from './api';
+import { useGetUsers } from './api';
 
-export default function Avatar({ userName, size, color }: Props) {
-  const { data } = useGetUser(userName);
+export default function Avatar({ userId, size, color }: Props) {
+  const { data } = useGetUsers({ ids: [userId] });
+  const userData = data?.data[0];
 
   return (
     <div
       role="img"
-      aria-label={userName}
+      aria-label={userData?.display_name}
       style={{
-        backgroundImage: `url(${data?.profile_image_url.replace('300x300', '70x70')})`,
+        backgroundImage: `url(${userData?.profile_image_url.replace('300x300', '70x70')})`,
         backgroundColor: color ?? colorBackgroundInputDisabled,
       }}
       className={clsx(styles.avatar, size === 'small' && styles.small)}
@@ -24,6 +25,6 @@ export default function Avatar({ userName, size, color }: Props) {
 
 interface Props {
   color?: string;
-  userName: string;
+  userId: string;
   size?: 'normal' | 'small';
 }

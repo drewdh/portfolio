@@ -1,13 +1,14 @@
 import Container from '@cloudscape-design/components/container';
 import Header from '@cloudscape-design/components/header';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { getCommonHeaders, useGetUser } from '../api';
+import { twitchClient, useGetUsers } from '../api';
 import Box from '@cloudscape-design/components/box';
 import styles from './chat.module.scss';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import ChatMessage from './chat-message';
 import Alert from '@cloudscape-design/components/alert';
 import {
+  Badge,
   ButtonDropdown,
   ButtonDropdownProps,
   ExpandableSection,
@@ -20,61 +21,23 @@ import Feedback from '../../../feedback/feedback';
 import StatusIndicator from '@cloudscape-design/components/status-indicator';
 import clsx from 'clsx';
 import ChatRestrictions from './chat-restrictions';
+import {
+  CreateEventSubSubscriptionResponse,
+  DeleteEventSubSubscriptionResponse,
+  WelcomeMessage,
+  ChatMessage as ChatMessageType,
+  Fragment,
+} from '../twitch-types';
+import Popover from '@cloudscape-design/components/popover';
 
-interface Message {
-  metadata: {
-    messageId: string;
-    messageTimestamp: string;
-    message_type: string;
-  };
-}
-interface WelcomeMessage extends Message {
-  metadata: {
-    messageId: string;
-    messageTimestamp: string;
-    message_type: 'session_welcome';
-  };
-  payload: {
-    session: {
-      id: string;
-      connected_at: string;
-      keepalive_timeout_seconds: number;
-      reconnect_url: string | null;
-      status: string;
-    };
-  };
-}
-interface ChatMessage extends Message {
-  metadata: {
-    messageId: string;
-    messageTimestamp: string;
-    message_type: 'notification';
-  };
-  payload: {
-    event: {
-      badges: unknown[];
-      broadcaster_user_id: string;
-      broadcaster_user_login: string;
-      broadcaster_user_name: string;
-      chatter_user_id: string;
-      chatter_user_login: string;
-      chatter_user_name: string;
-      color: string;
-      message: {
-        fragments: unknown[];
-        text: string;
-      };
-      message_id: string;
-      message_type: 'text';
-      reply: null;
-    };
-  };
-}
 export interface SimpleMessage {
   color: string;
+  fragments: Fragment[];
   message_id: string;
   message_text: string;
   chatter_user_name: string;
+  chatter_user_id: string;
+  subscriber_month_count: string | undefined;
 }
 
 interface SubscribeRequest {
@@ -82,15 +45,7 @@ interface SubscribeRequest {
   broadcasterUserId: string;
   userId: string;
 }
-interface SubscribeResponse {
-  data: Array<{
-    id: string;
-  }>;
-  total: number;
-  total_cost: number;
-  max_total_cost: number;
-}
-async function subscribe(request: SubscribeRequest): Promise<SubscribeResponse> {
+async function subscribe(request: SubscribeRequest): Promise<CreateEventSubSubscriptionResponse> {
   const requestBody = {
     type: 'channel.chat.message',
     version: 1,
@@ -103,26 +58,10 @@ async function subscribe(request: SubscribeRequest): Promise<SubscribeResponse> 
       session_id: request.sessionId,
     },
   };
-  const resp = await fetch('https://api.twitch.tv/helix/eventsub/subscriptions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...getCommonHeaders(),
-    },
-    body: JSON.stringify(requestBody),
-  });
-  const respBody = await resp.json();
-  if (!resp.ok) {
-    throw respBody;
-  } else {
-    return respBody;
-  }
+  return twitchClient.createEventSubSubscription(requestBody);
 }
-function deleteSubscription(subscriptionId: string): Promise<unknown> {
-  return fetch(`https://api.twitch.tv/helix/eventsub/subscriptions?id=${subscriptionId}`, {
-    method: 'DELETE',
-    headers: getCommonHeaders(),
-  });
+function deleteSubscription(subscriptionId: string): Promise<DeleteEventSubSubscriptionResponse> {
+  return twitchClient.deleteEventSubSubscription({ id: subscriptionId });
 }
 
 enum SettingsId {
@@ -130,6 +69,7 @@ enum SettingsId {
 }
 
 export default function Chat({ broadcasterUserId, height }: Props) {
+  const [isScrollPaused, setIsScrollPaused] = useState<boolean>(false);
   const [isRestrictionsModalVisible, setIsRestrictionsModalVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isReconnectError, setIsReconnectError] = useState<boolean>(false);
@@ -137,7 +77,8 @@ export default function Chat({ broadcasterUserId, height }: Props) {
   const [error, setError] = useState<object | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<SimpleMessage[]>([]);
-  const { data: user } = useGetUser();
+  const { data: userData } = useGetUsers({});
+  const user = userData?.data[0];
   // subtract border (1px + 1px), container heading height (53px), and content padding (4px top, 8px bottom)
   const heightString = `${(height ?? 1) - 71}px`;
 
@@ -152,7 +93,7 @@ export default function Chat({ broadcasterUserId, height }: Props) {
     };
 
     ws.onmessage = function (event) {
-      const message: WelcomeMessage | ChatMessage = JSON.parse(event.data);
+      const message: WelcomeMessage | ChatMessageType = JSON.parse(event.data);
       if (message.metadata.message_type === 'session_welcome') {
         setError(null);
         setIsReconnectError(false);
@@ -173,12 +114,16 @@ export default function Chat({ broadcasterUserId, height }: Props) {
         return;
       }
       if (message.metadata.message_type === 'notification') {
-        const { event } = (message as ChatMessage).payload;
+        const { event } = (message as ChatMessageType).payload;
+        // console.log(event);
         const newMessage: SimpleMessage = {
           color: event.color,
+          fragments: event.message.fragments,
           message_id: event.message_id,
           message_text: event.message.text,
+          chatter_user_id: event.chatter_user_id,
           chatter_user_name: event.chatter_user_name,
+          subscriber_month_count: event.badges.find((badge) => badge.set_id === 'subscriber')?.info,
         };
         setMessages((prevMessages) => {
           // Some messages can be duplicated, so don't process these again
@@ -189,25 +134,27 @@ export default function Chat({ broadcasterUserId, height }: Props) {
           if (wasProcessed) {
             return prevMessages;
           }
+          // @ts-ignore
+          // console.log(message.payload.event);
           return [newMessage, ...prevMessages];
         });
       }
     };
     return () => {
       ws.close();
-      deleteSubscription(subscriptionId);
+      subscriptionId && deleteSubscription(subscriptionId);
     };
   }, [broadcasterUserId, user?.id]);
 
   useLayoutEffect(() => {
-    if (!scrollContainerRef.current) {
+    if (!scrollContainerRef.current || isScrollPaused) {
       return;
     }
     scrollContainerRef.current.scrollTo({
       top: scrollContainerRef.current.scrollTop + scrollContainerRef.current.offsetHeight,
       behavior: 'smooth',
     });
-  }, [messages, scrollContainerRef]);
+  }, [messages, scrollContainerRef, isScrollPaused]);
 
   function handleItemClick(event: NonCancelableCustomEvent<ButtonDropdownProps.ItemClickDetails>) {
     const { id } = event.detail;
@@ -225,6 +172,21 @@ export default function Chat({ broadcasterUserId, height }: Props) {
           <div className={styles.chatHeader}>
             <Header
               variant="h2"
+              info={
+                <Box color="text-status-info" display="inline">
+                  <Popover
+                    header="Beta feature"
+                    size="medium"
+                    triggerType="text"
+                    content="Chat is in beta. Some functionality may not work as expected."
+                    renderWithPortal={true}
+                  >
+                    <Box color="text-status-info" fontSize="body-s" fontWeight="bold">
+                      Beta
+                    </Box>
+                  </Popover>
+                </Box>
+              }
               actions={
                 <ButtonDropdown
                   onItemClick={handleItemClick}
@@ -303,7 +265,11 @@ export default function Chat({ broadcasterUserId, height }: Props) {
           {!error && !isLoading && (
             <div className={styles.messages}>
               {messages.map((message) => (
-                <ChatMessage message={message} key={message.message_id} />
+                <ChatMessage
+                  onScrollPause={() => setIsScrollPaused(true)}
+                  message={message}
+                  key={message.message_id}
+                />
               ))}
             </div>
           )}

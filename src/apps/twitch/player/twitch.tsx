@@ -7,31 +7,37 @@ import ContentLayout from '@cloudscape-design/components/content-layout';
 
 import styles from './styles.module.scss';
 import useTitle from 'utilities/use-title';
-import { useGetStreamByUserLogin } from '../api';
+import { useGetChannelFollowers, useGetStreamByUserLogin, useGetUsers } from '../api';
 import Avatar from '../avatar';
 import RelativeTime from 'common/relative-time';
 import Chat from './chat';
+import Icon from '@cloudscape-design/components/icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBadgeCheck } from '@fortawesome/pro-solid-svg-icons';
 
 export default function TwitchComponent() {
   const player = useRef<any>(null);
   const twitchPlayerRef = useRef<HTMLDivElement>(null);
   const [playerHeight, setPlayerHeight] = useState<string>('10px');
-  const { user } = useParams();
-  useTitle(user, { isNested: true });
+  const { user: username } = useParams();
+  const { data: userData } = useGetUsers({ logins: [username ?? ''] });
+  const user = userData?.data[0];
+  const { data: followersData } = useGetChannelFollowers(user?.id);
+  useTitle(username, { isNested: true });
 
   useEffect(() => {
     // Force player to update channel when URL changes
-    player.current?.setChannel(user);
-  }, [user]);
+    player.current?.setChannel(username);
+  }, [username]);
 
   // Viewer count seems to be updated every 60 seconds, so let's refetch that often
-  const { data } = useGetStreamByUserLogin(user, { refetchInterval: 1000 * 60 });
+  const { data } = useGetStreamByUserLogin(username, { refetchInterval: 1000 * 60 });
   const streamData = data?.data?.[0];
 
   const options = {
     width: '100%',
     height: '100%',
-    channel: user,
+    channel: username,
     autoplay: true,
     muted: false,
   };
@@ -102,10 +108,23 @@ export default function TwitchComponent() {
             </div>
           </div>
           <SpaceBetween size="s" direction="horizontal" alignItems="center">
-            <Avatar userName={user ?? ''} />
-            <Box variant="h3" padding="n">
-              {streamData?.user_name}
-            </Box>
+            <Avatar userId={user?.id ?? ''} />
+            <div>
+              <Box variant="h3" padding="n">
+                {streamData?.user_name}{' '}
+                {user?.broadcaster_type === 'partner' && (
+                  <Icon svg={<FontAwesomeIcon icon={faBadgeCheck} />} />
+                )}
+              </Box>
+              <Box color="text-body-secondary">
+                {followersData && (
+                  <>
+                    {Number(followersData.total).toLocaleString(undefined, { notation: 'compact' })}{' '}
+                    followers
+                  </>
+                )}
+              </Box>
+            </div>
           </SpaceBetween>
         </SpaceBetween>
         <SpaceBetween size="l">

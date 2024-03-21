@@ -110,7 +110,7 @@ export default function TwitchPage() {
                       }}
                     >
                       <div className={styles.thumbnailWrapper}>
-                        <Avatar userName={stream.user_login} />
+                        <Avatar userId={stream.user_id} />
                         <div>
                           <div className={styles.header}>
                             <InternalLink href={href}>
