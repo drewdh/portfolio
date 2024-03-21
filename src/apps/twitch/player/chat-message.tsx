@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBadgeCheck } from '@fortawesome/pro-solid-svg-icons';
 import Emote from './emote';
 import Link from '@cloudscape-design/components/link';
+import { ReactNode } from 'react';
 
 export default function ChatMessage({ message }: Props) {
   const { data: userData } = useGetUsers({ ids: [message.chatter_user_id] });
@@ -71,7 +72,23 @@ export default function ChatMessage({ message }: Props) {
             if (fragment.type === 'emote') {
               return <Emote key={index} emote={fragment.emote} />;
             }
-            return <span key={index}>{fragment.text}</span>;
+            return (
+              <span key={index}>
+                {/* TODO: Make this more readable */}
+                {/* Make URLs into Links */}
+                {fragment.text.split(' ').map((string) => {
+                  let finalString: ReactNode = string;
+                  if (string.startsWith('https://')) {
+                    finalString = (
+                      <Link href={string} target="_blank">
+                        {string}
+                      </Link>
+                    );
+                  }
+                  return <>{finalString} </>;
+                })}
+              </span>
+            );
           })}
         </span>
       </div>
