@@ -61,17 +61,17 @@ export default function ChatMessage({ message, onScrollPause }: Props) {
 
             {user?.broadcaster_type === 'partner' && (
               <Box variant="span" padding={{ left: 'xxs' }}>
-                <Icon svg={<FontAwesomeIcon icon={faBadgeCheck} />} />
+                <Icon svg={<FontAwesomeIcon icon={faBadgeCheck} color="#a970ff" />} />
               </Box>
             )}
           </span>
         </Popover>{' '}
         <span className={styles.message}>
-          {message.fragments?.map((fragment) => {
+          {message.fragments?.map((fragment, index) => {
             if (fragment.type === 'emote') {
-              return <Emote emote={fragment.emote} />;
+              return <Emote key={index} emote={fragment.emote} />;
             }
-            return fragment.text;
+            return <span key={index}>{fragment.text}</span>;
           })}
         </span>
       </div>

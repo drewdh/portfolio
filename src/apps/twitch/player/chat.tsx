@@ -136,7 +136,7 @@ export default function Chat({ broadcasterUserId, height }: Props) {
           }
           // @ts-ignore
           // console.log(message.payload.event);
-          return [newMessage, ...prevMessages];
+          return [newMessage, ...prevMessages].slice(0, 500);
         });
       }
     };

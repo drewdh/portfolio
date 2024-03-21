@@ -113,7 +113,7 @@ export default function TwitchComponent() {
               <Box variant="h3" padding="n">
                 {streamData?.user_name}{' '}
                 {user?.broadcaster_type === 'partner' && (
-                  <Icon svg={<FontAwesomeIcon icon={faBadgeCheck} />} />
+                  <Icon svg={<FontAwesomeIcon icon={faBadgeCheck} color="#a970ff" />} />
                 )}
               </Box>
               <Box color="text-body-secondary">
