@@ -12,90 +12,99 @@ import { faBadgeCheck } from '@fortawesome/pro-solid-svg-icons';
 import Emote from './emote';
 import Link from '@cloudscape-design/components/link';
 import { ReactNode } from 'react';
+import clsx from 'clsx';
+import ButtonDropdown from '@cloudscape-design/components/button-dropdown';
 
-export default function ChatMessage({ message }: Props) {
+export function Message({ variant, message }: Props) {
+  return (
+    <span className={clsx(styles.message, variant === 'normal' && styles.normal)}>
+      {message.fragments?.map((fragment, index) => {
+        if (fragment.type === 'emote') {
+          return <Emote key={index} emote={fragment.emote} />;
+        }
+        return (
+          <span key={index}>
+            {/* TODO: Make this more readable */}
+            {/* Make URLs into Links */}
+            {fragment.text.split(' ').map((string) => {
+              let finalString: ReactNode = string;
+              if (string.startsWith('https://')) {
+                finalString = (
+                  <Link
+                    fontSize={variant === 'featured' ? 'heading-s' : 'body-s'}
+                    rel="noreferrer"
+                    href={string}
+                    target="_blank"
+                  >
+                    {string}
+                  </Link>
+                );
+              }
+              return <>{finalString} </>;
+            })}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+export default function ChatMessage({ message, onClick, variant = 'normal' }: Props) {
   const { data: userData } = useGetUsers({ ids: [message.chatter_user_id] });
   const user = userData?.data[0];
   const { data: followerData } = useGetChannelFollowers(user?.id);
 
-  return (
-    <div className={styles.messageWrapper}>
-      <div>
-        <Popover
-          fixedWidth
-          triggerType="custom"
-          header="Message details"
-          renderWithPortal
-          content={
-            <>
-              <Box variant="h4" padding={{ bottom: 'm' }}>
-                <SpaceBetween size="xs" direction="horizontal" alignItems="center">
-                  <Avatar color={message.color} userId={message.chatter_user_id} />
-                  <div>
-                    <div>{user?.display_name}</div>
-                    <Box color="text-body-secondary" fontWeight="normal">
-                      {Number(followerData?.total).toLocaleString(undefined, {
-                        notation: 'compact',
-                      })}{' '}
-                      followers
-                    </Box>
-                  </div>
-                </SpaceBetween>
-              </Box>
-              {message.subscriber_month_count ? (
-                <StatusIndicator type="success">
-                  Subscribed to streamer for {message.subscriber_month_count} months
-                </StatusIndicator>
-              ) : (
-                <StatusIndicator type="stopped">Not subscribed to streamer</StatusIndicator>
-              )}
-            </>
-          }
-        >
-          <span
-            className={styles.username}
-            onClick={() => {
-              console.log('hey');
-            }}
-          >
-            <b style={{ color: message.color }}>{message.chatter_user_name}</b>
-
-            {user?.broadcaster_type === 'partner' && (
-              <Box variant="span" padding={{ left: 'xxs' }}>
-                <Icon svg={<FontAwesomeIcon icon={faBadgeCheck} color="#a970ff" />} />
-              </Box>
-            )}
-          </span>
-        </Popover>{' '}
-        <span className={styles.message}>
-          {message.fragments?.map((fragment, index) => {
-            if (fragment.type === 'emote') {
-              return <Emote key={index} emote={fragment.emote} />;
-            }
-            return (
-              <span key={index}>
-                {/* TODO: Make this more readable */}
-                {/* Make URLs into Links */}
-                {fragment.text.split(' ').map((string) => {
-                  let finalString: ReactNode = string;
-                  if (string.startsWith('https://')) {
-                    finalString = (
-                      <Link href={string} target="_blank">
-                        {string}
-                      </Link>
-                    );
-                  }
-                  return <>{finalString} </>;
-                })}
+  if (variant === 'normal') {
+    return (
+      <div onClick={onClick}>
+        <Box fontSize="body-s">
+          <div className={styles.messageWrapper}>
+            <Avatar userId={message.chatter_user_id} size="small" />
+            <div>
+              <span className={styles.username}>
+                {/*<b style={{ color: message.color }}>{message.chatter_user_name}</b>*/}
+                <b>{message.chatter_user_name}</b>
+                {user?.broadcaster_type === 'partner' && (
+                  <Box variant="span" padding={{ left: 'xxs' }}>
+                    <Icon svg={<FontAwesomeIcon icon={faBadgeCheck} color="#a970ff" />} />
+                  </Box>
+                )}
               </span>
-            );
-          })}
-        </span>
+              <Message message={message} variant={variant} />
+            </div>
+          </div>
+        </Box>
       </div>
-    </div>
+    );
+  }
+
+  return (
+    <Box fontSize="heading-s">
+      <Box float="right">
+        <ButtonDropdown items={[]} variant="icon" />
+      </Box>
+      <div style={{ display: 'flex', gap: '8px', paddingBottom: '8px' }}>
+        <Avatar userId={message.chatter_user_id} />
+        <Box fontSize="heading-xs">
+          <b>{message.chatter_user_name}</b>
+          {user?.broadcaster_type === 'partner' && (
+            <Box variant="span" padding={{ left: 'xxs' }}>
+              <Icon svg={<FontAwesomeIcon icon={faBadgeCheck} color="#a970ff" />} />
+            </Box>
+          )}
+          <Box color="text-status-inactive">
+            {Number(followerData?.total).toLocaleString(undefined, { notation: 'compact' })}{' '}
+            followers
+          </Box>
+        </Box>
+      </div>
+      <Message message={message} variant={variant} />
+    </Box>
   );
 }
 
 interface Props {
   message: SimpleMessage;
+  onClick?: () => void;
+  variant?: 'featured' | 'normal';
 }

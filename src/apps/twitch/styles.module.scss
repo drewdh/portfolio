@@ -24,6 +24,8 @@
   }
 }
 .avatar {
+  display: inline-block;
+  vertical-align: center;
   background-size: cover;
   border-radius: 35px;
   width: 35px;

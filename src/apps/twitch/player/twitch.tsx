@@ -14,6 +14,7 @@ import Chat from './chat';
 import Icon from '@cloudscape-design/components/icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBadgeCheck } from '@fortawesome/pro-solid-svg-icons';
+import Header from '@cloudscape-design/components/header';
 
 export default function TwitchComponent() {
   const player = useRef<any>(null);
@@ -73,7 +74,7 @@ export default function TwitchComponent() {
   }, []);
 
   return (
-    <ContentLayout>
+    <div className={styles.pageWrapper}>
       <Grid
         gridDefinition={[
           { colspan: { default: 12, l: 9, m: 8, s: 7 } },
@@ -87,45 +88,43 @@ export default function TwitchComponent() {
             style={{ height: playerHeight }}
             className={styles.player}
           />
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div>
-              <Box fontSize="heading-m" fontWeight="bold">
-                {streamData?.title}
-              </Box>
-              <Box padding={{ top: 'xxs' }}>
-                Streaming <b>{streamData?.game_name}</b>
-              </Box>
-            </div>
-            <div style={{ whiteSpace: 'nowrap' }}>
-              <Box padding={{ left: 's', top: 'xxs' }}>
-                <Box fontWeight="bold" textAlign="right">
-                  {Number(streamData?.viewer_count).toLocaleString()} watching now
+          <div>
+            <Box fontSize="heading-m" fontWeight="bold">
+              {streamData?.title}
+            </Box>
+            <Box padding={{ top: 'xxs' }}>
+              Streaming <b>{streamData?.game_name}</b>
+            </Box>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <SpaceBetween size="s" direction="horizontal" alignItems="center">
+              <Avatar userId={user?.id ?? ''} />
+              <div>
+                <Box variant="h3" padding="n">
+                  {streamData?.user_name}{' '}
+                  {user?.broadcaster_type === 'partner' && (
+                    <Icon svg={<FontAwesomeIcon icon={faBadgeCheck} color="#a970ff" />} />
+                  )}
                 </Box>
-                <Box color="text-status-inactive" fontSize="body-s" textAlign="right">
-                  Started <RelativeTime date={streamData?.started_at} inline />
+                <Box color="text-body-secondary">
+                  {followersData && (
+                    <>
+                      {Number(followersData.total).toLocaleString(undefined, {
+                        notation: 'compact',
+                      })}{' '}
+                      followers
+                    </>
+                  )}
                 </Box>
+              </div>
+            </SpaceBetween>
+            <div className={styles.stats}>
+              <b>{Number(streamData?.viewer_count).toLocaleString()} watching now</b>
+              <Box color="text-status-inactive" fontSize="body-s">
+                Started <RelativeTime date={streamData?.started_at} inline />
               </Box>
             </div>
           </div>
-          <SpaceBetween size="s" direction="horizontal" alignItems="center">
-            <Avatar userId={user?.id ?? ''} />
-            <div>
-              <Box variant="h3" padding="n">
-                {streamData?.user_name}{' '}
-                {user?.broadcaster_type === 'partner' && (
-                  <Icon svg={<FontAwesomeIcon icon={faBadgeCheck} color="#a970ff" />} />
-                )}
-              </Box>
-              <Box color="text-body-secondary">
-                {followersData && (
-                  <>
-                    {Number(followersData.total).toLocaleString(undefined, { notation: 'compact' })}{' '}
-                    followers
-                  </>
-                )}
-              </Box>
-            </div>
-          </SpaceBetween>
         </SpaceBetween>
         <SpaceBetween size="l">
           <Chat
@@ -134,6 +133,6 @@ export default function TwitchComponent() {
           />
         </SpaceBetween>
       </Grid>
-    </ContentLayout>
+    </div>
   );
 }

@@ -29,6 +29,9 @@ import {
   Fragment,
 } from '../twitch-types';
 import Popover from '@cloudscape-design/components/popover';
+import Input from '@cloudscape-design/components/input';
+import FormField from '@cloudscape-design/components/form-field';
+import Avatar from '../avatar';
 
 export interface SimpleMessage {
   color: string;
@@ -80,6 +83,7 @@ export default function Chat({ broadcasterUserId, height }: Props) {
   const user = userData?.data[0];
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [unreadCount, setUnreadCount] = useState<number>(0);
+  const [highlightedMessage, setHighlightedMessage] = useState<SimpleMessage>();
   // subtract border (1px + 1px), container heading height (53px), and content padding (4px top, 8px bottom)
   const heightString = `${(height ?? 1) - 71}px`;
 
@@ -183,6 +187,13 @@ export default function Chat({ broadcasterUserId, height }: Props) {
       <Container
         disableHeaderPaddings
         disableContentPaddings
+        footer={
+          highlightedMessage && (
+            <SpaceBetween size="xs">
+              <ChatMessage message={highlightedMessage} variant="featured" />
+            </SpaceBetween>
+          )
+        }
         header={
           <div className={styles.chatHeader}>
             <Header
@@ -216,14 +227,7 @@ export default function Chat({ broadcasterUserId, height }: Props) {
           </div>
         }
       >
-        <div
-          className={styles.chatContainer}
-          ref={scrollContainerRef}
-          style={{
-            height: heightString,
-            maxHeight: heightString,
-          }}
-        >
+        <div className={styles.containerBody}>
           <div
             className={clsx(styles.unreadBadge, unreadCount > 0 && isScrolled && styles.visible)}
           >
@@ -231,66 +235,79 @@ export default function Chat({ broadcasterUserId, height }: Props) {
               {unreadCount} new message{unreadCount === 1 ? '' : 's'}
             </Button>
           </div>
-          {isLoading && (
-            <div className={styles.statusContainer}>
-              <StatusIndicator type="loading">Loading chat</StatusIndicator>
-            </div>
-          )}
-          {!isLoading && !error && !isReconnectError && !messages.length && (
-            <div className={clsx(styles.statusContainer, styles.empty)}>
-              <b>No new messages</b>
-            </div>
-          )}
-          {isReconnectError && (
-            <Alert
-              header="Chat not enabled"
-              action={
-                <Button
-                  onClick={() => localStorage.setItem('access_token', '')}
-                  href={connectHref}
-                  iconName="external"
-                  iconAlign="right"
-                  target="_blank"
-                >
-                  Reconnect
-                </Button>
-              }
-            >
-              This site's Twitch permissions have changed. Reconnect to Twitch and reload the page
-              to enable chat.
-            </Alert>
-          )}
-          {error && (
-            <Alert type="error" header="Failed to load chat">
-              <SpaceBetween size="m">
-                <div>
-                  Reload the page or try again later.{' '}
-                  <Link
-                    href="#"
-                    onFollow={(e) => {
-                      e.preventDefault();
-                      setIsFeedbackVisible(true);
-                    }}
-                    variant="primary"
-                    color="inverted"
+          <div
+            className={styles.chatContainer}
+            ref={scrollContainerRef}
+            style={{
+              height: heightString,
+              maxHeight: heightString,
+            }}
+          >
+            {isLoading && (
+              <div className={styles.statusContainer}>
+                <StatusIndicator type="loading">Loading chat</StatusIndicator>
+              </div>
+            )}
+            {!isLoading && !error && !isReconnectError && !messages.length && (
+              <div className={clsx(styles.statusContainer, styles.empty)}>
+                <b>No new messages</b>
+              </div>
+            )}
+            {isReconnectError && (
+              <Alert
+                header="Chat not enabled"
+                action={
+                  <Button
+                    onClick={() => localStorage.setItem('access_token', '')}
+                    href={connectHref}
+                    iconName="external"
+                    iconAlign="right"
+                    target="_blank"
                   >
-                    Send feedback
-                  </Link>{' '}
-                  and share more details.
-                </div>
-                <ExpandableSection headerText="Error details">
-                  <Box variant="pre">{JSON.stringify(error, null, 2)}</Box>
-                </ExpandableSection>
-              </SpaceBetween>
-            </Alert>
-          )}
-          {!error && !isLoading && (
-            <div className={styles.messages}>
-              {messages.map((message) => (
-                <ChatMessage message={message} key={message.message_id} />
-              ))}
-            </div>
-          )}
+                    Reconnect
+                  </Button>
+                }
+              >
+                This site's Twitch permissions have changed. Reconnect to Twitch and reload the page
+                to enable chat.
+              </Alert>
+            )}
+            {error && (
+              <Alert type="error" header="Failed to load chat">
+                <SpaceBetween size="m">
+                  <div>
+                    Reload the page or try again later.{' '}
+                    <Link
+                      href="#"
+                      onFollow={(e) => {
+                        e.preventDefault();
+                        setIsFeedbackVisible(true);
+                      }}
+                      variant="primary"
+                      color="inverted"
+                    >
+                      Send feedback
+                    </Link>{' '}
+                    and share more details.
+                  </div>
+                  <ExpandableSection headerText="Error details">
+                    <Box variant="pre">{JSON.stringify(error, null, 2)}</Box>
+                  </ExpandableSection>
+                </SpaceBetween>
+              </Alert>
+            )}
+            {!error && !isLoading && (
+              <div className={styles.messages}>
+                {messages.map((message) => (
+                  <ChatMessage
+                    onClick={() => setHighlightedMessage(message)}
+                    message={message}
+                    key={message.message_id}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </Container>
       <Feedback visible={isFeedbackVisible} onDismiss={() => setIsFeedbackVisible(false)} />

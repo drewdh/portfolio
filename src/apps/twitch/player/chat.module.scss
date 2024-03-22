@@ -1,19 +1,17 @@
 @use '@cloudscape-design/design-tokens' as awsui;
 
 .username {
-  cursor: pointer;
   color: awsui.$color-text-status-inactive;
   font-size: 13px;
   padding-right: awsui.$space-scaled-xxs;
 }
 .message {
-  font-size: 13px;
   word-break: break-word;
 }
 .messageWrapper {
   display: flex;
   flex-wrap: nowrap;
-  gap: awsui.$space-scaled-m;
+  gap: awsui.$space-scaled-s;
   padding: awsui.$space-scaled-xxs 0;
 }
 .chatContainer {
@@ -24,6 +22,9 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column-reverse;
+}
+.containerBody {
+  position: relative;
 }
 .messages {
   display: flex;

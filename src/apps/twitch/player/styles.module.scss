@@ -10,6 +10,26 @@
   border-radius: 16px;
   overflow: hidden;
 }
+.stats {
+  white-space: nowrap;
+  padding-left: awsui.$space-scaled-s;
+  text-align: right;
+}
+@media screen and (max-width: 688px) {
+  .player {
+    border-radius: 0;
+    // TODO: Not working
+    position: sticky;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 500;
+    margin: 0 -24px;
+  }
+  .pageWrapper {
+    padding: 0 24px 24px;
+  }
+}
 .controlsPositioner {
   display: flex;
   align-items: center;
