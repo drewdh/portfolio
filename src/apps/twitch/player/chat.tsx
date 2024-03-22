@@ -27,21 +27,15 @@ import {
   WelcomeMessage,
   ChatMessage as ChatMessageType,
   Fragment,
+  ChatEvent,
 } from '../twitch-types';
 import Popover from '@cloudscape-design/components/popover';
 import Input from '@cloudscape-design/components/input';
 import FormField from '@cloudscape-design/components/form-field';
 import Avatar from '../avatar';
-
-export interface SimpleMessage {
-  color: string;
-  fragments: Fragment[];
-  message_id: string;
-  message_text: string;
-  chatter_user_name: string;
-  chatter_user_id: string;
-  subscriber_month_count: string | undefined;
-}
+import FormikInput from 'common/formik/input';
+import { useFormik } from 'formik';
+import { spaceScaledXs } from '@cloudscape-design/design-tokens';
 
 interface SubscribeRequest {
   sessionId: string;
@@ -72,20 +66,21 @@ enum SettingsId {
 }
 
 export default function Chat({ broadcasterUserId, height }: Props) {
+  const [chatMessage, setChatMessage] = useState<string>('');
   const [isRestrictionsModalVisible, setIsRestrictionsModalVisible] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isReconnectError, setIsReconnectError] = useState<boolean>(false);
   const [isFeedbackVisible, setIsFeedbackVisible] = useState<boolean>(false);
   const [error, setError] = useState<object | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState<SimpleMessage[]>([]);
+  const [messages, setMessages] = useState<ChatEvent[]>([]);
   const { data: userData } = useGetUsers({});
   const user = userData?.data[0];
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [unreadCount, setUnreadCount] = useState<number>(0);
-  const [highlightedMessage, setHighlightedMessage] = useState<SimpleMessage>();
-  // subtract border (1px + 1px), container heading height (53px), and content padding (4px top, 8px bottom)
-  const heightString = `${(height ?? 1) - 71}px`;
+  const [highlightedMessage, setHighlightedMessage] = useState<ChatEvent | null>(null);
+  // subtract border (1px + 1px), container heading height (53px), and content padding (4px top, 8px bottom), and 84px footer
+  const heightString = `${(height ?? 1) - 156}px`;
 
   useEffect(() => {
     if (!broadcasterUserId || !user?.id) {
@@ -119,17 +114,17 @@ export default function Chat({ broadcasterUserId, height }: Props) {
         return;
       }
       if (message.metadata.message_type === 'notification') {
-        const { event } = (message as ChatMessageType).payload;
+        const { event: newMessage } = (message as ChatMessageType).payload;
         // console.log(event);
-        const newMessage: SimpleMessage = {
-          color: event.color,
-          fragments: event.message.fragments,
-          message_id: event.message_id,
-          message_text: event.message.text,
-          chatter_user_id: event.chatter_user_id,
-          chatter_user_name: event.chatter_user_name,
-          subscriber_month_count: event.badges.find((badge) => badge.set_id === 'subscriber')?.info,
-        };
+        // const newMessage: SimpleMessage = {
+        //   color: event.color,
+        //   fragments: event.message.fragments,
+        //   message_id: event.message_id,
+        //   message_text: event.message.text,
+        //   chatter_user_id: event.chatter_user_id,
+        //   chatter_user_name: event.chatter_user_name,
+        //   subscriber_month_count: event.badges.find((badge) => badge.set_id === 'subscriber')?.info,
+        // };
         setMessages((prevMessages) => {
           // Some messages can be duplicated, so don't process these again
           // https://dev.twitch.tv/docs/eventsub/#handling-duplicate-events
@@ -188,11 +183,32 @@ export default function Chat({ broadcasterUserId, height }: Props) {
         disableHeaderPaddings
         disableContentPaddings
         footer={
-          highlightedMessage && (
-            <SpaceBetween size="xs">
-              <ChatMessage message={highlightedMessage} variant="featured" />
-            </SpaceBetween>
-          )
+          <SpaceBetween size="m">
+            {highlightedMessage && (
+              <ChatMessage
+                message={highlightedMessage}
+                onHide={() => setHighlightedMessage(null)}
+                variant="featured"
+              />
+            )}
+            {/*<FormField*/}
+            {/*  label={*/}
+            {/*    highlightedMessage ? `Reply to ${highlightedMessage.chatter_user_name}` : 'Chat'*/}
+            {/*  }*/}
+            {/*>*/}
+            {/*  <div style={{ display: 'flex', alignItems: 'center', gap: spaceScaledXs }}>*/}
+            {/*    <Avatar userId={user?.id ?? ''} />*/}
+            {/*    <div style={{ width: '100%' }}>*/}
+            {/*      <Input*/}
+            {/*        ariaLabel="Message"*/}
+            {/*        onChange={(e) => setChatMessage(e.detail.value)}*/}
+            {/*        value={chatMessage}*/}
+            {/*        placeholder={highlightedMessage ? 'Reply...' : 'Chat...'}*/}
+            {/*      />*/}
+            {/*    </div>*/}
+            {/*  </div>*/}
+            {/*</FormField>*/}
+          </SpaceBetween>
         }
         header={
           <div className={styles.chatHeader}>

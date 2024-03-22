@@ -66,6 +66,7 @@ export function useGetStreamByUserLogin(userLogin?: string, options: SafeOptions
     queryFn: () => twitchClient.getStreams({ userLogins: [userLogin!] }),
     queryKey: [QueryKey.GetUserStream, userLogin],
     enabled: !!userLogin,
+    refetchInterval: 10 * 1000,
     ...options,
   });
 }

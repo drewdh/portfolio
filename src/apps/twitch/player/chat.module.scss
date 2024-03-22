@@ -11,8 +11,11 @@
 .messageWrapper {
   display: flex;
   flex-wrap: nowrap;
-  gap: awsui.$space-scaled-s;
+  gap: awsui.$space-scaled-xs;
   padding: awsui.$space-scaled-xxs 0;
+}
+.normalMessage {
+  align-self: center;
 }
 .chatContainer {
   border-top: 1px solid awsui.$color-border-divider-default;

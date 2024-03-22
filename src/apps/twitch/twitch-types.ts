@@ -315,6 +315,27 @@ export interface WelcomeMessage {
     };
   };
 }
+export interface ChatEvent {
+  badges: Array<{
+    set_id: string;
+    id: string;
+    info: string;
+  }>;
+  broadcaster_user_id: string;
+  broadcaster_user_login: string;
+  broadcaster_user_name: string;
+  chatter_user_id: string;
+  chatter_user_login: string;
+  chatter_user_name: string;
+  color: string;
+  message: {
+    fragments: Fragment[];
+    text: string;
+  };
+  message_id: string;
+  message_type: 'text';
+  reply: null;
+}
 export interface ChatMessage {
   metadata: {
     messageId: string;
@@ -322,27 +343,7 @@ export interface ChatMessage {
     message_type: 'notification';
   };
   payload: {
-    event: {
-      badges: Array<{
-        set_id: string;
-        id: string;
-        info: string;
-      }>;
-      broadcaster_user_id: string;
-      broadcaster_user_login: string;
-      broadcaster_user_name: string;
-      chatter_user_id: string;
-      chatter_user_login: string;
-      chatter_user_name: string;
-      color: string;
-      message: {
-        fragments: Fragment[];
-        text: string;
-      };
-      message_id: string;
-      message_type: 'text';
-      reply: null;
-    };
+    event: ChatEvent;
   };
 }
 export interface EmoteFragment {

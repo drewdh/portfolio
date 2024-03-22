@@ -112,13 +112,9 @@ export default function TwitchPage() {
                       <div className={styles.thumbnailWrapper}>
                         <Avatar userId={stream.user_id} />
                         <div>
-                          <div className={styles.header}>
-                            <InternalLink href={href}>
-                              <Box fontSize="heading-s" fontWeight="bold" padding={{ top: 'n' }}>
-                                {stream.title}
-                              </Box>
-                            </InternalLink>
-                          </div>
+                          <Button variant="inline-link" href={href}>
+                            <div className={styles.header}>{stream.title}</div>
+                          </Button>
                           <Box color="text-status-inactive" fontSize="body-s">
                             <div>{stream.user_name}</div>
                             <div>{viewerCount} watching</div>
