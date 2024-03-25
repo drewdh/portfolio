@@ -17,6 +17,7 @@ import Box from '@cloudscape-design/components/box';
 import styles from './styles.module.scss';
 import { useGetFollowedStreams } from './api';
 import Avatar from './avatar';
+import { colorBackgroundInputDisabled } from '@cloudscape-design/design-tokens';
 
 const connectSearchParams = new URLSearchParams({
   response_type: 'token',
@@ -102,6 +103,10 @@ export default function TwitchPage() {
                         content: (
                           <InternalLink href={href}>
                             <img
+                              style={{
+                                aspectRatio: '16 / 9',
+                                backgroundColor: colorBackgroundInputDisabled,
+                              }}
                               alt={stream.title}
                               src={`https://static-cdn.jtvnw.net/previews-ttv/live_user_${stream.user_login}-440x248.jpg`}
                             />
