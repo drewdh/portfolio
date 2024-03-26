@@ -64,7 +64,6 @@ const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutP
               type: 'link',
               text: widgetDetails.twitch.title,
               href: Pathname.Twitch,
-              info: <PreviewPopover />,
             },
             {
               type: 'link',

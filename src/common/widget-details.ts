@@ -18,7 +18,7 @@ const widgetDetails: Record<string, WidgetDetail> = {
   },
   twitch: {
     title: 'Twitch',
-    description: 'A re-imagined Twitch experience.',
+    description: 'A reimagined Twitch experience.',
   },
 };
 

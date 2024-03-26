@@ -21,7 +21,6 @@ const widgets: Widget[] = [
     title: widgetDetails.twitch.title,
     href: Pathname.Twitch,
     description: widgetDetails.twitch.description,
-    isPrototype: true,
   },
   {
     title: widgetDetails.ecobee.title,
