@@ -13,4 +13,5 @@ export enum Pathname {
   PasswordReset = '/auth/reset',
   Feedback = '/feedback',
   Twitch = '/twitch',
+  Blackjack = '/blackjack',
 }

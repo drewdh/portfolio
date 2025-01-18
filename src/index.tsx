@@ -17,6 +17,7 @@ import AuthPage from './auth/auth-page';
 import PasswordReset from './auth/password-reset';
 import TwitchPage from './apps/twitch/page';
 import ErrorBoundary from 'common/error-boundary';
+import BlackjackPage from './apps/blackjack/page';
 
 interface GlobalFlags {
   removeHighContrastHeader?: boolean;
@@ -63,6 +64,10 @@ const router = createBrowserRouter([
       {
         path: Pathname.Twitch,
         element: <TwitchPage />,
+      },
+      {
+        path: Pathname.Blackjack,
+        element: <BlackjackPage />,
       },
     ],
   },

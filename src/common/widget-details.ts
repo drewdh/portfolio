@@ -1,4 +1,6 @@
-const widgetDetails: Record<string, WidgetDetail> = {
+type WidgetName = 'diablo' | 'coffee' | 'ecobee' | 'feedback' | 'twitch' | 'blackjack';
+
+const widgetDetails: Record<WidgetName, WidgetDetail> = {
   diablo: {
     description:
       'View player statistics and find which Diablo IV Nightmare Dungeon Sigil Tier to use.',
@@ -19,6 +21,10 @@ const widgetDetails: Record<string, WidgetDetail> = {
   twitch: {
     title: 'Twitch',
     description: 'A reimagined Twitch experience.',
+  },
+  blackjack: {
+    title: 'Blackjack',
+    description: 'A simple, free version of the card game blackjack.',
   },
 };
 
