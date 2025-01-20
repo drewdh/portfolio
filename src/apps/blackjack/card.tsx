@@ -1,13 +1,17 @@
 import Container from '@cloudscape-design/components/container';
 import Box from '@cloudscape-design/components/box';
 
+import styles from './card.module.scss';
+
 export default function Card({ suit, rank, faceDown }: CardProps) {
   const rankLabel = typeof rank === 'string' ? rank.substring(0, 1).toUpperCase() : rank;
 
   return (
     <Container>
-      <Box fontSize="display-l">{faceDown ? '?' : rankLabel}</Box>
-      <small>{faceDown ? '?' : suit}</small>
+      <div className={styles.wrapper}>
+        <Box fontSize="display-l">{faceDown ? '?' : rankLabel}</Box>
+        <small>{faceDown ? '' : suit}</small>
+      </div>
     </Container>
   );
 }
