@@ -13,6 +13,7 @@ import widgetDetails from 'common/widget-details';
 import DhBreadcrumbs from 'common/dh-breadcrumbs';
 import { Pathname } from 'utilities/routes';
 import Card, { CardProps } from './card';
+import Outcome, { OutcomeProps } from './outcome';
 
 function getHandValue(cards: ICard[]) {
   let value = 0;
@@ -65,7 +66,7 @@ const defaultBet = 15;
 export default function BlackjackPage() {
   useTitle(widgetDetails.blackjack.title);
   const [bet, setBet] = useState<number>(defaultBet);
-  const [outcome, setOutcome] = useState<string>('-');
+  const [outcome, setOutcome] = useState<OutcomeProps.Outcome | null>(null);
   const deckRef = useRef<ICard[]>(getDeck());
   const [playerFinished, setPlayerFinished] = useState<boolean>(true);
   const [playerHand, setPlayerHand] = useState<ICard[]>([]);
@@ -113,13 +114,13 @@ export default function BlackjackPage() {
     if (handValue > 21 || newPlayerHandValue > handValue) {
       setPlayerWins((prev) => prev + 1);
       setWinnings((prev) => prev + bet);
-      setOutcome('WIN');
+      setOutcome('win');
     } else if (newPlayerHandValue < handValue) {
       setHouseWins((prev) => prev + 1);
       setWinnings((prev) => prev - bet);
-      setOutcome('LOSE');
+      setOutcome('loss');
     } else {
-      setOutcome('PUSH');
+      setOutcome('push');
     }
 
     setDealerHand(nextDealerHand);
@@ -135,6 +136,7 @@ export default function BlackjackPage() {
       ...getDeck(),
     ];
     setPlayerFinished(false);
+    setOutcome(null);
     setBet(defaultBet);
     const newPlayerHand = [takeCard(), takeCard()];
     const newDealerHand = [takeCard(), takeCard()];
@@ -150,15 +152,15 @@ export default function BlackjackPage() {
       setPlayerFinished(true);
     }
     if (dealerBlackjack && playerBlackJack) {
-      setOutcome('PUSH');
+      setOutcome('push');
     } else if (dealerBlackjack) {
       setHouseWins((prev) => prev + 1);
       setWinnings((prev) => prev - bet);
-      setOutcome('LOSE');
+      setOutcome('loss');
     } else if (playerBlackJack) {
       setPlayerWins((prev) => prev + 1);
       setWinnings((prev) => prev + bet * (6 / 5));
-      setOutcome('BLACKJACK');
+      setOutcome('win');
     }
   }
 
@@ -172,7 +174,7 @@ export default function BlackjackPage() {
       setPlayerFinished(true);
       setHouseWins((prev) => prev + 1);
       setWinnings((prev) => prev - bet);
-      setOutcome('BUST');
+      setOutcome('loss');
     }
     return handValue;
   }
@@ -180,7 +182,7 @@ export default function BlackjackPage() {
   function surrender() {
     setPlayerFinished(true);
     setWinnings((prev) => prev - bet / 2);
-    setOutcome('SURRENDER');
+    setOutcome(null);
   }
 
   return (
@@ -222,7 +224,7 @@ export default function BlackjackPage() {
                 items={[
                   {
                     label: 'Outcome',
-                    value: playerFinished ? outcome : '-',
+                    value: <Outcome outcome={outcome} />,
                   },
                   {
                     label: 'Winnings',
