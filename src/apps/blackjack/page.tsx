@@ -6,6 +6,7 @@ import Button from '@cloudscape-design/components/button';
 import KeyValuePairs from '@cloudscape-design/components/key-value-pairs';
 import ExpandableSection from '@cloudscape-design/components/expandable-section';
 import shuffle from 'lodash/shuffle';
+import Modal from '@cloudscape-design/components/modal';
 
 import DhAppLayout from 'common/dh-app-layout';
 import useTitle from 'utilities/use-title';
@@ -14,6 +15,8 @@ import DhBreadcrumbs from 'common/dh-breadcrumbs';
 import { Pathname } from 'utilities/routes';
 import Card, { CardProps } from './card';
 import Outcome, { OutcomeProps } from './outcome';
+import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
+import Box from '@cloudscape-design/components/box';
 
 function getHandValue(cards: ICard[]) {
   let value = 0;
@@ -65,6 +68,7 @@ const defaultBet = 15;
 /** TODO: Implement splitting */
 export default function BlackjackPage() {
   useTitle(widgetDetails.blackjack.title);
+  const [statsModalVisible, setStatsModalVisible] = useState<boolean>(false);
   const [bet, setBet] = useState<number>(defaultBet);
   const [outcome, setOutcome] = useState<OutcomeProps.Outcome | null>(null);
   const deckRef = useRef<ICard[]>(getDeck());
@@ -73,12 +77,21 @@ export default function BlackjackPage() {
   const [dealerHand, setDealerHand] = useState<ICard[]>([]);
   const playerHandValue = getHandValue(playerHand).value;
   const dealerHandValue = getHandValue(dealerHand).value;
-  const [winnings, setWinnings] = useState<number>(0);
-  const [lowWaterMark, setLowWaterMark] = useState<number>(0);
-  const [highWaterMark, setHighWaterMark] = useState<number>(0);
-  const [playerWins, setPlayerWins] = useState<number>(0);
-  const [dealerWins, setDealerWins] = useState<number>(0);
-  const [handsPlayed, setHandsPlayed] = useState<number>(0);
+  const [winnings, setWinnings] = useLocalStorage<number>(LocalStorageKey.BjWinnings, 0);
+  const [lowWaterMark, setLowWaterMark] = useLocalStorage<number>(LocalStorageKey.BjLowWater, 0);
+  const [highWaterMark, setHighWaterMark] = useLocalStorage<number>(LocalStorageKey.BjHighWater, 0);
+  const [playerWins, setPlayerWins] = useLocalStorage<number>(LocalStorageKey.BjPlayerWins, 0);
+  const [dealerWins, setDealerWins] = useLocalStorage<number>(LocalStorageKey.BjDealerWins, 0);
+  const [handsPlayed, setHandsPlayed] = useLocalStorage<number>(LocalStorageKey.BjHandsPlayed, 0);
+
+  function resetStats() {
+    setWinnings(0);
+    setPlayerWins(0);
+    setDealerWins(0);
+    setHandsPlayed(0);
+    setLowWaterMark(0);
+    setHighWaterMark(0);
+  }
 
   useEffect(() => {
     setLowWaterMark((prev) => Math.min(prev, winnings));
@@ -189,134 +202,166 @@ export default function BlackjackPage() {
   }
 
   return (
-    <DhAppLayout
-      breadcrumbs={
-        <DhBreadcrumbs
-          items={[{ text: widgetDetails.blackjack.title, href: Pathname.Blackjack }]}
-        />
-      }
-      toolsHide
-      content={
-        <SpaceBetween size="m" direction="vertical">
-          <Header
-            actions={
-              <SpaceBetween size="xs" direction="horizontal">
-                <Button onClick={surrender} disabled={playerHand.length !== 2 || playerFinished}>
-                  Surrender
-                </Button>
-                <Button onClick={doubleDown} disabled={playerHand.length !== 2 || playerFinished}>
-                  Double
-                </Button>
-                <Button onClick={() => completeHand()} disabled={playerFinished}>
-                  Stand
-                </Button>
-                <Button onClick={() => (playerFinished ? deal() : playerHit())}>
-                  {playerFinished ? 'Deal' : 'Hit'}
-                </Button>
+    <>
+      <DhAppLayout
+        breadcrumbs={
+          <DhBreadcrumbs
+            items={[{ text: widgetDetails.blackjack.title, href: Pathname.Blackjack }]}
+          />
+        }
+        toolsHide
+        content={
+          <SpaceBetween size="m" direction="vertical">
+            <Header
+              actions={
+                <SpaceBetween size="xs" direction="horizontal">
+                  <Button onClick={surrender} disabled={playerHand.length !== 2 || playerFinished}>
+                    Surrender
+                  </Button>
+                  <Button onClick={doubleDown} disabled={playerHand.length !== 2 || playerFinished}>
+                    Double
+                  </Button>
+                  <Button onClick={() => completeHand()} disabled={playerFinished}>
+                    Stand
+                  </Button>
+                  <Button onClick={() => (playerFinished ? deal() : playerHit())}>
+                    {playerFinished ? 'Deal' : 'Hit'}
+                  </Button>
+                </SpaceBetween>
+              }
+              variant="h1"
+              description={widgetDetails.blackjack.description}
+            >
+              {widgetDetails.blackjack.title}
+            </Header>
+            <SpaceBetween size="l" direction="vertical">
+              <ExpandableSection
+                headerActions={<Button onClick={() => setStatsModalVisible(true)}>Reset</Button>}
+                variant="container"
+                headerText="Stats"
+                defaultExpanded
+              >
+                <KeyValuePairs
+                  columns={5}
+                  items={[
+                    {
+                      label: 'Outcome',
+                      value: <Outcome outcome={outcome} />,
+                    },
+                    {
+                      label: 'Winnings',
+                      value: winnings.toLocaleString(undefined, {
+                        style: 'currency',
+                        currency: 'USD',
+                      }),
+                    },
+                    {
+                      label: 'Low water mark',
+                      value: lowWaterMark.toLocaleString(undefined, {
+                        style: 'currency',
+                        currency: 'USD',
+                      }),
+                    },
+                    {
+                      label: 'High water mark',
+                      value: highWaterMark.toLocaleString(undefined, {
+                        style: 'currency',
+                        currency: 'USD',
+                      }),
+                    },
+                    {
+                      label: 'Player win rate',
+                      value: (playerWins / handsPlayed || 0).toLocaleString(undefined, {
+                        style: 'percent',
+                        minimumFractionDigits: 2,
+                      }),
+                    },
+                    {
+                      label: 'Dealer win rate',
+                      value: (dealerWins / handsPlayed || 0).toLocaleString(undefined, {
+                        style: 'percent',
+                        minimumFractionDigits: 2,
+                      }),
+                    },
+                    {
+                      label: 'Hands played',
+                      value: handsPlayed.toLocaleString(),
+                    },
+                    {
+                      label: 'Bet',
+                      value: bet.toLocaleString(undefined, {
+                        style: 'currency',
+                        currency: 'USD',
+                      }),
+                    },
+                  ]}
+                />
+              </ExpandableSection>
+              <SpaceBetween size="m">
+                <Header
+                  counter={
+                    playerFinished
+                      ? `(${dealerHandValue})`
+                      : `(${getHandValue([dealerHand[1]]).value})`
+                  }
+                >
+                  Dealer
+                </Header>
+                <ColumnLayout columns={5}>
+                  {dealerHand.map((card, index) => {
+                    const faceDown = index === 0 && !playerFinished;
+                    return (
+                      <Card
+                        key={JSON.stringify({ ...card, faceDown })}
+                        suit={card.suit}
+                        rank={card.rank}
+                        faceDown={faceDown}
+                      />
+                    );
+                  })}
+                </ColumnLayout>
               </SpaceBetween>
-            }
-            variant="h1"
-            description={widgetDetails.blackjack.description}
-          >
-            {widgetDetails.blackjack.title}
-          </Header>
-          <SpaceBetween size="l" direction="vertical">
-            <ExpandableSection variant="container" headerText="Stats" defaultExpanded>
-              <KeyValuePairs
-                columns={5}
-                items={[
-                  {
-                    label: 'Outcome',
-                    value: <Outcome outcome={outcome} />,
-                  },
-                  {
-                    label: 'Winnings',
-                    value: winnings.toLocaleString(undefined, {
-                      style: 'currency',
-                      currency: 'USD',
-                    }),
-                  },
-                  {
-                    label: 'Low water mark',
-                    value: lowWaterMark.toLocaleString(undefined, {
-                      style: 'currency',
-                      currency: 'USD',
-                    }),
-                  },
-                  {
-                    label: 'High water mark',
-                    value: highWaterMark.toLocaleString(undefined, {
-                      style: 'currency',
-                      currency: 'USD',
-                    }),
-                  },
-                  {
-                    label: 'Player win rate',
-                    value: (playerWins / handsPlayed || 0).toLocaleString(undefined, {
-                      style: 'percent',
-                      minimumFractionDigits: 2,
-                    }),
-                  },
-                  {
-                    label: 'Dealer win rate',
-                    value: (dealerWins / handsPlayed || 0).toLocaleString(undefined, {
-                      style: 'percent',
-                      minimumFractionDigits: 2,
-                    }),
-                  },
-                  {
-                    label: 'Hands played',
-                    value: handsPlayed.toLocaleString(),
-                  },
-                  {
-                    label: 'Bet',
-                    value: bet.toLocaleString(undefined, {
-                      style: 'currency',
-                      currency: 'USD',
-                    }),
-                  },
-                ]}
-              />
-            </ExpandableSection>
-            <SpaceBetween size="m">
-              <Header
-                counter={
-                  playerFinished
-                    ? `(${dealerHandValue})`
-                    : `(${getHandValue([dealerHand[1]]).value})`
-                }
-              >
-                Dealer
-              </Header>
-              <ColumnLayout columns={5}>
-                {dealerHand.map((card, index) => {
-                  const faceDown = index === 0 && !playerFinished;
-                  return (
-                    <Card
-                      key={JSON.stringify({ ...card, faceDown })}
-                      suit={card.suit}
-                      rank={card.rank}
-                      faceDown={faceDown}
-                    />
-                  );
-                })}
-              </ColumnLayout>
-            </SpaceBetween>
-            <SpaceBetween size="m">
-              <Header
-                counter={`(${getHandValue(playerHand).isSoft && playerHandValue !== 21 ? 'Soft ' : ''}${playerHandValue})`}
-              >
-                Player
-              </Header>
-              <ColumnLayout columns={5}>
-                {playerHand.map((card, index) => {
-                  return <Card suit={card.suit} rank={card.rank} />;
-                })}
-              </ColumnLayout>
+              <SpaceBetween size="m">
+                <Header
+                  counter={`(${getHandValue(playerHand).isSoft && playerHandValue !== 21 ? 'Soft ' : ''}${playerHandValue})`}
+                >
+                  Player
+                </Header>
+                <ColumnLayout columns={5}>
+                  {playerHand.map((card, index) => {
+                    return <Card suit={card.suit} rank={card.rank} />;
+                  })}
+                </ColumnLayout>
+              </SpaceBetween>
             </SpaceBetween>
           </SpaceBetween>
-        </SpaceBetween>
-      }
-    />
+        }
+      />
+      <Modal
+        footer={
+          <Box float="right">
+            <SpaceBetween direction="horizontal" size="xs">
+              <Button variant="link" onClick={() => setStatsModalVisible(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  resetStats();
+                  setStatsModalVisible(false);
+                }}
+              >
+                Reset
+              </Button>
+            </SpaceBetween>
+          </Box>
+        }
+        header="Reset stats"
+        visible={statsModalVisible}
+        onDismiss={() => setStatsModalVisible(false)}
+      >
+        Permanently reset stats for this browser? You can't undo this action.
+      </Modal>
+    </>
   );
 }

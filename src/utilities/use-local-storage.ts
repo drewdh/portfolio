@@ -14,6 +14,12 @@ export enum LocalStorageKey {
   ContentDensity = 'contentDensity',
   VisualMode = 'visualMode',
   IsNewVisitor = 'isNewVisitor',
+  BjWinnings = 'bjWinnings',
+  BjLowWater = 'bjLowWater',
+  BjHighWater = 'bjHighWater',
+  BjPlayerWins = 'bjPlayerWins',
+  BjDealerWins = 'bjDealerWins',
+  BjHandsPlayed = 'bjHandsPlayed',
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */
