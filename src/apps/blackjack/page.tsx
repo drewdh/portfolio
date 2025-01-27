@@ -77,7 +77,8 @@ export default function BlackjackPage() {
   const [lowWaterMark, setLowWaterMark] = useState<number>(0);
   const [highWaterMark, setHighWaterMark] = useState<number>(0);
   const [playerWins, setPlayerWins] = useState<number>(0);
-  const [houseWins, setHouseWins] = useState<number>(0);
+  const [dealerWins, setDealerWins] = useState<number>(0);
+  const [handsPlayed, setHandsPlayed] = useState<number>(0);
 
   useEffect(() => {
     setLowWaterMark((prev) => Math.min(prev, winnings));
@@ -96,6 +97,7 @@ export default function BlackjackPage() {
   }
 
   function completeHand(newPlayerHandValue: number = playerHandValue) {
+    setHandsPlayed((prev) => prev + 1);
     setPlayerFinished(true);
 
     const nextDealerHand = [...dealerHand];
@@ -116,7 +118,7 @@ export default function BlackjackPage() {
       setWinnings((prev) => prev + bet);
       setOutcome('win');
     } else if (newPlayerHandValue < handValue) {
-      setHouseWins((prev) => prev + 1);
+      setDealerWins((prev) => prev + 1);
       setWinnings((prev) => prev - bet);
       setOutcome('loss');
     } else {
@@ -150,11 +152,12 @@ export default function BlackjackPage() {
     const playerBlackJack = getHandValue(newPlayerHand).value === 21;
     if (dealerBlackjack || playerBlackJack) {
       setPlayerFinished(true);
+      setHandsPlayed((prev) => prev + 1);
     }
     if (dealerBlackjack && playerBlackJack) {
       setOutcome('push');
     } else if (dealerBlackjack) {
-      setHouseWins((prev) => prev + 1);
+      setDealerWins((prev) => prev + 1);
       setWinnings((prev) => prev - bet);
       setOutcome('loss');
     } else if (playerBlackJack) {
@@ -172,7 +175,7 @@ export default function BlackjackPage() {
       completeHand(handValue);
     } else if (handValue > 21) {
       setPlayerFinished(true);
-      setHouseWins((prev) => prev + 1);
+      setDealerWins((prev) => prev + 1);
       setWinnings((prev) => prev - bet);
       setOutcome('loss');
     }
@@ -248,15 +251,22 @@ export default function BlackjackPage() {
                     }),
                   },
                   {
-                    label: 'Win rate',
-                    value: (playerWins / (houseWins + playerWins) || 0).toLocaleString(undefined, {
+                    label: 'Player win rate',
+                    value: (playerWins / handsPlayed || 0).toLocaleString(undefined, {
+                      style: 'percent',
+                      minimumFractionDigits: 2,
+                    }),
+                  },
+                  {
+                    label: 'Dealer win rate',
+                    value: (dealerWins / handsPlayed || 0).toLocaleString(undefined, {
                       style: 'percent',
                       minimumFractionDigits: 2,
                     }),
                   },
                   {
                     label: 'Hands played',
-                    value: (houseWins + playerWins).toLocaleString(),
+                    value: handsPlayed.toLocaleString(),
                   },
                   {
                     label: 'Bet',
