@@ -216,6 +216,64 @@ export default function BlackjackPage() {
               {widgetDetails.blackjack.title}
             </Header>
             <SpaceBetween size="l" direction="vertical">
+              <SpaceBetween size="m">
+                <Header
+                  counter={
+                    playerFinished
+                      ? `(${dealerHandValue})`
+                      : `(${getHandValue([dealerHand[1]]).value})`
+                  }
+                >
+                  Dealer
+                </Header>
+                <ColumnLayout columns={5}>
+                  {dealerHand.map((card, index) => {
+                    const faceDown = index === 0 && !playerFinished;
+                    return (
+                      <Card
+                        key={JSON.stringify({ ...card, faceDown })}
+                        suit={card.suit}
+                        rank={card.rank}
+                        faceDown={faceDown}
+                      />
+                    );
+                  })}
+                </ColumnLayout>
+              </SpaceBetween>
+              <SpaceBetween size="m">
+                <Header
+                  actions={
+                    <SpaceBetween size="xs" direction="horizontal">
+                      <Button
+                        onClick={surrender}
+                        disabled={playerHand.length !== 2 || playerFinished}
+                      >
+                        Surrender
+                      </Button>
+                      <Button
+                        onClick={doubleDown}
+                        disabled={playerHand.length !== 2 || playerFinished}
+                      >
+                        Double
+                      </Button>
+                      <Button onClick={() => completeHand()} disabled={playerFinished}>
+                        Stand
+                      </Button>
+                      <Button onClick={() => (playerFinished ? deal() : playerHit())}>
+                        {playerFinished ? 'Deal' : 'Hit'}
+                      </Button>
+                    </SpaceBetween>
+                  }
+                  counter={`(${getHandValue(playerHand).isSoft && playerHandValue !== 21 ? 'Soft ' : ''}${playerHandValue})`}
+                >
+                  Player
+                </Header>
+                <ColumnLayout columns={5}>
+                  {playerHand.map((card, index) => {
+                    return <Card suit={card.suit} rank={card.rank} />;
+                  })}
+                </ColumnLayout>
+              </SpaceBetween>
               <ExpandableSection
                 headerActions={<Button onClick={() => setStatsModalVisible(true)}>Reset</Button>}
                 variant="container"
@@ -278,64 +336,6 @@ export default function BlackjackPage() {
                   ]}
                 />
               </ExpandableSection>
-              <SpaceBetween size="m">
-                <Header
-                  counter={
-                    playerFinished
-                      ? `(${dealerHandValue})`
-                      : `(${getHandValue([dealerHand[1]]).value})`
-                  }
-                >
-                  Dealer
-                </Header>
-                <ColumnLayout columns={5}>
-                  {dealerHand.map((card, index) => {
-                    const faceDown = index === 0 && !playerFinished;
-                    return (
-                      <Card
-                        key={JSON.stringify({ ...card, faceDown })}
-                        suit={card.suit}
-                        rank={card.rank}
-                        faceDown={faceDown}
-                      />
-                    );
-                  })}
-                </ColumnLayout>
-              </SpaceBetween>
-              <SpaceBetween size="m">
-                <Header
-                  actions={
-                    <SpaceBetween size="xs" direction="horizontal">
-                      <Button
-                        onClick={surrender}
-                        disabled={playerHand.length !== 2 || playerFinished}
-                      >
-                        Surrender
-                      </Button>
-                      <Button
-                        onClick={doubleDown}
-                        disabled={playerHand.length !== 2 || playerFinished}
-                      >
-                        Double
-                      </Button>
-                      <Button onClick={() => completeHand()} disabled={playerFinished}>
-                        Stand
-                      </Button>
-                      <Button onClick={() => (playerFinished ? deal() : playerHit())}>
-                        {playerFinished ? 'Deal' : 'Hit'}
-                      </Button>
-                    </SpaceBetween>
-                  }
-                  counter={`(${getHandValue(playerHand).isSoft && playerHandValue !== 21 ? 'Soft ' : ''}${playerHandValue})`}
-                >
-                  Player
-                </Header>
-                <ColumnLayout columns={5}>
-                  {playerHand.map((card, index) => {
-                    return <Card suit={card.suit} rank={card.rank} />;
-                  })}
-                </ColumnLayout>
-              </SpaceBetween>
             </SpaceBetween>
           </SpaceBetween>
         }
