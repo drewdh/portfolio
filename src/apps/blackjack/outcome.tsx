@@ -4,7 +4,7 @@ import StatusIndicator, {
 
 const labels: Record<OutcomeProps.Outcome, string> = {
   win: 'Win',
-  loss: 'Loss',
+  loss: 'Lose',
   push: 'Push',
 };
 
