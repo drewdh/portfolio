@@ -212,26 +212,7 @@ export default function BlackjackPage() {
         toolsHide
         content={
           <SpaceBetween size="m" direction="vertical">
-            <Header
-              actions={
-                <SpaceBetween size="xs" direction="horizontal">
-                  <Button onClick={surrender} disabled={playerHand.length !== 2 || playerFinished}>
-                    Surrender
-                  </Button>
-                  <Button onClick={doubleDown} disabled={playerHand.length !== 2 || playerFinished}>
-                    Double
-                  </Button>
-                  <Button onClick={() => completeHand()} disabled={playerFinished}>
-                    Stand
-                  </Button>
-                  <Button onClick={() => (playerFinished ? deal() : playerHit())}>
-                    {playerFinished ? 'Deal' : 'Hit'}
-                  </Button>
-                </SpaceBetween>
-              }
-              variant="h1"
-              description={widgetDetails.blackjack.description}
-            >
+            <Header variant="h1" description={widgetDetails.blackjack.description}>
               {widgetDetails.blackjack.title}
             </Header>
             <SpaceBetween size="l" direction="vertical">
@@ -323,6 +304,28 @@ export default function BlackjackPage() {
               </SpaceBetween>
               <SpaceBetween size="m">
                 <Header
+                  actions={
+                    <SpaceBetween size="xs" direction="horizontal">
+                      <Button
+                        onClick={surrender}
+                        disabled={playerHand.length !== 2 || playerFinished}
+                      >
+                        Surrender
+                      </Button>
+                      <Button
+                        onClick={doubleDown}
+                        disabled={playerHand.length !== 2 || playerFinished}
+                      >
+                        Double
+                      </Button>
+                      <Button onClick={() => completeHand()} disabled={playerFinished}>
+                        Stand
+                      </Button>
+                      <Button onClick={() => (playerFinished ? deal() : playerHit())}>
+                        {playerFinished ? 'Deal' : 'Hit'}
+                      </Button>
+                    </SpaceBetween>
+                  }
                   counter={`(${getHandValue(playerHand).isSoft && playerHandValue !== 21 ? 'Soft ' : ''}${playerHandValue})`}
                 >
                   Player
