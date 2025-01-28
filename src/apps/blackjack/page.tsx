@@ -305,7 +305,7 @@ export default function BlackjackPage() {
                       value: <Outcome outcome={outcome} />,
                     },
                     {
-                      label: 'Winnings',
+                      label: 'Total winnings',
                       value: winnings.toLocaleString(undefined, {
                         style: 'currency',
                         currency: 'USD',
