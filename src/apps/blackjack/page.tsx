@@ -106,13 +106,39 @@ export default function BlackjackPage() {
   function doubleDown() {
     setBet((prev) => prev * 2);
     const newPlayerHandValue = playerHit();
-    completeHand(newPlayerHandValue);
+    if (newPlayerHandValue > 21) {
+      setPlayerFinished(true);
+      setDealerWins((prev) => prev + 1);
+      setWinnings((prev) => prev - bet);
+      setHandsPlayed((prev) => prev + 1);
+      setOutcome('loss');
+      return;
+    }
+    completeDealerHand(newPlayerHandValue);
   }
 
-  function completeHand(newPlayerHandValue: number = playerHandValue) {
-    setHandsPlayed((prev) => prev + 1);
-    setPlayerFinished(true);
+  function calculateOutcome({
+    nextPlayerHandValue,
+    nextDealerHandValue,
+  }: {
+    nextPlayerHandValue: number;
+    nextDealerHandValue: number;
+  }) {
+    if (nextDealerHandValue > 21 || nextPlayerHandValue > nextDealerHandValue) {
+      setPlayerWins((prev) => prev + 1);
+      setWinnings((prev) => prev + bet);
+      setOutcome('win');
+    } else if (nextPlayerHandValue < nextDealerHandValue) {
+      setDealerWins((prev) => prev + 1);
+      setWinnings((prev) => prev - bet);
+      setOutcome('loss');
+    } else {
+      setOutcome('push');
+    }
+  }
 
+  function completeDealerHand(nextPlayerHandValue: number = playerHandValue) {
+    setPlayerFinished(true);
     const nextDealerHand = [...dealerHand];
     const { value, isSoft } = getHandValue(nextDealerHand);
     let isSoft17 = value === 17 && isSoft;
@@ -123,22 +149,12 @@ export default function BlackjackPage() {
       isSoft17 = value === 17 && isSoft;
       shouldHit = value < 17 || isSoft17;
     }
-
-    // calculate winner
-    const handValue = getHandValue(nextDealerHand).value;
-    if (handValue > 21 || newPlayerHandValue > handValue) {
-      setPlayerWins((prev) => prev + 1);
-      setWinnings((prev) => prev + bet);
-      setOutcome('win');
-    } else if (newPlayerHandValue < handValue) {
-      setDealerWins((prev) => prev + 1);
-      setWinnings((prev) => prev - bet);
-      setOutcome('loss');
-    } else {
-      setOutcome('push');
-    }
-
     setDealerHand(nextDealerHand);
+    setHandsPlayed((prev) => prev + 1);
+    calculateOutcome({
+      nextPlayerHandValue,
+      nextDealerHandValue: getHandValue(nextDealerHand).value,
+    });
   }
 
   function deal() {
@@ -185,11 +201,12 @@ export default function BlackjackPage() {
     const handValue = getHandValue(nextHand).value;
     setPlayerHand(nextHand);
     if (handValue === 21) {
-      completeHand(handValue);
+      completeDealerHand(handValue);
     } else if (handValue > 21) {
       setPlayerFinished(true);
       setDealerWins((prev) => prev + 1);
       setWinnings((prev) => prev - bet);
+      setHandsPlayed((prev) => prev + 1);
       setOutcome('loss');
     }
     return handValue;
@@ -256,7 +273,7 @@ export default function BlackjackPage() {
                       >
                         Double
                       </Button>
-                      <Button onClick={() => completeHand()} disabled={playerFinished}>
+                      <Button onClick={() => completeDealerHand()} disabled={playerFinished}>
                         Stand
                       </Button>
                       <Button onClick={() => (playerFinished ? deal() : playerHit())}>
@@ -312,14 +329,14 @@ export default function BlackjackPage() {
                       label: 'Player win rate',
                       value: (playerWins / handsPlayed || 0).toLocaleString(undefined, {
                         style: 'percent',
-                        minimumFractionDigits: 2,
+                        minimumFractionDigits: 1,
                       }),
                     },
                     {
                       label: 'Dealer win rate',
                       value: (dealerWins / handsPlayed || 0).toLocaleString(undefined, {
                         style: 'percent',
-                        minimumFractionDigits: 2,
+                        minimumFractionDigits: 1,
                       }),
                     },
                     {
