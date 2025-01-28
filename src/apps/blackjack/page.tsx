@@ -96,7 +96,7 @@ export default function BlackjackPage() {
   useEffect(() => {
     setLowWaterMark((prev) => Math.min(prev, winnings));
     setHighWaterMark((prev) => Math.max(prev, winnings));
-  }, [winnings]);
+  }, [setHighWaterMark, setLowWaterMark, winnings]);
 
   function takeCard() {
     // TODO: Make sure we always have a card
