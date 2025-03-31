@@ -14,4 +14,5 @@ export enum Pathname {
   Feedback = '/feedback',
   Twitch = '/twitch',
   Blackjack = '/blackjack',
+  RpdrBracket = '/rpdr-bracket',
 }

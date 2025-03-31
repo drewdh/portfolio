@@ -18,6 +18,7 @@ import PasswordReset from './auth/password-reset';
 import TwitchPage from './apps/twitch/page';
 import ErrorBoundary from 'common/error-boundary';
 import BlackjackPage from './apps/blackjack/page';
+import RpdrBracket from './apps/rpdr-bracket';
 
 interface GlobalFlags {
   removeHighContrastHeader?: boolean;
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
       {
         path: Pathname.Blackjack,
         element: <BlackjackPage />,
+      },
+      {
+        path: Pathname.RpdrBracket,
+        element: <RpdrBracket />,
       },
     ],
   },
