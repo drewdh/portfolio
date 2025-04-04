@@ -16,11 +16,11 @@ import Button from '@cloudscape-design/components/button';
 
 import widgetDetails from 'common/widget-details';
 import useEcobee from './use-ecobee';
-import useAddNotification from 'common/use-add-notification';
+import { useNotifications } from 'common/use-notifications';
 
 export default function Ecobee() {
   const { handleRefresh, isFetching } = useEcobee();
-  const addNotification = useAddNotification();
+  const addNotification = useNotifications((state) => state.pushNotification);
 
   useEffect((): void => {
     addNotification({
