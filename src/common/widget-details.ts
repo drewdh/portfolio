@@ -1,4 +1,11 @@
-type WidgetName = 'diablo' | 'coffee' | 'ecobee' | 'feedback' | 'twitch' | 'blackjack';
+type WidgetName =
+  | 'diablo'
+  | 'coffee'
+  | 'ecobee'
+  | 'feedback'
+  | 'twitch'
+  | 'blackjack'
+  | 'owProgress';
 
 const widgetDetails: Record<WidgetName, WidgetDetail> = {
   diablo: {
@@ -25,6 +32,10 @@ const widgetDetails: Record<WidgetName, WidgetDetail> = {
   blackjack: {
     title: 'Blackjack',
     description: 'A simple, free version of the card game blackjack.',
+  },
+  owProgress: {
+    title: 'Overwatch progress',
+    description: 'Track your progress in competitive Overwatch.',
   },
 };
 

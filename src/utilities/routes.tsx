@@ -15,4 +15,6 @@ export enum Pathname {
   Twitch = '/twitch',
   Blackjack = '/blackjack',
   RpdrBracket = '/rpdr-bracket',
+  OwProgress = '/ow-progress',
+  OwProgressCreate = '/ow-progress/add',
 }

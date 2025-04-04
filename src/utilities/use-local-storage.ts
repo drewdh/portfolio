@@ -20,6 +20,7 @@ export enum LocalStorageKey {
   BjPlayerWins = 'bjPlayerWins',
   BjDealerWins = 'bjDealerWins',
   BjHandsPlayed = 'bjHandsPlayed',
+  OwGames = 'owGames',
 }
 
 /** Helper functions for accessing local storage that safely stringify and parse values */

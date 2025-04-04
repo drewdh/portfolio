@@ -19,6 +19,8 @@ import TwitchPage from './apps/twitch/page';
 import ErrorBoundary from 'common/error-boundary';
 import BlackjackPage from './apps/blackjack/page';
 import RpdrBracket from './apps/rpdr-bracket';
+import OwProgress from './apps/ow-progress';
+import OwProgressCreate from './apps/ow-progress/create';
 
 interface GlobalFlags {
   removeHighContrastHeader?: boolean;
@@ -73,6 +75,14 @@ const router = createBrowserRouter([
       {
         path: Pathname.RpdrBracket,
         element: <RpdrBracket />,
+      },
+      {
+        path: Pathname.OwProgress,
+        element: <OwProgress />,
+      },
+      {
+        path: Pathname.OwProgressCreate,
+        element: <OwProgressCreate />,
       },
     ],
   },

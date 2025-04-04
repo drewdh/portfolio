@@ -1,0 +1,21 @@
+@use '@cloudscape-design/design-tokens' as cs;
+
+.flexWrapper {
+  align-items: start;
+  display: flex;
+  gap: cs.$space-scaled-s;
+}
+.sliderWrapper {
+  flex: 1 1;
+  max-inline-size: 800px;
+}
+.inputWrapper {
+  max-inline-size: 70px;
+}
+.tierInput {
+  inline-size: 250px;
+  //width: 100%;
+}
+.divisionInput {
+  inline-size: 150px;
+}
