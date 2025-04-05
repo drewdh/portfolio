@@ -12,6 +12,7 @@ import Slider from '@cloudscape-design/components/slider';
 import Select, { SelectProps } from '@cloudscape-design/components/select';
 import Input from '@cloudscape-design/components/input';
 import { Formik } from 'formik';
+import { useNavigate } from 'react-router';
 import * as yup from 'yup';
 
 import DhAppLayout from 'common/dh-app-layout';
@@ -27,8 +28,6 @@ import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
 import { Division, Modifier, Outcome, OutcomeDetails, Tier } from './types';
 import { divisionLabels, modifierLabels, outcomeLabels, tierLabels } from './constants';
 import { useNotifications } from 'common/use-notifications';
-import { useNavigate } from 'react-router';
-import { flushSync } from 'react-dom';
 
 const tierOptions: SelectProps.Option[] = [
   { label: tierLabels[Tier.Bronze], value: Tier.Bronze },
@@ -157,6 +156,7 @@ export default function OwProgressCreate() {
           })}
           validateOnChange={submitted}
           initialValues={{
+            id: crypto.randomUUID(),
             outcome: null,
             tier: null,
             division: null,

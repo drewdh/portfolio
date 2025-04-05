@@ -34,6 +34,7 @@ export enum Modifier {
   Pressure = 'pressure',
 }
 export interface OutcomeDetails {
+  id: string;
   outcome: Outcome | null;
   tier: Tier | null;
   division: Division | null;
@@ -42,4 +43,12 @@ export interface OutcomeDetails {
   time: string;
   period: string;
   rankChange: number;
+}
+export enum ColumnId {
+  Outcome = 'outcome',
+  RankGainLoss = 'rankGainLoss',
+  Modifiers = 'modifiers',
+  Tier = 'tier',
+  Division = 'division',
+  Date = 'date',
 }

@@ -1,10 +1,11 @@
-import Table, { TableProps } from '@cloudscape-design/components/table';
-import { formatDistanceToNow } from 'date-fns/formatDistanceToNow';
+import Table from '@cloudscape-design/components/table';
 import { parse } from 'date-fns/parse';
 import Header from '@cloudscape-design/components/header';
-import { useMemo } from 'react';
-import { sortBy } from 'lodash';
+import { useEffect, useMemo, useState } from 'react';
+import SpaceBetween from '@cloudscape-design/components/space-between';
+import Button from '@cloudscape-design/components/button';
 
+import { sortBy } from 'lodash';
 import DhAppLayout from 'common/dh-app-layout';
 import widgetDetails from 'common/widget-details';
 import useTitle from 'utilities/use-title';
@@ -12,65 +13,24 @@ import DhBreadcrumbs from 'common/dh-breadcrumbs';
 import { Pathname } from 'utilities/routes';
 import ButtonLink from 'common/button-link';
 import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
-import { OutcomeDetails } from './types';
-import { divisionLabels, modifierLabels, outcomeLabels, tierLabels } from './constants';
+import { ColumnId, OutcomeDetails } from './types';
 import Empty from 'common/empty';
+import { columnDefinitions } from './constants';
+import useHeaderCounter from 'common/use-header-counter';
+import Modal from '@cloudscape-design/components/modal';
 import Box from '@cloudscape-design/components/box';
-
-enum ColumnId {
-  Outcome = 'outcome',
-  RankGainLoss = 'rankGainLoss',
-  Modifiers = 'modifiers',
-  Tier = 'tier',
-  Division = 'division',
-  Date = 'date',
-}
-
-const columnDefinitions: TableProps.ColumnDefinition<OutcomeDetails>[] = [
-  {
-    id: ColumnId.Outcome,
-    cell: ({ outcome }) => outcomeLabels[outcome!] ?? '-',
-    header: 'Outcome',
-  },
-  {
-    id: ColumnId.RankGainLoss,
-    header: 'Rank gain/loss',
-    cell: ({ rankChange }) => (
-      <Box textAlign="right">
-        {rankChange > 0 ? '+' : ''}
-        {rankChange}%
-      </Box>
-    ),
-  },
-  {
-    id: ColumnId.Tier,
-    header: 'Tier',
-    cell: ({ tier }) => tierLabels[tier!] ?? '-',
-  },
-  {
-    id: ColumnId.Division,
-    header: 'Division',
-    cell: ({ division }) => divisionLabels[division!] ?? '-',
-  },
-  {
-    id: ColumnId.Modifiers,
-    header: 'Modifiers',
-    cell: ({ modifiers }) => modifiers.map((modifier) => modifierLabels[modifier]).join(', '),
-  },
-  {
-    id: ColumnId.Date,
-    header: 'Date',
-    cell: ({ time, date, period }) => {
-      const fullDateTimeStr = `${date} ${time} ${period}`;
-      const parsedDate = parse(fullDateTimeStr, 'yyyy-MM-dd hh:mm a', new Date());
-      return formatDistanceToNow(parsedDate, { addSuffix: true, includeSeconds: false });
-    },
-  },
-];
 
 export default function OwProgress() {
   useTitle(widgetDetails.owProgress.title);
-  const [items] = useLocalStorage<OutcomeDetails[]>(LocalStorageKey.OwGames, []);
+  useBackfillIds();
+  const [items, setItems] = useLocalStorage<OutcomeDetails[]>(LocalStorageKey.OwGames, []);
+  const [selectedItems, setSelectedItems] = useState<OutcomeDetails[]>([]);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(false);
+
+  const counter = useHeaderCounter({
+    totalCount: items.length,
+    selectedCount: selectedItems.length,
+  });
 
   const sortedItems = useMemo((): OutcomeDetails[] => {
     return sortBy(items, (item) => {
@@ -78,6 +38,15 @@ export default function OwProgress() {
       return parse(fullDateTimeStr, 'yyyy-MM-dd hh:mm a', new Date());
     }).reverse();
   }, [items]);
+
+  function handleDelete() {
+    const selectedIds = selectedItems.map((item) => item.id);
+    setItems((prev) => {
+      return prev.filter((item) => !selectedIds.includes(item.id));
+    });
+    setSelectedItems([]);
+    setIsDeleteModalVisible(false);
+  }
 
   return (
     <DhAppLayout
@@ -88,34 +57,103 @@ export default function OwProgress() {
         />
       }
       content={
-        <Table<OutcomeDetails>
-          sortingColumn={columnDefinitions.find(({ id }) => id === ColumnId.Date)}
-          sortingDisabled
-          sortingDescending
-          items={sortedItems}
-          columnDefinitions={columnDefinitions}
-          empty={
-            <Empty
-              header="No games"
-              action={<ButtonLink href={Pathname.OwProgressCreate}>Add game</ButtonLink>}
-            />
-          }
-          header={
-            <Header
-              actions={
-                <ButtonLink href={Pathname.OwProgressCreate} variant="primary">
-                  Add game
-                </ButtonLink>
-              }
-              variant="awsui-h1-sticky"
-              description={widgetDetails.owProgress.description}
-            >
-              {widgetDetails.owProgress.title}
-            </Header>
-          }
-          variant="full-page"
-        />
+        <>
+          <Table<OutcomeDetails>
+            sortingColumn={columnDefinitions.find(({ id }) => id === ColumnId.Date)}
+            sortingDisabled
+            sortingDescending
+            items={sortedItems}
+            columnDefinitions={columnDefinitions}
+            selectionType="multi"
+            onSelectionChange={(e) => setSelectedItems(e.detail.selectedItems)}
+            selectedItems={selectedItems}
+            empty={
+              <Empty
+                header="No games"
+                action={<ButtonLink href={Pathname.OwProgressCreate}>Add game</ButtonLink>}
+              />
+            }
+            header={
+              <Header
+                counter={counter}
+                actions={
+                  <SpaceBetween size="xs" direction="horizontal">
+                    <Button
+                      onClick={() => setIsDeleteModalVisible(true)}
+                      disabled={!selectedItems.length}
+                    >
+                      Delete
+                    </Button>
+                    {/*<Button disabled={selectedItems.length !== 1}>Edit</Button>*/}
+                    <ButtonLink href={Pathname.OwProgressCreate} variant="primary">
+                      Add game
+                    </ButtonLink>
+                  </SpaceBetween>
+                }
+                variant="awsui-h1-sticky"
+                description={widgetDetails.owProgress.description}
+              >
+                {widgetDetails.owProgress.title}
+              </Header>
+            }
+            variant="full-page"
+          />
+          <DeleteModal
+            visible={isDeleteModalVisible}
+            selectedCount={selectedItems.length}
+            onDismiss={() => setIsDeleteModalVisible(false)}
+            onConfirm={handleDelete}
+          />
+        </>
       }
     />
+  );
+}
+
+/** Add IDs to any items that don't have one */
+function useBackfillIds() {
+  const [, setItems] = useLocalStorage<OutcomeDetails[]>(LocalStorageKey.OwGames, []);
+
+  useEffect(() => {
+    setItems((prev) => {
+      return prev.map((item) => ({
+        ...item,
+        id: item.id ?? crypto.randomUUID(),
+      }));
+    });
+  }, [setItems]);
+}
+
+interface DeleteModalProps {
+  visible: boolean;
+  selectedCount: number;
+  onConfirm: () => void;
+  onDismiss: () => void;
+}
+function DeleteModal({ onConfirm, onDismiss, selectedCount, visible }: DeleteModalProps) {
+  return (
+    <Modal
+      footer={
+        <Box float="right">
+          <SpaceBetween size="xs" direction="horizontal">
+            <Button onClick={onDismiss} variant="link">
+              Cancel
+            </Button>
+            <Button onClick={onConfirm} variant="primary">
+              Delete
+            </Button>
+          </SpaceBetween>
+        </Box>
+      }
+      onDismiss={onDismiss}
+      header={selectedCount === 1 ? 'Delete game' : 'Delete games'}
+      visible={visible}
+    >
+      Permanently delete{' '}
+      <b>
+        {selectedCount} {selectedCount === 1 ? 'game' : 'games'}
+      </b>
+      ? You can't undo this action.
+    </Modal>
   );
 }
