@@ -2,7 +2,6 @@ import { FlashbarProps } from '@cloudscape-design/components/flashbar';
 import without from 'lodash/without';
 import { ButtonProps } from '@cloudscape-design/components/button';
 import { create } from 'zustand/react';
-import { v4 as uuidV4 } from 'uuid';
 
 export interface MessageDefinition extends FlashbarProps.MessageDefinition {
   /** @default 'never' */
@@ -32,7 +31,7 @@ export const useNotifications = create<UseNotificationsState>((set, get) => ({
     }
   },
   pushNotification: (item) => {
-    const id = item.id || uuidV4();
+    const id = item.id || crypto.randomUUID();
     const newItem: FlashbarProps.MessageDefinition = {
       ...item,
       id,
