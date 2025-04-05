@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from 'react';
 
 export enum LocalStorageKey {
   GlobalSettings = 'globalSettings',
@@ -34,18 +34,23 @@ export default function useLocalStorage<T>(key: LocalStorageKey, defaultValue: T
     }
   });
 
+  // Store the latest state in a ref to keep updateItem stable without stale values
+  const itemRef = useRef(item);
+  itemRef.current = item;
+
   const updateItem = useCallback(
     (updater: T | ((prevValue: T) => T)): void => {
-      const newValue = typeof updater === 'function' ? (updater as Function)(item) : updater;
+      const newValue =
+        typeof updater === 'function' ? (updater as Function)(itemRef.current) : updater;
       try {
         const stringifiedValue = JSON.stringify(newValue);
         localStorage.setItem(key, stringifiedValue);
         setItem(newValue);
       } catch (e) {
-        console.warn(`Could not save value for key ${key}:`, item, e);
+        console.warn(`Could not save value for key ${key}:`, itemRef.current, e);
       }
     },
-    [item, key]
+    [key]
   );
 
   return [item, updateItem];
