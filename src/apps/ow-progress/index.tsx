@@ -78,18 +78,18 @@ export default function OwProgress() {
                 counter={counter}
                 actions={
                   <SpaceBetween size="xs" direction="horizontal">
-                    <Button
-                      onClick={() => setIsDeleteModalVisible(true)}
-                      disabled={!selectedItems.length}
-                    >
-                      Delete
-                    </Button>
                     <ButtonLink
                       href={`${Pathname.OwProgress}/edit/${selectedItems[0]?.id}`}
                       disabled={selectedItems.length !== 1}
                     >
                       Edit
                     </ButtonLink>
+                    <Button
+                      onClick={() => setIsDeleteModalVisible(true)}
+                      disabled={!selectedItems.length}
+                    >
+                      Delete
+                    </Button>
                     <ButtonLink href={Pathname.OwProgressCreate} variant="primary">
                       Add game
                     </ButtonLink>
