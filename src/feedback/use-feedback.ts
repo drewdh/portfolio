@@ -1,13 +1,14 @@
 import { Ref, useRef, useState } from 'react';
-import { AlertProps, NonCancelableCustomEvent } from '@cloudscape-design/components';
+import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import { TextareaProps } from '@cloudscape-design/components/textarea';
+import { AlertProps } from '@cloudscape-design/components/alert';
 import { RadioGroupProps } from '@cloudscape-design/components/radio-group';
 import { SelectProps } from '@cloudscape-design/components/select';
+import { InputProps } from '@cloudscape-design/components/input';
 import { FormikErrors, useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { sendFeedback } from './feedback-api';
-import { InputProps } from '@cloudscape-design/components/input';
 
 enum Satisfied {
   Yes = 'yes',

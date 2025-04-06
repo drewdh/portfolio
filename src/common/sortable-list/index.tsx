@@ -27,7 +27,6 @@ import styles from './styles.module.scss';
 import Box from '@cloudscape-design/components/box';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import FormField from '@cloudscape-design/components/form-field';
-import { useDragOverlayMeasuring } from '@dnd-kit/core/dist/hooks/utilities';
 
 export default function SortableList({ items, onChange, disabled }: SortableListProps) {
   const [overRank, setOverRank] = useState<number>(-1);
@@ -108,26 +107,10 @@ function ListItem({
   disabled?: boolean;
   rank?: number;
 }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    isDragging,
-    items,
-    isSorting,
-    newIndex,
-    active,
-    activeIndex,
-    // overIndex,
-  } = useSortable({
-    id: item.id,
-  });
-
-  // const isActive = active?.id === item.id;
-  if (isActive) {
-    // console.log(overIndex);
-  }
+  const { attributes, listeners, setNodeRef, transform, isDragging, items, isSorting, newIndex } =
+    useSortable({
+      id: item.id,
+    });
 
   const style = {
     transform: CSS.Transform.toString(transform),
