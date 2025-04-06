@@ -27,7 +27,6 @@ import styles from './styles.module.scss';
 import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
 import { Division, Modifier, Outcome, OutcomeDetails, Tier } from './types';
 import { divisionLabels, modifierLabels, outcomeLabels, tierLabels } from './constants';
-import { useNotifications } from 'common/use-notifications';
 
 const tierOptions: SelectProps.Option[] = [
   { label: tierLabels[Tier.Bronze], value: Tier.Bronze },
@@ -113,7 +112,6 @@ export default function OwProgressForm() {
   const { id } = useParams();
   const mode = id ? Mode.Edit : Mode.Create;
   useTitle(mode === Mode.Create ? 'Add game' : `Edit game`);
-  const pushNotification = useNotifications((state) => state.pushNotification);
   const navigate = useNavigate();
   const [games, setGames] = useLocalStorage<OutcomeDetails[]>(LocalStorageKey.OwGames, []);
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -188,12 +186,6 @@ export default function OwProgressForm() {
               });
             }
             navigate(Pathname.OwProgress);
-            pushNotification({
-              type: 'success',
-              dismissible: true,
-              content: 'Successfully added a game.',
-              persistOnNavigate: 'once',
-            });
           }}
         >
           {({ values, setFieldValue, handleSubmit }) => (
