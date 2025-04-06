@@ -17,4 +17,5 @@ export enum Pathname {
   RpdrBracket = '/rpdr-bracket',
   OwProgress = '/ow-progress',
   OwProgressCreate = '/ow-progress/add',
+  OwProgressEdit = '/ow-progress/edit/:id',
 }

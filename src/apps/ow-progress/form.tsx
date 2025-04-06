@@ -12,7 +12,7 @@ import Slider from '@cloudscape-design/components/slider';
 import Select, { SelectProps } from '@cloudscape-design/components/select';
 import Input from '@cloudscape-design/components/input';
 import { Formik } from 'formik';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import * as yup from 'yup';
 
 import DhAppLayout from 'common/dh-app-layout';
@@ -104,12 +104,20 @@ const modifierOptions: SelectProps.Option[] = [
   },
 ];
 
-export default function OwProgressCreate() {
-  useTitle('Add game');
+enum Mode {
+  Create,
+  Edit,
+}
+
+export default function OwProgressForm() {
+  const { id } = useParams();
+  const mode = id ? Mode.Edit : Mode.Create;
+  useTitle(mode === Mode.Create ? 'Add game' : `Edit game`);
   const pushNotification = useNotifications((state) => state.pushNotification);
   const navigate = useNavigate();
-  const [, setGames] = useLocalStorage<OutcomeDetails[]>(LocalStorageKey.OwGames, []);
+  const [games, setGames] = useLocalStorage<OutcomeDetails[]>(LocalStorageKey.OwGames, []);
   const [submitted, setSubmitted] = useState<boolean>(false);
+
   const today = new Date();
   const formattedDate =
     today.getFullYear() +
@@ -131,6 +139,18 @@ export default function OwProgressCreate() {
       })
       .match(/AM|PM/)?.[0] ?? 'AM';
 
+  const initialValues: OutcomeDetails = games.find((game) => game.id === id) ?? {
+    id: crypto.randomUUID(),
+    outcome: null,
+    tier: null,
+    division: null,
+    rankChange: 0,
+    modifiers: [],
+    date: formattedDate,
+    time: timeOnly,
+    period,
+  };
+
   return (
     <DhAppLayout
       contentType="form"
@@ -139,7 +159,10 @@ export default function OwProgressCreate() {
         <DhBreadcrumbs
           items={[
             { text: widgetDetails.owProgress.title, href: Pathname.OwProgress },
-            { text: 'Add game', href: Pathname.OwProgressCreate },
+            {
+              text: `${mode === Mode.Create ? 'Create' : 'Edit'} game`,
+              href: Pathname.OwProgressCreate,
+            },
           ]}
         />
       }
@@ -155,19 +178,15 @@ export default function OwProgressCreate() {
             period: yup.string().required('Choose a time period.'),
           })}
           validateOnChange={submitted}
-          initialValues={{
-            id: crypto.randomUUID(),
-            outcome: null,
-            tier: null,
-            division: null,
-            rankChange: 0,
-            modifiers: [],
-            date: formattedDate,
-            time: timeOnly,
-            period,
-          }}
+          initialValues={initialValues}
           onSubmit={(values) => {
-            setGames((prev) => [...prev, values]);
+            if (mode === Mode.Create) {
+              setGames((prev) => [...prev, values]);
+            } else {
+              setGames((prev) => {
+                return prev.map((item) => (item.id === values.id ? values : item));
+              });
+            }
             navigate(Pathname.OwProgress);
             pushNotification({
               type: 'success',
@@ -179,7 +198,7 @@ export default function OwProgressCreate() {
         >
           {({ values, setFieldValue, handleSubmit }) => (
             <Form
-              header={<Header variant="h1">Add game</Header>}
+              header={<Header variant="h1">{mode === Mode.Create ? 'Create' : 'Edit'} game</Header>}
               actions={
                 <SpaceBetween size="xs" direction="horizontal">
                   <ButtonLink href={Pathname.OwProgress} variant="link">
@@ -192,7 +211,7 @@ export default function OwProgressCreate() {
                     }}
                     variant="primary"
                   >
-                    Add
+                    {mode === Mode.Create ? 'Add' : 'Save'}
                   </Button>
                 </SpaceBetween>
               }

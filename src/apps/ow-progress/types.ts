@@ -45,6 +45,7 @@ export interface OutcomeDetails {
   rankChange: number;
 }
 export enum ColumnId {
+  Id = 'id',
   Outcome = 'outcome',
   RankGainLoss = 'rankGainLoss',
   Modifiers = 'modifiers',

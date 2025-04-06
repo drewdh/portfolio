@@ -4,6 +4,8 @@ import Header from '@cloudscape-design/components/header';
 import { useEffect, useMemo, useState } from 'react';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Button from '@cloudscape-design/components/button';
+import Modal from '@cloudscape-design/components/modal';
+import Box from '@cloudscape-design/components/box';
 
 import { sortBy } from 'lodash';
 import DhAppLayout from 'common/dh-app-layout';
@@ -17,8 +19,6 @@ import { ColumnId, OutcomeDetails } from './types';
 import Empty from 'common/empty';
 import { columnDefinitions } from './constants';
 import useHeaderCounter from 'common/use-header-counter';
-import Modal from '@cloudscape-design/components/modal';
-import Box from '@cloudscape-design/components/box';
 
 export default function OwProgress() {
   useTitle(widgetDetails.owProgress.title);
@@ -84,7 +84,12 @@ export default function OwProgress() {
                     >
                       Delete
                     </Button>
-                    {/*<Button disabled={selectedItems.length !== 1}>Edit</Button>*/}
+                    <ButtonLink
+                      href={`${Pathname.OwProgress}/edit/${selectedItems[0]?.id}`}
+                      disabled={selectedItems.length !== 1}
+                    >
+                      Edit
+                    </ButtonLink>
                     <ButtonLink href={Pathname.OwProgressCreate} variant="primary">
                       Add game
                     </ButtonLink>
