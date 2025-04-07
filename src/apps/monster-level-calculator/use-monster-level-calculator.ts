@@ -1,9 +1,10 @@
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import { SelectProps } from '@cloudscape-design/components/select';
 import { useCallback, useMemo, useState } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 import useTitle from 'utilities/use-title';
-import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
+import { LocalStorageKey } from 'utilities/local-storage-keys';
 
 export default function useMonsterLevelCalculator(): State {
   // TODO: Infer from selected sigil tier

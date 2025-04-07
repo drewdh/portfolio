@@ -16,7 +16,7 @@ import Modal from '@cloudscape-design/components/modal';
 import Alert from '@cloudscape-design/components/alert';
 import Table from '@cloudscape-design/components/table';
 import Link from '@cloudscape-design/components/link';
-import { sum } from 'lodash';
+import sum from 'lodash/sum';
 
 const initialValue = [
   { id: 'js', label: 'Jewels Sparkles' },

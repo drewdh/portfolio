@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 import DhBreadcrumbs from 'common/dh-breadcrumbs';
 import Overview from './overview';
-import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
+import { LocalStorageKey } from 'utilities/local-storage-keys';
 import DhAppLayout from 'common/dh-app-layout';
 
 let initialIsNewVisitor: boolean | undefined;

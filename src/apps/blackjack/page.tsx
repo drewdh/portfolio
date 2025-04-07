@@ -7,6 +7,7 @@ import KeyValuePairs from '@cloudscape-design/components/key-value-pairs';
 import ExpandableSection from '@cloudscape-design/components/expandable-section';
 import shuffle from 'lodash/shuffle';
 import Modal from '@cloudscape-design/components/modal';
+import { useLocalStorage } from 'usehooks-ts';
 
 import DhAppLayout from 'common/dh-app-layout';
 import useTitle from 'utilities/use-title';
@@ -15,7 +16,7 @@ import DhBreadcrumbs from 'common/dh-breadcrumbs';
 import { Pathname } from 'utilities/routes';
 import Card, { CardProps } from './card';
 import Outcome, { OutcomeProps } from './outcome';
-import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
+import { LocalStorageKey } from 'utilities/local-storage-keys';
 import Box from '@cloudscape-design/components/box';
 
 function getHandValue(cards: ICard[]) {

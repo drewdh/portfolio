@@ -12,8 +12,9 @@ import ColumnLayout from '@cloudscape-design/components/column-layout';
 import Tiles, { TilesProps } from '@cloudscape-design/components/tiles';
 import Input, { InputProps } from '@cloudscape-design/components/input';
 import Alert from '@cloudscape-design/components/alert';
+import { useLocalStorage } from 'usehooks-ts';
 
-import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
+import { LocalStorageKey } from 'utilities/local-storage-keys';
 
 const worldTierItems: TilesProps.TilesDefinition[] = [
   { value: '3', label: 'Nightmare', description: 'World Tier 3' },

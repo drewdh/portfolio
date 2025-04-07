@@ -6,10 +6,11 @@ import Button from '@cloudscape-design/components/button';
 import FormField from '@cloudscape-design/components/form-field';
 import RadioGroup, { RadioGroupProps } from '@cloudscape-design/components/radio-group';
 import { NonCancelableCustomEvent } from '@cloudscape-design/components';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { Appearance, SettingsValues } from './types';
 import { handleMatchChange, setDarkMode } from './utilities';
-import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
+import { LocalStorageKey } from 'utilities/local-storage-keys';
 import { defaultSettings } from './constants';
 
 let isInitialized = false;
