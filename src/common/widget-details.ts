@@ -34,8 +34,8 @@ const widgetDetails: Record<WidgetName, WidgetDetail> = {
     description: 'A simple, free version of the card game blackjack.',
   },
   owProgress: {
-    title: 'Overwatch progress',
-    description: 'Track your progress in competitive Overwatch.',
+    title: 'Overwatch log',
+    description: 'Track your progress in ranked Overwatch matches.',
   },
 };
 

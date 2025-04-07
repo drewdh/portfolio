@@ -6,25 +6,38 @@ import SpaceBetween from '@cloudscape-design/components/space-between';
 import Button from '@cloudscape-design/components/button';
 import Modal from '@cloudscape-design/components/modal';
 import Box from '@cloudscape-design/components/box';
+import SplitPanel from '@cloudscape-design/components/split-panel';
+import sortBy from 'lodash/sortBy';
+import Alert from '@cloudscape-design/components/alert';
+import { useBoolean, useLocalStorage } from 'usehooks-ts';
 
-import { sortBy } from 'lodash';
 import DhAppLayout from 'common/dh-app-layout';
 import widgetDetails from 'common/widget-details';
 import useTitle from 'utilities/use-title';
 import DhBreadcrumbs from 'common/dh-breadcrumbs';
 import { Pathname } from 'utilities/routes';
-import ButtonLink from 'common/button-link';
-import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
+import { LocalStorageKey } from 'utilities/local-storage-keys';
 import { ColumnId, OutcomeDetails } from './types';
 import Empty from 'common/empty';
 import { columnDefinitions } from './constants';
 import useHeaderCounter from 'common/use-header-counter';
+import OwProgressForm from './form';
 
 export default function OwProgress() {
   useTitle(widgetDetails.owProgress.title);
-  useBackfillIds();
+  useBackfillItems();
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
+  const {
+    value: splitPanelOpen,
+    setTrue: openSplitPanel,
+    setFalse: closeSplitPanel,
+  } = useBoolean(false);
   const [items, setItems] = useLocalStorage<OutcomeDetails[]>(LocalStorageKey.OwGames, []);
+  const [isPanelClosePending, setIsPanelClosePending] = useState<boolean>(false);
+  const [activeEditId, setActiveEditId] = useState<string | null>(null);
+  const [pendingEditId, setPendingEditId] = useState<string | null>(null);
   const [selectedItems, setSelectedItems] = useState<OutcomeDetails[]>([]);
+  const [isUnsavedModalVisible, setIsUnsavedModalVisible] = useState<boolean>(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState<boolean>(false);
 
   const counter = useHeaderCounter({
@@ -34,10 +47,29 @@ export default function OwProgress() {
 
   const sortedItems = useMemo((): OutcomeDetails[] => {
     return sortBy(items, (item) => {
-      const fullDateTimeStr = `${item.date} ${item.time} ${item.period}`;
-      return parse(fullDateTimeStr, 'yyyy-MM-dd hh:mm a', new Date());
+      const fullDateTimeStr = `${item.date} ${item.time}`;
+      return parse(fullDateTimeStr, 'yyyy-MM-dd HH:mm', new Date());
     }).reverse();
   }, [items]);
+
+  function openPanel(id: string | null) {
+    if (id !== activeEditId && hasUnsavedChanges) {
+      setPendingEditId(id);
+      setIsUnsavedModalVisible(true);
+    } else {
+      setActiveEditId(id);
+      openSplitPanel();
+    }
+  }
+
+  function requestPanelDismiss() {
+    if (hasUnsavedChanges) {
+      setIsPanelClosePending(true);
+      setIsUnsavedModalVisible(true);
+    } else {
+      closeSplitPanel();
+    }
+  }
 
   function handleDelete() {
     const selectedIds = selectedItems.map((item) => item.id);
@@ -46,11 +78,38 @@ export default function OwProgress() {
     });
     setSelectedItems([]);
     setIsDeleteModalVisible(false);
+    if (activeEditId && selectedIds.includes(activeEditId)) {
+      closeSplitPanel();
+      setActiveEditId(null);
+    }
   }
 
   return (
     <DhAppLayout
       toolsHide
+      contentType="table"
+      splitPanelOpen={splitPanelOpen}
+      onSplitPanelToggle={(event) => {
+        if (event.detail.open) {
+          openSplitPanel();
+        } else {
+          requestPanelDismiss();
+        }
+      }}
+      splitPanel={
+        <SplitPanel
+          hidePreferencesButton
+          closeBehavior="hide"
+          header={activeEditId ? 'Edit match' : 'Add match'}
+        >
+          <OwProgressForm
+            onModifiedChange={(isModified) => setHasUnsavedChanges(isModified)}
+            id={activeEditId}
+            onDismiss={requestPanelDismiss}
+          />
+        </SplitPanel>
+      }
+      splitPanelPreferences={{ position: 'side' }}
       breadcrumbs={
         <DhBreadcrumbs
           items={[{ text: widgetDetails.owProgress.title, href: Pathname.OwProgress }]}
@@ -69,8 +128,8 @@ export default function OwProgress() {
             selectedItems={selectedItems}
             empty={
               <Empty
-                header="No games"
-                action={<ButtonLink href={Pathname.OwProgressCreate}>Add game</ButtonLink>}
+                header="No matches"
+                action={<Button onClick={openSplitPanel}>Add match</Button>}
               />
             }
             header={
@@ -78,21 +137,21 @@ export default function OwProgress() {
                 counter={counter}
                 actions={
                   <SpaceBetween size="xs" direction="horizontal">
-                    <ButtonLink
-                      href={`${Pathname.OwProgress}/edit/${selectedItems[0]?.id}`}
+                    <Button
+                      onClick={() => openPanel(selectedItems[0].id)}
                       disabled={selectedItems.length !== 1}
                     >
                       Edit
-                    </ButtonLink>
+                    </Button>
                     <Button
                       onClick={() => setIsDeleteModalVisible(true)}
                       disabled={!selectedItems.length}
                     >
                       Delete
                     </Button>
-                    <ButtonLink href={Pathname.OwProgressCreate} variant="primary">
-                      Add game
-                    </ButtonLink>
+                    <Button onClick={() => openPanel(null)} variant="primary">
+                      Add match
+                    </Button>
                   </SpaceBetween>
                 }
                 variant="awsui-h1-sticky"
@@ -102,6 +161,23 @@ export default function OwProgress() {
               </Header>
             }
             variant="full-page"
+          />
+          <DiscardChangesModal
+            visible={isUnsavedModalVisible}
+            onDismiss={() => {
+              if (isPanelClosePending) {
+                setPendingEditId(null);
+              }
+              setIsUnsavedModalVisible(false);
+            }}
+            onConfirm={() => {
+              if (isPanelClosePending) {
+                closeSplitPanel();
+              }
+              setActiveEditId(pendingEditId);
+              setPendingEditId(null);
+              setIsUnsavedModalVisible(false);
+            }}
           />
           <DeleteModal
             visible={isDeleteModalVisible}
@@ -115,8 +191,22 @@ export default function OwProgress() {
   );
 }
 
-/** Add IDs to any items that don't have one */
-function useBackfillIds() {
+function fixTime(item: OutcomeDetails): string {
+  const hour = Number(item.time.substring(0, 2));
+  let newHour = hour;
+  if (hour >= 24) {
+    // Fix issue where 12 hours was incorrectly added to 24-hour times
+    newHour = newHour - 12;
+  } else if (hour <= 12 && item.period === 'PM') {
+    // Convert PM times to 24-hour
+    newHour = newHour + 12;
+  }
+  const minutes = item.time.substring(3);
+  return `${newHour}:${minutes}`;
+}
+
+/** Add IDs to any items that don't have one and uses 24-hour date */
+function useBackfillItems() {
   const [, setItems] = useLocalStorage<OutcomeDetails[]>(LocalStorageKey.OwGames, []);
 
   useEffect(() => {
@@ -124,6 +214,8 @@ function useBackfillIds() {
       return prev.map((item) => ({
         ...item,
         id: item.id ?? crypto.randomUUID(),
+        time: fixTime(item),
+        period: undefined,
       }));
     });
   }, [setItems]);
@@ -151,14 +243,45 @@ function DeleteModal({ onConfirm, onDismiss, selectedCount, visible }: DeleteMod
         </Box>
       }
       onDismiss={onDismiss}
-      header={selectedCount === 1 ? 'Delete game' : 'Delete games'}
+      header={selectedCount === 1 ? 'Delete match' : 'Delete matches'}
       visible={visible}
     >
       Permanently delete{' '}
       <b>
-        {selectedCount} {selectedCount === 1 ? 'game' : 'games'}
+        {selectedCount} {selectedCount === 1 ? 'match' : 'matches'}
       </b>
       ? You can't undo this action.
+    </Modal>
+  );
+}
+
+interface DiscardChangesModalProps {
+  visible: boolean;
+  onConfirm: () => void;
+  onDismiss: () => void;
+}
+function DiscardChangesModal({ onConfirm, onDismiss, visible }: DiscardChangesModalProps) {
+  return (
+    <Modal
+      footer={
+        <Box float="right">
+          <SpaceBetween size="xs" direction="horizontal">
+            <Button onClick={onDismiss} variant="link">
+              Cancel
+            </Button>
+            <Button onClick={onConfirm} variant="primary">
+              Discard changes
+            </Button>
+          </SpaceBetween>
+        </Box>
+      }
+      onDismiss={onDismiss}
+      header="Discard changes"
+      visible={visible}
+    >
+      <Alert type="warning">
+        Are you sure you want to continue? The changes you made won't be saved.
+      </Alert>
     </Modal>
   );
 }

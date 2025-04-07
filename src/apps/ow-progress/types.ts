@@ -41,15 +41,17 @@ export interface OutcomeDetails {
   modifiers: Modifier[];
   date: string;
   time: string;
-  period: string;
   rankChange: number;
+  notes: string;
+  /** @deprecated Use 24-hour `time` */
+  period?: string;
 }
 export enum ColumnId {
   Id = 'id',
   Outcome = 'outcome',
   RankGainLoss = 'rankGainLoss',
   Modifiers = 'modifiers',
-  Tier = 'tier',
-  Division = 'division',
+  NewRank = 'newRank',
   Date = 'date',
+  Notes = 'notes',
 }

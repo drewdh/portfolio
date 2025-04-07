@@ -20,7 +20,6 @@ import ErrorBoundary from 'common/error-boundary';
 import BlackjackPage from './apps/blackjack/page';
 import RpdrBracket from './apps/rpdr-bracket';
 import OwProgress from './apps/ow-progress';
-import OwProgressForm from './apps/ow-progress/form';
 
 interface GlobalFlags {
   removeHighContrastHeader?: boolean;
@@ -79,14 +78,6 @@ const router = createBrowserRouter([
       {
         path: Pathname.OwProgress,
         element: <OwProgress />,
-      },
-      {
-        path: Pathname.OwProgressCreate,
-        element: <OwProgressForm />,
-      },
-      {
-        path: Pathname.OwProgressEdit,
-        element: <OwProgressForm />,
       },
     ],
   },

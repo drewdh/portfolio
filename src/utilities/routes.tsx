@@ -16,6 +16,4 @@ export enum Pathname {
   Blackjack = '/blackjack',
   RpdrBracket = '/rpdr-bracket',
   OwProgress = '/ow-progress',
-  OwProgressCreate = '/ow-progress/add',
-  OwProgressEdit = '/ow-progress/edit/:id',
 }

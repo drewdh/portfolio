@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import Form from '@cloudscape-design/components/form';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Header from '@cloudscape-design/components/header';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Button from '@cloudscape-design/components/button';
@@ -7,335 +6,265 @@ import DatePicker from '@cloudscape-design/components/date-picker';
 import Multiselect from '@cloudscape-design/components/multiselect';
 import Box from '@cloudscape-design/components/box';
 import TimeInput from '@cloudscape-design/components/time-input';
-import Container from '@cloudscape-design/components/container';
 import Slider from '@cloudscape-design/components/slider';
-import Select, { SelectProps } from '@cloudscape-design/components/select';
+import Select from '@cloudscape-design/components/select';
 import Input from '@cloudscape-design/components/input';
-import { Formik } from 'formik';
-import { useNavigate, useParams } from 'react-router';
+import Textarea from '@cloudscape-design/components/textarea';
+import FormField from '@cloudscape-design/components/form-field';
+import Tiles from '@cloudscape-design/components/tiles';
+import { useFormik } from 'formik';
+import sortBy from 'lodash/sortBy';
+import isEqual from 'lodash/isEqual';
+import { parse } from 'date-fns/parse';
 import * as yup from 'yup';
+import { useLocalStorage } from 'usehooks-ts';
 
-import DhAppLayout from 'common/dh-app-layout';
-import useTitle from 'utilities/use-title';
-import DhBreadcrumbs from 'common/dh-breadcrumbs';
-import widgetDetails from 'common/widget-details';
-import { Pathname } from 'utilities/routes';
-import ButtonLink from 'common/button-link';
-import FormikFormField from 'common/formik/form-field';
-import FormikRadioGroup from 'common/formik/radio-group';
 import styles from './styles.module.scss';
-import useLocalStorage, { LocalStorageKey } from 'utilities/use-local-storage';
-import { Division, Modifier, Outcome, OutcomeDetails, Tier } from './types';
-import { divisionLabels, modifierLabels, outcomeLabels, tierLabels } from './constants';
+import { LocalStorageKey } from 'utilities/local-storage-keys';
+import { Division, Outcome, OutcomeDetails } from './types';
+import { divisionOptions, modifierOptions, outcomeLabels, tierOptions } from './constants';
 
-const tierOptions: SelectProps.Option[] = [
-  { label: tierLabels[Tier.Bronze], value: Tier.Bronze },
-  { label: tierLabels[Tier.Silver], value: Tier.Silver },
-  { label: tierLabels[Tier.Gold], value: Tier.Gold },
-  { label: tierLabels[Tier.Platinum], value: Tier.Platinum },
-  { label: tierLabels[Tier.Diamond], value: Tier.Diamond },
-  { label: tierLabels[Tier.Master], value: Tier.Master },
-  { label: tierLabels[Tier.Grandmaster], value: Tier.Grandmaster },
-  { label: tierLabels[Tier.Champion], value: Tier.Champion },
-];
-const divisionOptions: SelectProps.Option[] = [
-  { label: divisionLabels[Division.One], value: Division.One },
-  { label: divisionLabels[Division.Two], value: Division.Two },
-  { label: divisionLabels[Division.Three], value: Division.Three },
-  { label: divisionLabels[Division.Four], value: Division.Four },
-  { label: divisionLabels[Division.Five], value: Division.Five },
-];
-const modifierOptions: SelectProps.Option[] = [
-  {
-    label: modifierLabels[Modifier.WinningTrend],
-    value: Modifier.WinningTrend,
-    description: 'Bonus for high win rate',
-  },
-  {
-    label: modifierLabels[Modifier.LosingTrend],
-    value: Modifier.LosingTrend,
-    description: 'Penalty for high loss rate',
-  },
-  {
-    label: modifierLabels[Modifier.Consolation],
-    value: Modifier.Consolation,
-    description: "You weren't favored and you lost",
-  },
-  {
-    label: modifierLabels[Modifier.Reversal],
-    value: Modifier.Reversal,
-    description: 'You were favored but you lost',
-  },
-  {
-    label: modifierLabels[Modifier.UphillBattle],
-    value: Modifier.UphillBattle,
-    description: "You weren't favored but you won",
-  },
-  {
-    label: modifierLabels[Modifier.Expected],
-    value: Modifier.Expected,
-    description: 'You were favored and you won',
-  },
-  {
-    label: modifierLabels[Modifier.Calibration],
-    value: Modifier.Calibration,
-    description: 'Your rank is uncertain',
-  },
-  {
-    label: modifierLabels[Modifier.Demotion],
-    value: Modifier.Demotion,
-    description: 'You lost a match while in Demotion Protection',
-  },
-  {
-    label: modifierLabels[Modifier.DemotionProtection],
-    value: Modifier.DemotionProtection,
-    description: 'If you lose again you will rank down',
-  },
-  {
-    label: modifierLabels[Modifier.Wide],
-    value: Modifier.Wide,
-    description: 'Your group is wide so you gained or lost less rank',
-  },
-  {
-    label: modifierLabels[Modifier.Pressure],
-    value: Modifier.Pressure,
-    description: 'You were pushed toward average at a high or low rank',
-  },
-];
+function Section({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <SpaceBetween size="s">
+      <Header>{title}</Header>
+      <SpaceBetween size="m">{children}</SpaceBetween>
+    </SpaceBetween>
+  );
+}
+
+const validationSchema = yup.object({
+  outcome: yup.string().required('Choose an outcome.'),
+  tier: yup.string().required('Choose a tier.'),
+  division: yup.string().required('Choose a division.'),
+  date: yup.string().required('Enter a date.'),
+  time: yup.string().required('Enter a time.'),
+});
 
 enum Mode {
   Create,
   Edit,
 }
-
-export default function OwProgressForm() {
-  const { id } = useParams();
-  const mode = id ? Mode.Edit : Mode.Create;
-  useTitle(mode === Mode.Create ? 'Add game' : `Edit game`);
-  const navigate = useNavigate();
+export interface OwProgressFormProps {
+  id?: string | null;
+  onDismiss: () => void;
+  onModifiedChange: (isModified: boolean) => void;
+}
+export default function OwProgressForm({
+  id: idProp,
+  onDismiss,
+  onModifiedChange,
+}: OwProgressFormProps) {
+  const mode = idProp ? Mode.Edit : Mode.Create;
   const [games, setGames] = useLocalStorage<OutcomeDetails[]>(LocalStorageKey.OwGames, []);
   const [submitted, setSubmitted] = useState<boolean>(false);
+  const id = useMemo((): string => {
+    return idProp ? idProp : crypto.randomUUID();
+  }, [idProp]);
 
-  const today = new Date();
-  const formattedDate =
-    today.getFullYear() +
-    '-' +
-    String(today.getMonth() + 1).padStart(2, '0') +
-    '-' +
-    String(today.getDate()).padStart(2, '0');
-  const timeWithPeriod = today.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
+  const lastGame = useMemo((): OutcomeDetails | null => {
+    return (
+      sortBy(games, (game) => {
+        const fullDateTimeStr = `${game.date} ${game.time}`;
+        return parse(fullDateTimeStr, 'yyyy-MM-dd HH:mm', new Date());
+      }).reverse()[0] ?? null
+    );
+  }, [games]);
+
+  const initialValues = useMemo((): OutcomeDetails => {
+    const existingGame = games.find((game) => game.id === id);
+    if (existingGame) {
+      return existingGame;
+    }
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    const time = today.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+    return {
+      id,
+      outcome: Outcome.Win,
+      tier: lastGame?.tier ?? null,
+      division: lastGame?.division ?? Division.One,
+      rankChange: 0,
+      modifiers: [],
+      date: formattedDate,
+      time,
+      notes: '',
+    };
+  }, [games, id, lastGame]);
+
+  const onSubmit = useCallback(
+    (values: OutcomeDetails) => {
+      if (mode === Mode.Create) {
+        setGames((prev) => [...prev, values]);
+      } else {
+        setGames((prev) => {
+          return prev.map((item) => (item.id === values.id ? values : item));
+        });
+      }
+      onDismiss();
+    },
+    [mode, onDismiss, setGames]
+  );
+
+  const { values, setFieldValue, handleSubmit, errors, resetForm } = useFormik<OutcomeDetails>({
+    validationSchema,
+    validateOnChange: submitted,
+    initialValues,
+    onSubmit,
   });
-  const timeOnly = timeWithPeriod.replace(/\s?[AP]M/, '');
-  const period =
-    today
-      .toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        hour12: true,
-      })
-      .match(/AM|PM/)?.[0] ?? 'AM';
 
-  const initialValues: OutcomeDetails = games.find((game) => game.id === id) ?? {
-    id: crypto.randomUUID(),
-    outcome: null,
-    tier: null,
-    division: null,
-    rankChange: 0,
-    modifiers: [],
-    date: formattedDate,
-    time: timeOnly,
-    period,
-  };
+  useEffect(() => {
+    resetForm({ values: initialValues });
+  }, [id, initialValues, resetForm]);
+
+  useEffect(() => {
+    const isModified = !isEqual(initialValues, values);
+    onModifiedChange(isModified);
+  }, [initialValues, values, onModifiedChange]);
 
   return (
-    <DhAppLayout
-      contentType="form"
-      toolsHide
-      breadcrumbs={
-        <DhBreadcrumbs
-          items={[
-            { text: widgetDetails.owProgress.title, href: Pathname.OwProgress },
-            {
-              text: `${mode === Mode.Create ? 'Create' : 'Edit'} game`,
-              href: Pathname.OwProgressCreate,
-            },
-          ]}
-        />
-      }
-      content={
-        <Formik<OutcomeDetails>
-          validationSchema={yup.object({
-            outcome: yup.string().required('Choose an outcome.'),
-            tier: yup.string().required('Choose a tier.'),
-            division: yup.string().required('Choose a division.'),
-            modifiers: yup.array().min(1, 'Choose modifiers.'),
-            date: yup.string().required('Enter a date.'),
-            time: yup.string().required('Enter a time.'),
-            period: yup.string().required('Choose a time period.'),
-          })}
-          validateOnChange={submitted}
-          initialValues={initialValues}
-          onSubmit={(values) => {
-            if (mode === Mode.Create) {
-              setGames((prev) => [...prev, values]);
-            } else {
-              setGames((prev) => {
-                return prev.map((item) => (item.id === values.id ? values : item));
-              });
+    <SpaceBetween size="m">
+      <SpaceBetween size="xl">
+        <Section title="Match summary">
+          <FormField label="Outcome" errorText={errors.outcome}>
+            <Tiles
+              columns={1}
+              onChange={(event) => setFieldValue('outcome', event.detail.value)}
+              value={values.outcome}
+              items={[
+                { value: Outcome.Win, label: outcomeLabels[Outcome.Win] },
+                { value: Outcome.Loss, label: outcomeLabels[Outcome.Loss] },
+                { value: Outcome.Draw, label: outcomeLabels[Outcome.Draw] },
+              ]}
+            />
+          </FormField>
+          <FormField
+            label="Rank gain/loss (%)"
+            controlId="validation-input"
+            errorText={errors.rankChange}
+          >
+            <div className={styles.flexWrapper}>
+              <div className={styles.sliderWrapper}>
+                <Slider
+                  hideFillLine
+                  onChange={({ detail }) => setFieldValue('rankChange', detail.value)}
+                  value={values.rankChange}
+                  referenceValues={[0]}
+                  valueFormatter={(value) => `${value > 0 ? '+' : ''}${value}`}
+                  max={100}
+                  min={-100}
+                />
+              </div>
+              <div className={styles.inputWrapper}>
+                <Input
+                  type="number"
+                  inputMode="numeric"
+                  value={values.rankChange.toString()}
+                  onChange={({ detail }) => {
+                    setFieldValue('rankChange', Number(detail.value));
+                  }}
+                  controlId="validation-input"
+                />
+              </div>
+            </div>
+          </FormField>
+          <FormField
+            errorText={errors.modifiers}
+            label={
+              <>
+                Modifiers - <i>optional</i>
+              </>
             }
-            navigate(Pathname.OwProgress);
-          }}
-        >
-          {({ values, setFieldValue, handleSubmit }) => (
-            <Form
-              header={<Header variant="h1">{mode === Mode.Create ? 'Create' : 'Edit'} game</Header>}
-              actions={
-                <SpaceBetween size="xs" direction="horizontal">
-                  <ButtonLink href={Pathname.OwProgress} variant="link">
-                    Cancel
-                  </ButtonLink>
-                  <Button
-                    onClick={() => {
-                      setSubmitted(true);
-                      handleSubmit();
-                    }}
-                    variant="primary"
-                  >
-                    {mode === Mode.Create ? 'Add' : 'Save'}
-                  </Button>
-                </SpaceBetween>
-              }
-            >
-              <Container header={<Header>Details</Header>}>
-                <SpaceBetween size="l">
-                  <FormikFormField name="outcome" label="Outcome">
-                    <FormikRadioGroup
-                      name="outcome"
-                      items={[
-                        { value: Outcome.Win, label: outcomeLabels[Outcome.Win] },
-                        { value: Outcome.Loss, label: outcomeLabels[Outcome.Loss] },
-                        { value: Outcome.Draw, label: outcomeLabels[Outcome.Draw] },
-                      ]}
-                    />
-                  </FormikFormField>
-                  <FormikFormField
-                    name="rankChange"
-                    label="Rank gain/loss"
-                    controlId="validation-input"
-                  >
-                    <div className={styles.flexWrapper}>
-                      <div className={styles.sliderWrapper}>
-                        <Slider
-                          hideFillLine
-                          onChange={({ detail }) => setFieldValue('rankChange', detail.value)}
-                          value={values.rankChange}
-                          referenceValues={[0]}
-                          valueFormatter={(value) => `${value > 0 ? '+' : ''}${value}%`}
-                          max={100}
-                          min={-100}
-                        />
-                      </div>
-                      <SpaceBetween size="xs" alignItems="center" direction="horizontal">
-                        <div className={styles.inputWrapper}>
-                          <Input
-                            type="number"
-                            inputMode="numeric"
-                            value={values.rankChange.toString()}
-                            onChange={({ detail }) => {
-                              setFieldValue('rankChange', Number(detail.value));
-                            }}
-                            controlId="validation-input"
-                          />
-                        </div>
-                        <Box>%</Box>
-                      </SpaceBetween>
-                    </div>
-                  </FormikFormField>
-                  <FormikFormField name="modifiers" label="Modifiers">
-                    <Multiselect
-                      filteringType="auto"
-                      placeholder="Choose modifiers"
-                      onChange={(event) => {
-                        setFieldValue(
-                          'modifiers',
-                          event.detail.selectedOptions.map((option) => option.value)
-                        );
-                      }}
-                      selectedOptions={values.modifiers.map(
-                        (modifier) => modifierOptions.find((option) => option.value === modifier)!
-                      )}
-                      options={modifierOptions}
-                    />
-                  </FormikFormField>
-                  <div className={styles.flexWrapper}>
-                    <div className={styles.tierInput}>
-                      <FormikFormField name="tier" label="Tier">
-                        <Select
-                          placeholder="Choose tier"
-                          onChange={(event) =>
-                            setFieldValue('tier', event.detail.selectedOption.value)
-                          }
-                          selectedOption={
-                            tierOptions.find((option) => option.value === values.tier) ?? null
-                          }
-                          options={tierOptions}
-                        />
-                      </FormikFormField>
-                    </div>
-                    <div className={styles.divisionInput}>
-                      <FormikFormField name="division" label="Division">
-                        <Select
-                          placeholder="Choose division"
-                          onChange={(event) =>
-                            setFieldValue('division', event.detail.selectedOption.value)
-                          }
-                          selectedOption={
-                            divisionOptions.find((option) => option.value === values.division) ??
-                            null
-                          }
-                          options={divisionOptions}
-                        />
-                      </FormikFormField>
-                    </div>
-                  </div>
+          >
+            <Multiselect
+              filteringType="auto"
+              placeholder="Choose modifiers"
+              onChange={(event) => {
+                setFieldValue(
+                  'modifiers',
+                  event.detail.selectedOptions.map((option) => option.value)
+                );
+              }}
+              selectedOptions={values.modifiers.map(
+                (modifier) => modifierOptions.find((option) => option.value === modifier)!
+              )}
+              options={modifierOptions}
+            />
+          </FormField>
+          <FormField errorText={errors.tier} label="New rank">
+            <SpaceBetween size="s" direction="horizontal">
+              <Select
+                ariaLabel="Skill tier"
+                placeholder="Choose skill tier"
+                onChange={(event) => setFieldValue('tier', event.detail.selectedOption.value)}
+                selectedOption={tierOptions.find((option) => option.value === values.tier) ?? null}
+                options={tierOptions}
+              />
+              <Select
+                ariaLabel="Division"
+                placeholder="Choose division"
+                onChange={(event) => setFieldValue('division', event.detail.selectedOption.value)}
+                selectedOption={
+                  divisionOptions.find((option) => option.value === values.division) ?? null
+                }
+                options={divisionOptions}
+              />
+            </SpaceBetween>
+          </FormField>
+        </Section>
 
-                  <div className={styles.flexWrapper}>
-                    <FormikFormField name="date" label="Date">
-                      <DatePicker
-                        value={values.date}
-                        onChange={(event) => setFieldValue('date', event.detail.value)}
-                      />
-                    </FormikFormField>
-                    <FormikFormField name="time" label="Time">
-                      <TimeInput
-                        value={values.time}
-                        format="hh:mm"
-                        placeholder="hh:mm"
-                        onChange={(event) => setFieldValue('time', event.detail.value)}
-                      />
-                    </FormikFormField>
-                    <FormikFormField name="period" label="Period">
-                      <Select
-                        placeholder="Choose time period"
-                        options={[
-                          { label: 'AM', value: 'AM' },
-                          { label: 'PM', value: 'PM' },
-                        ]}
-                        selectedOption={{ label: values.period, value: values.period }}
-                        onChange={(event) =>
-                          setFieldValue('period', event.detail.selectedOption.value)
-                        }
-                      />
-                    </FormikFormField>
-                  </div>
-                </SpaceBetween>
-              </Container>
-            </Form>
-          )}
-        </Formik>
-      }
-    />
+        <Section title="Match info">
+          <div className={styles.flexWrapper}>
+            <FormField errorText={errors.date} label="Date">
+              <DatePicker
+                value={values.date}
+                onChange={(event) => setFieldValue('date', event.detail.value)}
+              />
+            </FormField>
+            <FormField errorText={errors.time} label="Time" constraintText="Use 24-hour format.">
+              <TimeInput
+                value={values.time}
+                format="hh:mm"
+                placeholder="hh:mm"
+                onChange={(event) => setFieldValue('time', event.detail.value)}
+              />
+            </FormField>
+          </div>
+          <FormField
+            errorText={errors.notes}
+            label={
+              <>
+                Comments - <i>optional</i>
+              </>
+            }
+          >
+            <Textarea
+              onChange={(event) => setFieldValue('notes', event.detail.value)}
+              value={values.notes}
+            />
+          </FormField>
+        </Section>
+      </SpaceBetween>
+
+      <Box float="right">
+        <SpaceBetween size="xs" direction="horizontal">
+          <Button variant="link" onClick={onDismiss}>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              setSubmitted(true);
+              handleSubmit();
+            }}
+          >
+            {mode === Mode.Create ? 'Add match' : 'Save'}
+          </Button>
+        </SpaceBetween>
+      </Box>
+    </SpaceBetween>
   );
 }
