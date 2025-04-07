@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { AppLayoutProps } from '@cloudscape-design/components/app-layout';
+import { AppLayoutToolbarProps } from '@cloudscape-design/components/app-layout-toolbar';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
 import Header from '@cloudscape-design/components/header';
 import Tabs, { TabsProps } from '@cloudscape-design/components/tabs';
@@ -28,7 +28,7 @@ const defaultTab = TabId.NightmareDungeon;
 export default function SuggestedSigilTierPage() {
   useTitle(widgetDetails.diablo.title);
   const [content, setContent] = useState<ReactNode>(null);
-  const ref = useRef<AppLayoutProps.Ref>(null);
+  const ref = useRef<AppLayoutToolbarProps.Ref>(null);
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [
     {
       text: widgetDetails.diablo.title,

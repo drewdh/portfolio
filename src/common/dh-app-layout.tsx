@@ -1,4 +1,6 @@
-import AppLayout, { AppLayoutProps } from '@cloudscape-design/components/app-layout';
+import AppLayoutToolbar, {
+  AppLayoutToolbarProps,
+} from '@cloudscape-design/components/app-layout-toolbar';
 import { forwardRef, Ref, useEffect, useRef } from 'react';
 import Flashbar from '@cloudscape-design/components/flashbar';
 import { useLocation } from 'react-router';
@@ -32,7 +34,7 @@ function PreviewPopover() {
   );
 }
 
-const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutProps.Ref>) {
+const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutToolbarProps.Ref>) {
   const notifications = useNotifications((state) => state.notifications);
   const setNotifications = useNotifications((state) => state.setNotifications);
   const previousPathname = useRef<string | null>(null);
@@ -66,7 +68,7 @@ const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutP
   }
 
   return (
-    <AppLayout
+    <AppLayoutToolbar
       {...props}
       ref={ref}
       notifications={<Flashbar items={notifications} />}
@@ -98,11 +100,11 @@ const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutP
   );
 });
 
-export default forwardRef(function (props: Props, ref: Ref<AppLayoutProps.Ref>) {
+export default forwardRef(function (props: Props, ref: Ref<AppLayoutToolbarProps.Ref>) {
   return <Layout {...props} ref={ref} />;
 });
 
 type Props = Omit<
-  AppLayoutProps,
+  AppLayoutToolbarProps,
   'footerSelector' | 'headerSelector' | 'notifications' | 'navigation' | 'navigationWidth'
 >;
