@@ -1,7 +1,7 @@
 import { FormikValues, getIn, useFormikContext } from 'formik';
-import CloudscapeInput, { InputProps } from '@cloudscape-design/components/input';
+import CloudscapeTimeInput, { TimeInputProps } from '@cloudscape-design/components/time-input';
 
-export default function FormikInput<T extends FormikValues>({
+export default function FormikTimeInput<T extends FormikValues>({
   name,
   onChange,
   onBlur,
@@ -10,7 +10,7 @@ export default function FormikInput<T extends FormikValues>({
   const { values, setFieldValue, setFieldTouched, touched } = useFormikContext<T>();
 
   return (
-    <CloudscapeInput
+    <CloudscapeTimeInput
       {...props}
       value={values[name]}
       onBlur={(e) => {
@@ -25,6 +25,6 @@ export default function FormikInput<T extends FormikValues>({
   );
 }
 
-interface Props extends Omit<InputProps, 'value'> {
+interface Props extends Omit<TimeInputProps, 'value'> {
   name: string;
 }

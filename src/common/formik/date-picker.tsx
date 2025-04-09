@@ -1,16 +1,16 @@
 import { FormikValues, getIn, useFormikContext } from 'formik';
-import CloudscapeInput, { InputProps } from '@cloudscape-design/components/input';
+import CloudscapeDatePicker, { DatePickerProps } from '@cloudscape-design/components/date-picker';
 
-export default function FormikInput<T extends FormikValues>({
+export default function FormikDatePicker<T extends FormikValues>({
   name,
   onChange,
   onBlur,
   ...props
 }: Props) {
-  const { values, setFieldValue, setFieldTouched, touched } = useFormikContext<T>();
+  const { values, setFieldTouched, setFieldValue, touched } = useFormikContext<T>();
 
   return (
-    <CloudscapeInput
+    <CloudscapeDatePicker
       {...props}
       value={values[name]}
       onBlur={(e) => {
@@ -25,6 +25,6 @@ export default function FormikInput<T extends FormikValues>({
   );
 }
 
-interface Props extends Omit<InputProps, 'value'> {
+interface Props extends Omit<DatePickerProps, 'value'> {
   name: string;
 }

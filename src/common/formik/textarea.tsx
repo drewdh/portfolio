@@ -1,16 +1,16 @@
 import { FormikValues, getIn, useFormikContext } from 'formik';
-import CloudscapeInput, { InputProps } from '@cloudscape-design/components/input';
+import CloudscapeTextarea, { TextareaProps } from '@cloudscape-design/components/textarea';
 
-export default function FormikInput<T extends FormikValues>({
+export default function FormikTextarea<T extends FormikValues>({
   name,
-  onChange,
   onBlur,
+  onChange,
   ...props
 }: Props) {
   const { values, setFieldValue, setFieldTouched, touched } = useFormikContext<T>();
 
   return (
-    <CloudscapeInput
+    <CloudscapeTextarea
       {...props}
       value={values[name]}
       onBlur={(e) => {
@@ -25,6 +25,6 @@ export default function FormikInput<T extends FormikValues>({
   );
 }
 
-interface Props extends Omit<InputProps, 'value'> {
+interface Props extends Omit<TextareaProps, 'value'> {
   name: string;
 }

@@ -1,8 +1,13 @@
-import { useFormikContext } from 'formik';
+import { FormikValues, useFormikContext } from 'formik';
 import RadioGroup, { RadioGroupProps } from '@cloudscape-design/components/radio-group';
 
-export default function FormikRadioGroup({ name, onChange, ...props }: Props) {
-  const { values, setFieldValue } = useFormikContext<any>();
+export default function FormikRadioGroup<T extends FormikValues>({
+  name,
+  onChange,
+  ...props
+}: Props) {
+  const { values, setFieldValue } = useFormikContext<T>();
+
   return (
     <RadioGroup
       {...props}

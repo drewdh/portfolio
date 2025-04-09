@@ -1,11 +1,11 @@
 import { FormikValues, useFormikContext } from 'formik';
-import Tiles, { TilesProps } from '@cloudscape-design/components/tiles';
+import Slider, { SliderProps } from '@cloudscape-design/components/slider';
 
-export default function FormikTiles<T extends FormikValues>({ name, onChange, ...props }: Props) {
+export default function FormikSlider<T extends FormikValues>({ name, onChange, ...props }: Props) {
   const { values, setFieldValue } = useFormikContext<T>();
 
   return (
-    <Tiles
+    <Slider
       {...props}
       value={values[name]}
       onChange={(e) => {
@@ -21,6 +21,6 @@ export default function FormikTiles<T extends FormikValues>({ name, onChange, ..
   );
 }
 
-interface Props extends Omit<TilesProps, 'value'> {
+interface Props extends Omit<SliderProps, 'value'> {
   name: string;
 }

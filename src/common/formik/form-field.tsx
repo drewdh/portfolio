@@ -1,8 +1,8 @@
 import FormField, { FormFieldProps } from '@cloudscape-design/components/form-field';
-import { useFormikContext } from 'formik';
+import { FormikValues, useFormikContext } from 'formik';
 
-export default function FormikFormField({ name, ...props }: Props) {
-  const { errors } = useFormikContext<any>();
+export default function FormikFormField<T extends FormikValues>({ name, ...props }: Props) {
+  const { errors } = useFormikContext<T>();
 
   return <FormField {...props} errorText={errors[name] as string} />;
 }
