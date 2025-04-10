@@ -1,13 +1,12 @@
 import Table from '@cloudscape-design/components/table';
-import { parse } from 'date-fns/parse';
 import Header from '@cloudscape-design/components/header';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Button from '@cloudscape-design/components/button';
 import Modal from '@cloudscape-design/components/modal';
 import Box from '@cloudscape-design/components/box';
 import SplitPanel from '@cloudscape-design/components/split-panel';
-import sortBy from 'lodash/sortBy';
+import orderBy from 'lodash/orderBy';
 import Alert from '@cloudscape-design/components/alert';
 import { useBoolean, useLocalStorage } from 'usehooks-ts';
 
@@ -25,7 +24,6 @@ import OwProgressForm from './form';
 
 export default function OwProgress() {
   useTitle(widgetDetails.owProgress.title);
-  useBackfillItems();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const {
     value: splitPanelOpen,
@@ -46,10 +44,7 @@ export default function OwProgress() {
   });
 
   const sortedItems = useMemo((): OutcomeDetails[] => {
-    return sortBy(items, (item) => {
-      const fullDateTimeStr = `${item.date} ${item.time}`;
-      return parse(fullDateTimeStr, 'yyyy-MM-dd HH:mm', new Date());
-    }).reverse();
+    return orderBy(items, 'date', 'desc');
   }, [items]);
 
   function openPanel(id: string | null) {
@@ -106,6 +101,7 @@ export default function OwProgress() {
             onModifiedChange={(isModified) => setHasUnsavedChanges(isModified)}
             id={activeEditId}
             onDismiss={requestPanelDismiss}
+            onSubmit={closeSplitPanel}
           />
         </SplitPanel>
       }
@@ -126,6 +122,7 @@ export default function OwProgress() {
             selectionType="multi"
             onSelectionChange={(e) => setSelectedItems(e.detail.selectedItems)}
             selectedItems={selectedItems}
+            trackBy="id"
             empty={
               <Empty
                 header="No matches"
@@ -173,6 +170,7 @@ export default function OwProgress() {
             onConfirm={() => {
               if (isPanelClosePending) {
                 closeSplitPanel();
+                setHasUnsavedChanges(false);
               }
               setActiveEditId(pendingEditId);
               setPendingEditId(null);
@@ -189,36 +187,6 @@ export default function OwProgress() {
       }
     />
   );
-}
-
-function fixTime(item: OutcomeDetails): string {
-  const hour = Number(item.time.substring(0, 2));
-  let newHour = hour;
-  if (hour >= 24) {
-    // Fix issue where 12 hours was incorrectly added to 24-hour times
-    newHour = newHour - 12;
-  } else if (hour <= 12 && item.period === 'PM') {
-    // Convert PM times to 24-hour
-    newHour = newHour + 12;
-  }
-  const minutes = item.time.substring(3);
-  return `${newHour}:${minutes}`;
-}
-
-/** Add IDs to any items that don't have one and uses 24-hour date */
-function useBackfillItems() {
-  const [, setItems] = useLocalStorage<OutcomeDetails[]>(LocalStorageKey.OwGames, []);
-
-  useEffect(() => {
-    setItems((prev) => {
-      return prev.map((item) => ({
-        ...item,
-        id: item.id ?? crypto.randomUUID(),
-        time: fixTime(item),
-        period: undefined,
-      }));
-    });
-  }, [setItems]);
 }
 
 interface DeleteModalProps {

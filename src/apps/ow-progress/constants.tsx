@@ -1,10 +1,9 @@
 import { TableProps } from '@cloudscape-design/components/table';
 import Box from '@cloudscape-design/components/box';
 import { SelectProps } from '@cloudscape-design/components/select';
-import { parse } from 'date-fns/parse';
 import { formatDistanceToNow } from 'date-fns/formatDistanceToNow';
 
-import { ColumnId, Division, Modifier, Outcome, OutcomeDetails, Tier } from './types';
+import { ColumnId, Modifier, Outcome, OutcomeDetails, TierDivision } from './types';
 
 export const outcomeLabels: Record<Outcome, string> = {
   [Outcome.Win]: 'Win',
@@ -24,39 +23,89 @@ export const modifierLabels: Record<Modifier, string> = {
   [Modifier.Wide]: 'Wide',
   [Modifier.Pressure]: 'Pressure',
 };
-export const tierLabels: Record<Tier, string> = {
-  [Tier.Bronze]: 'Bronze',
-  [Tier.Silver]: 'Silver',
-  [Tier.Gold]: 'Gold',
-  [Tier.Platinum]: 'Platinum',
-  [Tier.Diamond]: 'Diamond',
-  [Tier.Master]: 'Master',
-  [Tier.Grandmaster]: 'Grandmaster',
-  [Tier.Champion]: 'Champion',
+export const tierDivisionLabels: Record<TierDivision, string> = {
+  [TierDivision.Bronze5]: 'Bronze 5',
+  [TierDivision.Bronze4]: 'Bronze 4',
+  [TierDivision.Bronze3]: 'Bronze 3',
+  [TierDivision.Bronze2]: 'Bronze 2',
+  [TierDivision.Bronze1]: 'Bronze 1',
+  [TierDivision.Silver5]: 'Silver 5',
+  [TierDivision.Silver4]: 'Silver 4',
+  [TierDivision.Silver3]: 'Silver 3',
+  [TierDivision.Silver2]: 'Silver 2',
+  [TierDivision.Silver1]: 'Silver 1',
+  [TierDivision.Gold5]: 'Gold 5',
+  [TierDivision.Gold4]: 'Gold 4',
+  [TierDivision.Gold3]: 'Gold 3',
+  [TierDivision.Gold2]: 'Gold 2',
+  [TierDivision.Gold1]: 'Gold 1',
+  [TierDivision.Platinum5]: 'Platinum 5',
+  [TierDivision.Platinum4]: 'Platinum 4',
+  [TierDivision.Platinum3]: 'Platinum 3',
+  [TierDivision.Platinum2]: 'Platinum 2',
+  [TierDivision.Platinum1]: 'Platinum 1',
+  [TierDivision.Diamond5]: 'Diamond 5',
+  [TierDivision.Diamond4]: 'Diamond 4',
+  [TierDivision.Diamond3]: 'Diamond 3',
+  [TierDivision.Diamond2]: 'Diamond 2',
+  [TierDivision.Diamond1]: 'Diamond 1',
+  [TierDivision.Master5]: 'Master 5',
+  [TierDivision.Master4]: 'Master 4',
+  [TierDivision.Master3]: 'Master 3',
+  [TierDivision.Master2]: 'Master 2',
+  [TierDivision.Master1]: 'Master 1',
+  [TierDivision.Grandmaster5]: 'Grandmaster 5',
+  [TierDivision.Grandmaster4]: 'Grandmaster 4',
+  [TierDivision.Grandmaster3]: 'Grandmaster 3',
+  [TierDivision.Grandmaster2]: 'Grandmaster 2',
+  [TierDivision.Grandmaster1]: 'Grandmaster 1',
+  [TierDivision.Champion5]: 'Champion 5',
+  [TierDivision.Champion4]: 'Champion 4',
+  [TierDivision.Champion3]: 'Champion 3',
+  [TierDivision.Champion2]: 'Champion 2',
+  [TierDivision.Champion1]: 'Champion 1',
 };
-export const divisionLabels: Record<Division, string> = {
-  [Division.One]: '1',
-  [Division.Two]: '2',
-  [Division.Three]: '3',
-  [Division.Four]: '4',
-  [Division.Five]: '5',
-};
-export const tierOptions: SelectProps.Option[] = [
-  { label: tierLabels[Tier.Champion], value: Tier.Champion },
-  { label: tierLabels[Tier.Grandmaster], value: Tier.Grandmaster },
-  { label: tierLabels[Tier.Master], value: Tier.Master },
-  { label: tierLabels[Tier.Diamond], value: Tier.Diamond },
-  { label: tierLabels[Tier.Platinum], value: Tier.Platinum },
-  { label: tierLabels[Tier.Gold], value: Tier.Gold },
-  { label: tierLabels[Tier.Silver], value: Tier.Silver },
-  { label: tierLabels[Tier.Bronze], value: Tier.Bronze },
-];
-export const divisionOptions: SelectProps.Option[] = [
-  { label: divisionLabels[Division.One], value: Division.One },
-  { label: divisionLabels[Division.Two], value: Division.Two },
-  { label: divisionLabels[Division.Three], value: Division.Three },
-  { label: divisionLabels[Division.Four], value: Division.Four },
-  { label: divisionLabels[Division.Five], value: Division.Five },
+export const tierDivisionOptions: SelectProps.Option[] = [
+  { label: tierDivisionLabels[TierDivision.Champion1], value: TierDivision.Champion1 },
+  { label: tierDivisionLabels[TierDivision.Champion2], value: TierDivision.Champion2 },
+  { label: tierDivisionLabels[TierDivision.Champion3], value: TierDivision.Champion3 },
+  { label: tierDivisionLabels[TierDivision.Champion4], value: TierDivision.Champion4 },
+  { label: tierDivisionLabels[TierDivision.Champion5], value: TierDivision.Champion5 },
+  { label: tierDivisionLabels[TierDivision.Grandmaster1], value: TierDivision.Grandmaster1 },
+  { label: tierDivisionLabels[TierDivision.Grandmaster2], value: TierDivision.Grandmaster2 },
+  { label: tierDivisionLabels[TierDivision.Grandmaster3], value: TierDivision.Grandmaster3 },
+  { label: tierDivisionLabels[TierDivision.Grandmaster4], value: TierDivision.Grandmaster4 },
+  { label: tierDivisionLabels[TierDivision.Grandmaster5], value: TierDivision.Grandmaster5 },
+  { label: tierDivisionLabels[TierDivision.Master1], value: TierDivision.Master1 },
+  { label: tierDivisionLabels[TierDivision.Master2], value: TierDivision.Master2 },
+  { label: tierDivisionLabels[TierDivision.Master3], value: TierDivision.Master3 },
+  { label: tierDivisionLabels[TierDivision.Master4], value: TierDivision.Master4 },
+  { label: tierDivisionLabels[TierDivision.Master5], value: TierDivision.Master5 },
+  { label: tierDivisionLabels[TierDivision.Diamond1], value: TierDivision.Diamond1 },
+  { label: tierDivisionLabels[TierDivision.Diamond2], value: TierDivision.Diamond2 },
+  { label: tierDivisionLabels[TierDivision.Diamond3], value: TierDivision.Diamond3 },
+  { label: tierDivisionLabels[TierDivision.Diamond4], value: TierDivision.Diamond4 },
+  { label: tierDivisionLabels[TierDivision.Diamond5], value: TierDivision.Diamond5 },
+  { label: tierDivisionLabels[TierDivision.Platinum1], value: TierDivision.Platinum1 },
+  { label: tierDivisionLabels[TierDivision.Platinum2], value: TierDivision.Platinum2 },
+  { label: tierDivisionLabels[TierDivision.Platinum3], value: TierDivision.Platinum3 },
+  { label: tierDivisionLabels[TierDivision.Platinum4], value: TierDivision.Platinum4 },
+  { label: tierDivisionLabels[TierDivision.Platinum5], value: TierDivision.Platinum5 },
+  { label: tierDivisionLabels[TierDivision.Gold1], value: TierDivision.Gold1 },
+  { label: tierDivisionLabels[TierDivision.Gold2], value: TierDivision.Gold2 },
+  { label: tierDivisionLabels[TierDivision.Gold3], value: TierDivision.Gold3 },
+  { label: tierDivisionLabels[TierDivision.Gold4], value: TierDivision.Gold4 },
+  { label: tierDivisionLabels[TierDivision.Gold5], value: TierDivision.Gold5 },
+  { label: tierDivisionLabels[TierDivision.Silver1], value: TierDivision.Silver1 },
+  { label: tierDivisionLabels[TierDivision.Silver2], value: TierDivision.Silver2 },
+  { label: tierDivisionLabels[TierDivision.Silver3], value: TierDivision.Silver3 },
+  { label: tierDivisionLabels[TierDivision.Silver4], value: TierDivision.Silver4 },
+  { label: tierDivisionLabels[TierDivision.Silver5], value: TierDivision.Silver5 },
+  { label: tierDivisionLabels[TierDivision.Bronze1], value: TierDivision.Bronze1 },
+  { label: tierDivisionLabels[TierDivision.Bronze2], value: TierDivision.Bronze2 },
+  { label: tierDivisionLabels[TierDivision.Bronze3], value: TierDivision.Bronze3 },
+  { label: tierDivisionLabels[TierDivision.Bronze4], value: TierDivision.Bronze4 },
+  { label: tierDivisionLabels[TierDivision.Bronze5], value: TierDivision.Bronze5 },
 ];
 export const modifierOptions: SelectProps.Option[] = [
   {
@@ -122,8 +171,8 @@ export const columnDefinitions: TableProps.ColumnDefinition<OutcomeDetails>[] = 
     header: 'Outcome',
   },
   {
-    id: ColumnId.RankGainLoss,
-    header: 'Rank gain/loss',
+    id: ColumnId.RankChange,
+    header: 'Rank change',
     cell: ({ rankChange }) => (
       <Box textAlign="right">
         {rankChange > 0 ? '+' : ''}
@@ -140,7 +189,7 @@ export const columnDefinitions: TableProps.ColumnDefinition<OutcomeDetails>[] = 
   {
     id: ColumnId.NewRank,
     header: 'New rank',
-    cell: ({ tier, division }) => `${tierLabels[tier!]} ${divisionLabels[division!]}`,
+    cell: ({ tierDivision }) => tierDivisionLabels[tierDivision!],
   },
   {
     id: ColumnId.Notes,
@@ -150,10 +199,11 @@ export const columnDefinitions: TableProps.ColumnDefinition<OutcomeDetails>[] = 
   {
     id: ColumnId.Date,
     header: 'Date',
-    cell: ({ time, date }) => {
-      const fullDateTimeStr = `${date} ${time}`;
-      const parsedDate = parse(fullDateTimeStr, 'yyyy-MM-dd HH:mm', new Date());
-      const formattedDate = formatDistanceToNow(parsedDate, {
+    cell: ({ date }) => {
+      if (!date) {
+        return '-';
+      }
+      const formattedDate = formatDistanceToNow(date, {
         addSuffix: true,
         includeSeconds: false,
       });
