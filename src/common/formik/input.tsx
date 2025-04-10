@@ -12,7 +12,7 @@ export default function FormikInput<T extends FormikValues>({
   return (
     <CloudscapeInput
       {...props}
-      value={values[name]}
+      value={getIn(values, name)}
       onBlur={(e) => {
         setFieldTouched(name);
         onBlur?.(e);

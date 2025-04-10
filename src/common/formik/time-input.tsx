@@ -12,7 +12,7 @@ export default function FormikTimeInput<T extends FormikValues>({
   return (
     <CloudscapeTimeInput
       {...props}
-      value={values[name]}
+      value={getIn(values, name)}
       onBlur={(e) => {
         setFieldTouched(name);
         onBlur?.(e);

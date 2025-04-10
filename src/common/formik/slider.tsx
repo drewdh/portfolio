@@ -1,4 +1,4 @@
-import { FormikValues, useFormikContext } from 'formik';
+import { FormikValues, getIn, useFormikContext } from 'formik';
 import Slider, { SliderProps } from '@cloudscape-design/components/slider';
 
 export default function FormikSlider<T extends FormikValues>({ name, onChange, ...props }: Props) {
@@ -7,7 +7,7 @@ export default function FormikSlider<T extends FormikValues>({ name, onChange, .
   return (
     <Slider
       {...props}
-      value={values[name]}
+      value={getIn(values, name)}
       onChange={(e) => {
         /*
          * Tiles component doesn't expose an onBlur, probably because guidance is to always

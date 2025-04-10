@@ -12,7 +12,7 @@ export default function FormikTextarea<T extends FormikValues>({
   return (
     <CloudscapeTextarea
       {...props}
-      value={values[name]}
+      value={getIn(values, name)}
       onBlur={(e) => {
         setFieldTouched(name);
         onBlur?.(e);

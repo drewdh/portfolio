@@ -12,7 +12,7 @@ export default function FormikDatePicker<T extends FormikValues>({
   return (
     <CloudscapeDatePicker
       {...props}
-      value={values[name]}
+      value={getIn(values, name)}
       onBlur={(e) => {
         setFieldTouched(name);
         onBlur?.(e);

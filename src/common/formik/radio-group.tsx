@@ -1,4 +1,4 @@
-import { FormikValues, useFormikContext } from 'formik';
+import { FormikValues, getIn, useFormikContext } from 'formik';
 import RadioGroup, { RadioGroupProps } from '@cloudscape-design/components/radio-group';
 
 export default function FormikRadioGroup<T extends FormikValues>({
@@ -11,9 +11,14 @@ export default function FormikRadioGroup<T extends FormikValues>({
   return (
     <RadioGroup
       {...props}
-      value={values[name]}
+      value={getIn(values, name)}
       onChange={(e) => {
-        setFieldValue(name, e.detail.value);
+        /*
+         * Radio group component doesn't expose an onBlur, probably because guidance is to always
+         * have an option selected. So we'll always validate on change, though there likely
+         * won't be errors for a radio group.
+         */
+        setFieldValue(name, e.detail.value, true);
         onChange?.(e);
       }}
     />
