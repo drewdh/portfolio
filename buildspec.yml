@@ -8,6 +8,8 @@ phases:
       - echo Installing NPM dependencies from package-lock.json...
       - npm i
   build:
+    runtime-versions:
+      nodejs: latest
     commands:
       - echo Build started on `date`
       - node -v
