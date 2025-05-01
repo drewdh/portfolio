@@ -12,12 +12,7 @@ const FormikRadioGroup = forwardRef<RadioGroupProps.Ref, Props>(
         ref={ref}
         value={getIn(values, name)}
         onChange={(e) => {
-          /*
-           * Radio group component doesn't expose an onBlur, probably because guidance is to always
-           * have an option selected. So we'll always validate on change, though there likely
-           * won't be errors for a radio group.
-           */
-          setFieldValue(name, e.detail.value, true);
+          setFieldValue(name, e.detail.value);
           onChange?.(e);
         }}
       />

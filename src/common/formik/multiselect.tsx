@@ -1,5 +1,6 @@
 import { FormikValues, getIn, useFormikContext } from 'formik';
 import Multiselect, { MultiselectProps } from '@cloudscape-design/components/multiselect';
+import useValidateField from 'common/formik/use-validate-field';
 
 export default function FormikMultiselect<T extends FormikValues>({
   name,
@@ -8,6 +9,7 @@ export default function FormikMultiselect<T extends FormikValues>({
   ...props
 }: Props) {
   const { values, setFieldValue, touched, setFieldTouched } = useFormikContext<T>();
+  const validateField = useValidateField(name);
 
   return (
     <Multiselect
@@ -15,10 +17,14 @@ export default function FormikMultiselect<T extends FormikValues>({
       selectedOptions={getIn(values, name)}
       onBlur={(event) => {
         setFieldTouched(name);
+        validateField();
         onBlur?.(event);
       }}
-      onChange={(event) => {
-        setFieldValue(name, event.detail.selectedOptions, getIn(touched, name));
+      onChange={async (event) => {
+        await setFieldValue(name, event.detail.selectedOptions);
+        if (getIn(touched, name)) {
+          validateField();
+        }
         onChange?.(event);
       }}
     />

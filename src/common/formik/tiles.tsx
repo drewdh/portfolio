@@ -9,12 +9,7 @@ export default function FormikTiles<T extends FormikValues>({ name, onChange, ..
       {...props}
       value={getIn(values, name)}
       onChange={(e) => {
-        /*
-         * Tiles component doesn't expose an onBlur, probably because guidance is to always
-         * have an option selected. So we'll always validate on change, though there likely
-         * won't be errors for tiles.
-         */
-        setFieldValue(name, e.detail.value, true);
+        setFieldValue(name, e.detail.value);
         onChange?.(e);
       }}
     />

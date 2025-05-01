@@ -135,6 +135,7 @@ export default function OwProgressForm({
     validationSchema,
     // Validation is handled at the field level
     validateOnChange: false,
+    validateOnBlur: false,
     initialValues,
     onSubmit,
   });

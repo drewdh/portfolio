@@ -1,6 +1,8 @@
 import { FormikValues, getIn, useFormikContext } from 'formik';
 import Select, { SelectProps } from '@cloudscape-design/components/select';
 
+import useValidateField from 'common/formik/use-validate-field';
+
 export default function FormikSelect<T extends FormikValues>({
   name,
   onChange,
@@ -8,6 +10,7 @@ export default function FormikSelect<T extends FormikValues>({
   ...props
 }: Props) {
   const { values, setFieldValue, touched, setFieldTouched } = useFormikContext<T>();
+  const validateField = useValidateField(name);
 
   return (
     <Select
@@ -15,10 +18,14 @@ export default function FormikSelect<T extends FormikValues>({
       selectedOption={getIn(values, name)}
       onBlur={(event) => {
         setFieldTouched(name);
+        validateField();
         onBlur?.(event);
       }}
-      onChange={(event) => {
-        setFieldValue(name, event.detail.selectedOption, getIn(touched, name));
+      onChange={async (event) => {
+        await setFieldValue(name, event.detail.selectedOption);
+        if (getIn(touched, name)) {
+          validateField();
+        }
         onChange?.(event);
       }}
     />
