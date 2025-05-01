@@ -5,7 +5,7 @@ env:
 phases:
   install:
     runtime-versions:
-      nodejs: latest
+      nodejs: 22
   pre_build:
     commands:
       - echo Installing NPM dependencies from package-lock.json...
