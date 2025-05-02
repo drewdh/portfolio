@@ -70,6 +70,7 @@ export default function useFeedback({ onDismiss }: Props): State {
       type: typeOptions[0],
     },
     validateOnChange: false,
+    validateOnBlur: false,
     validationSchema,
     onSubmit: async (values) => {
       setIsApiError(false);
