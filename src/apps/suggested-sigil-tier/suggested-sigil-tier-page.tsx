@@ -8,7 +8,7 @@ import { NonCancelableCustomEvent } from '@cloudscape-design/components';
 import { useLocation, useNavigate } from 'react-router';
 
 import DhBreadcrumbs from 'common/dh-breadcrumbs';
-import widgetDetails from 'common/widget-details';
+import { AppId, apps } from 'common/apps';
 import DhAppLayout from 'common/dh-app-layout';
 import SuggestedSigilTier from './suggested-sigil-tier';
 import { Pathname } from 'utilities/routes';
@@ -23,16 +23,18 @@ enum TabId {
   PlayerStatistics = 'ps',
 }
 
+const appDetails = apps.find((app) => app.id === AppId.Diablo)!;
+
 const defaultTab = TabId.NightmareDungeon;
 
 export default function SuggestedSigilTierPage() {
-  useTitle(widgetDetails.diablo.title);
+  useTitle(appDetails.title);
   const [content, setContent] = useState<ReactNode>(null);
   const ref = useRef<AppLayoutToolbarProps.Ref>(null);
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [
     {
-      text: widgetDetails.diablo.title,
-      href: Pathname.Diablo,
+      text: appDetails.title,
+      href: appDetails.href,
     },
   ];
 
@@ -78,8 +80,8 @@ export default function SuggestedSigilTierPage() {
         content={
           <ContentLayout
             header={
-              <Header variant="h1" description={widgetDetails.diablo.description}>
-                {widgetDetails.diablo.title}
+              <Header variant="h1" description={appDetails.description}>
+                {appDetails.title}
               </Header>
             }
           >

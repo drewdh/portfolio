@@ -2,16 +2,17 @@ import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-g
 
 import Ecobee from './ecobee';
 import DhBreadcrumbs from 'common/dh-breadcrumbs';
-import { Pathname } from 'utilities/routes';
 import useTitle from 'utilities/use-title';
 import DhAppLayout from 'common/dh-app-layout';
-import widgetDetails from 'common/widget-details';
+import { AppId, apps } from 'common/apps';
+
+const appDetails = apps.find((app) => app.id === AppId.Ecobee)!;
 
 export default function EcobeePage() {
   const breadcrumbItems: BreadcrumbGroupProps.Item[] = [
-    { text: widgetDetails.ecobee.title, href: Pathname.Ecobee },
+    { text: appDetails.title, href: appDetails.href },
   ];
-  useTitle(widgetDetails.ecobee.title);
+  useTitle(appDetails.title);
 
   return (
     <DhAppLayout

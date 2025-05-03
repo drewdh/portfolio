@@ -1,6 +1,8 @@
 import AppLayoutToolbar, {
   AppLayoutToolbarProps,
 } from '@cloudscape-design/components/app-layout-toolbar';
+import Box from '@cloudscape-design/components/box';
+import Popover from '@cloudscape-design/components/popover';
 import { forwardRef, Ref, useEffect, useRef } from 'react';
 import Flashbar from '@cloudscape-design/components/flashbar';
 import { useLocation } from 'react-router';
@@ -11,10 +13,8 @@ import { footerSelector } from '../footer/constants';
 import { topNavSelector } from '../top-navigation/constants';
 import { useNotifications } from 'common/use-notifications';
 import { Pathname } from 'utilities/routes';
-import widgetDetails from 'common/widget-details';
+import { apps } from 'common/apps';
 import useFollow from 'common/use-follow';
-import Box from '@cloudscape-design/components/box';
-import Popover from '@cloudscape-design/components/popover';
 
 function PreviewPopover() {
   return (
@@ -67,6 +67,15 @@ const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutT
     follow({ href, event });
   }
 
+  const navItems: SideNavigationProps.Item[] = apps.map((app) => {
+    return {
+      type: 'link',
+      text: app.title,
+      href: app.href,
+      info: app.isPreview ? <PreviewPopover /> : null,
+    };
+  });
+
   return (
     <AppLayoutToolbar
       {...props}
@@ -79,21 +88,7 @@ const Layout = forwardRef(function DhAppLayout(props: Props, ref: Ref<AppLayoutT
           activeHref={pathname}
           onFollow={handleFollow}
           header={{ href: Pathname.Home, text: 'Apps' }}
-          items={[
-            {
-              type: 'link',
-              text: widgetDetails.twitch.title,
-              href: Pathname.Twitch,
-            },
-            {
-              type: 'link',
-              text: widgetDetails.ecobee.title,
-              href: Pathname.Ecobee,
-              info: <PreviewPopover />,
-            },
-            { type: 'link', text: widgetDetails.diablo.title, href: Pathname.Diablo },
-            { type: 'link', text: widgetDetails.owProgress.title, href: Pathname.OwProgress },
-          ]}
+          items={navItems}
         />
       }
     />

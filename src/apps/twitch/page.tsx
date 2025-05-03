@@ -5,13 +5,14 @@ import Link from '@cloudscape-design/components/link';
 import Button from '@cloudscape-design/components/button';
 
 import DhAppLayout from 'common/dh-app-layout';
-import widgetDetails from 'common/widget-details';
+import { AppId, apps } from 'common/apps';
 import DhBreadcrumbs from 'common/dh-breadcrumbs';
-import { Pathname } from 'utilities/routes';
 import useTitle from 'utilities/use-title';
 
+const appDetails = apps.find((app) => app.id === AppId.Twitch)!;
+
 export default function TwitchPage() {
-  useTitle(widgetDetails.twitch.title);
+  useTitle(appDetails.title);
 
   return (
     <DhAppLayout
@@ -19,8 +20,8 @@ export default function TwitchPage() {
         <DhBreadcrumbs
           items={[
             {
-              href: Pathname.Twitch,
-              text: widgetDetails.twitch.title,
+              href: appDetails.href,
+              text: appDetails.title,
             },
           ]}
         />
@@ -32,9 +33,9 @@ export default function TwitchPage() {
             <Header
               // actions={isConnected && <Input type="search" value="hey" />}
               variant="h1"
-              description={widgetDetails.twitch.description}
+              description={appDetails.description}
             >
-              {widgetDetails.twitch.title}
+              {appDetails.title}
             </Header>
           }
         >

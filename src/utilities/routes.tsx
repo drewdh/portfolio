@@ -6,12 +6,10 @@ export enum Pathname {
   /** @deprecated Use Pathname.Diablo */
   DiabloSuggestedSigilTierOld = '/diablo-suggested-sigil-tier',
   Diablo = '/diablo',
-  CoffeeCalculator = '/coffee',
   Ecobee = '/ecobee',
   Auth = '/auth',
   Signin = '/auth/signin',
   PasswordReset = '/auth/reset',
-  Feedback = '/feedback',
   Twitch = '/twitch',
   Blackjack = '/blackjack',
   RpdrBracket = '/rpdr-bracket',

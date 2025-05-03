@@ -14,9 +14,11 @@ import React, { useEffect } from 'react';
 import Link from '@cloudscape-design/components/link';
 import Button from '@cloudscape-design/components/button';
 
-import widgetDetails from 'common/widget-details';
+import { AppId, apps } from 'common/apps';
 import useEcobee from './use-ecobee';
 import { useNotifications } from 'common/use-notifications';
+
+const appDetails = apps.find((app) => app.id === AppId.Ecobee)!;
 
 export default function Ecobee() {
   const { handleRefresh, isFetching } = useEcobee();
@@ -37,7 +39,7 @@ export default function Ecobee() {
       header={
         <Header
           variant="h1"
-          description={widgetDetails.ecobee.description}
+          description={appDetails.description}
           actions={
             <SpaceBetween size="xs" direction="horizontal" alignItems="center">
               <Box fontSize="body-s" color="text-status-inactive" textAlign="right">
@@ -48,7 +50,7 @@ export default function Ecobee() {
             </SpaceBetween>
           }
         >
-          {widgetDetails.ecobee.title}
+          {appDetails.title}
         </Header>
       }
     >

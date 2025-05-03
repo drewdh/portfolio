@@ -11,7 +11,7 @@ import { useLocalStorage } from 'usehooks-ts';
 
 import DhAppLayout from 'common/dh-app-layout';
 import useTitle from 'utilities/use-title';
-import widgetDetails from 'common/widget-details';
+import { apps, AppId } from 'common/apps';
 import DhBreadcrumbs from 'common/dh-breadcrumbs';
 import { Pathname } from 'utilities/routes';
 import Card, { CardProps } from './card';
@@ -66,9 +66,11 @@ interface ICard {
 
 const defaultBet = 15;
 
+const appDetails = apps.find((app) => app.id === AppId.Blackjack)!;
+
 /** TODO: Implement splitting */
 export default function BlackjackPage() {
-  useTitle(widgetDetails.blackjack.title);
+  useTitle(appDetails.title);
   const [statsModalVisible, setStatsModalVisible] = useState<boolean>(false);
   const [bet, setBet] = useState<number>(defaultBet);
   const [outcome, setOutcome] = useState<OutcomeProps.Outcome | null>(null);
@@ -223,15 +225,13 @@ export default function BlackjackPage() {
     <>
       <DhAppLayout
         breadcrumbs={
-          <DhBreadcrumbs
-            items={[{ text: widgetDetails.blackjack.title, href: Pathname.Blackjack }]}
-          />
+          <DhBreadcrumbs items={[{ text: appDetails.title, href: Pathname.Blackjack }]} />
         }
         toolsHide
         content={
           <SpaceBetween size="m" direction="vertical">
-            <Header variant="h1" description={widgetDetails.blackjack.description}>
-              {widgetDetails.blackjack.title}
+            <Header variant="h1" description={appDetails.description}>
+              {appDetails.title}
             </Header>
             <SpaceBetween size="l" direction="vertical">
               <SpaceBetween size="m">

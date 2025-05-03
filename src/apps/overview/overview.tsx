@@ -5,43 +5,16 @@ import Box from '@cloudscape-design/components/box';
 import Popover from '@cloudscape-design/components/popover';
 
 import useTitle from 'utilities/use-title';
-import { Pathname } from 'utilities/routes';
 import InternalLink from 'common/internal-link';
-import widgetDetails from 'common/widget-details';
+import { apps, App } from 'common/apps';
 
-interface Widget {
-  title: string;
-  href: string;
-  description: string;
-  isPrototype?: boolean;
-}
-
-const widgets: Widget[] = [
-  {
-    title: widgetDetails.twitch.title,
-    href: Pathname.Twitch,
-    description: widgetDetails.twitch.description,
-  },
-  {
-    title: widgetDetails.ecobee.title,
-    href: Pathname.Ecobee,
-    description: widgetDetails.ecobee.description,
-    isPrototype: true,
-  },
-  {
-    title: widgetDetails.diablo.title,
-    href: Pathname.Diablo,
-    description: widgetDetails.diablo.description,
-  },
-];
-
-const cardDefinition: CardsProps.CardDefinition<Widget> = {
+const cardDefinition: CardsProps.CardDefinition<App> = {
   header: (item) => (
     <SpaceBetween size="xs" direction="horizontal">
       <InternalLink fontSize="heading-m" href={item.href}>
         {item.title}
       </InternalLink>
-      {item.isPrototype && (
+      {item.isPreview && (
         <Box color="text-status-info" display="inline">
           <Popover
             header="Preview app"
@@ -65,7 +38,7 @@ export default function Overview() {
   useTitle();
 
   return (
-    <Cards<Widget>
+    <Cards<App>
       header={
         <Header
           description="Mini apps for experimenting with different user experience ideas and technologies."
@@ -74,7 +47,7 @@ export default function Overview() {
           Apps
         </Header>
       }
-      items={widgets}
+      items={apps}
       cardDefinition={cardDefinition}
       variant="full-page"
       stickyHeader

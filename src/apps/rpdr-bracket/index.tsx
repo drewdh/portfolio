@@ -1,8 +1,4 @@
-import DhAppLayout from 'common/dh-app-layout';
-import DhBreadcrumbs from 'common/dh-breadcrumbs';
 import { BreadcrumbGroupProps } from '@cloudscape-design/components/breadcrumb-group';
-import useTitle from 'utilities/use-title';
-import { Pathname } from 'utilities/routes';
 import SpaceBetween from '@cloudscape-design/components/space-between';
 import Header from '@cloudscape-design/components/header';
 import SplitPanel from '@cloudscape-design/components/split-panel';
@@ -11,12 +7,18 @@ import FormField from '@cloudscape-design/components/form-field';
 import Select from '@cloudscape-design/components/select';
 import Button from '@cloudscape-design/components/button';
 import Box from '@cloudscape-design/components/box';
-import SortableList, { SortableListProps } from 'common/sortable-list';
 import Modal from '@cloudscape-design/components/modal';
 import Alert from '@cloudscape-design/components/alert';
 import Table from '@cloudscape-design/components/table';
 import Link from '@cloudscape-design/components/link';
 import sum from 'lodash/sum';
+
+import SortableList, { SortableListProps } from 'common/sortable-list';
+import useTitle from 'utilities/use-title';
+import { Pathname } from 'utilities/routes';
+import DhAppLayout from 'common/dh-app-layout';
+import DhBreadcrumbs from 'common/dh-breadcrumbs';
+import { AppId, apps } from 'common/apps';
 
 const initialValue = [
   { id: 'js', label: 'Jewels Sparkles' },
@@ -28,8 +30,10 @@ const initialValue = [
   { id: 'st', label: 'Suzie Toot' },
 ];
 
+const appDetails = apps.find((app) => app.id === AppId.Rpdr)!;
+
 export default function RpdrBracket() {
-  useTitle("RuPaul's Drag Race Bracket");
+  useTitle(appDetails.title);
   const [unsavedChangesModalVisible, setUnsavedChangesModalVisible] = useState<boolean>(false);
   const [splitPanelOpen, setSplitPanelOpen] = useState<boolean>(false);
   const [splitPanelSize, setSplitPanelSize] = useState<number>(400);
@@ -39,8 +43,8 @@ export default function RpdrBracket() {
 
   const breadcrumbs: BreadcrumbGroupProps.Item[] = [
     {
-      text: "RuPaul's Drag Race Bracket",
-      href: Pathname.RpdrBracket,
+      text: appDetails.title,
+      href: appDetails.href,
     },
   ];
 
@@ -79,7 +83,7 @@ export default function RpdrBracket() {
 
   return (
     <DhAppLayout
-      navigationHide
+      contentType="table"
       onSplitPanelToggle={cancel}
       splitPanelOpen={splitPanelOpen}
       splitPanelSize={splitPanelSize}
@@ -124,17 +128,21 @@ export default function RpdrBracket() {
       content={
         <>
           <Table
-            header={<Header variant="h1">RuPaul's Drag Race Bracket</Header>}
+            header={
+              <Header description={appDetails.description} variant="h1">
+                {appDetails.title}
+              </Header>
+            }
             sortingColumn={totalColumn}
             sortingDescending
             sortingDisabled
             items={[
               {
-                name: 'Andrew',
+                name: 'Andre',
                 points: [58, 12, 14, 34, 23],
               },
               {
-                name: 'Orry',
+                name: 'Harry',
                 points: [8, 12, 14],
               },
               {

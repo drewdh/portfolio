@@ -11,10 +11,9 @@ import Alert from '@cloudscape-design/components/alert';
 import { useBoolean, useLocalStorage } from 'usehooks-ts';
 
 import DhAppLayout from 'common/dh-app-layout';
-import widgetDetails from 'common/widget-details';
+import { AppId, apps } from 'common/apps';
 import useTitle from 'utilities/use-title';
 import DhBreadcrumbs from 'common/dh-breadcrumbs';
-import { Pathname } from 'utilities/routes';
 import { LocalStorageKey } from 'utilities/local-storage-keys';
 import { ColumnId, OutcomeDetails } from './types';
 import Empty from 'common/empty';
@@ -22,8 +21,10 @@ import { columnDefinitions } from './constants';
 import useHeaderCounter from 'common/use-header-counter';
 import OwProgressForm from './form';
 
+const appDetails = apps.find((app) => app.id === AppId.Overwatch)!;
+
 export default function OwProgress() {
-  useTitle(widgetDetails.owProgress.title);
+  useTitle(appDetails.title);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const {
     value: splitPanelOpen,
@@ -106,11 +107,7 @@ export default function OwProgress() {
         </SplitPanel>
       }
       splitPanelPreferences={{ position: 'side' }}
-      breadcrumbs={
-        <DhBreadcrumbs
-          items={[{ text: widgetDetails.owProgress.title, href: Pathname.OwProgress }]}
-        />
-      }
+      breadcrumbs={<DhBreadcrumbs items={[{ text: appDetails.title, href: appDetails.href }]} />}
       content={
         <>
           <Table<OutcomeDetails>
@@ -152,9 +149,9 @@ export default function OwProgress() {
                   </SpaceBetween>
                 }
                 variant="awsui-h1-sticky"
-                description={widgetDetails.owProgress.description}
+                description={appDetails.description}
               >
-                {widgetDetails.owProgress.title}
+                {appDetails.title}
               </Header>
             }
             variant="full-page"
