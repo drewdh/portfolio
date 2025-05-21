@@ -1,0 +1,33 @@
+.button {
+  color: rgba(255, 255, 255, 0.87);
+  text-decoration: none;
+  border: none;
+  font-size: 14px;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  border-radius: 22px;
+  padding-block: 8px;
+  padding-inline: 14px;
+  cursor: pointer;
+  transition: background-color 135ms ease-out;
+}
+
+.variant-normal {
+  background-color: #8C8C79;
+  &:hover {
+    background-color: #959584;
+  }
+  &:active {
+    background-color: #81816F;
+  }
+}
+
+.variant-primary {
+  background-color: #3366cc;
+  &:hover {
+    background-color: #4775D1;
+  }
+  &:active {
+    background-color: #2E5CB8;
+  }
+}
