@@ -3,10 +3,15 @@ import { clsx } from 'clsx';
 
 import styles from './styles.module.scss';
 
-export default function Button({ href, children, variant = 'normal' }: ButtonProps) {
+export default function Button({ href, children, external, variant = 'normal' }: ButtonProps) {
   if (href) {
     return (
-      <a href={href} className={clsx(styles.button, styles[`variant-${variant}`])}>
+      <a
+        href={href}
+        target={external ? '_blank' : undefined}
+        rel={external ? 'noopener noreferrer' : undefined}
+        className={clsx(styles.button, styles[`variant-${variant}`])}
+      >
         {children}
       </a>
     );
@@ -20,6 +25,7 @@ export declare namespace ButtonProps {
 }
 export interface ButtonProps {
   children?: ReactNode;
+  external?: boolean;
   href?: string;
   variant?: ButtonProps.Variant;
 }
