@@ -1,0 +1,23 @@
+.wrapper {
+  display: flex;
+}
+
+.size-s {
+  gap: 8px;
+}
+
+.size-m {
+  gap: 12px;
+}
+
+.size-l {
+  gap: 16px;
+}
+
+.direction-horizontal {
+  flex-direction: row;
+}
+
+.direction-vertical {
+  flex-direction: column;
+}
