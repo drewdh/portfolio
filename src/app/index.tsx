@@ -1,8 +1,11 @@
 import styles from './styles.module.scss';
 import Button from 'common/button';
 import SpaceBetween from 'common/space-between';
+import useRouter from 'common/router';
 
 export default function App() {
+  useRouter();
+
   return (
     <div className={styles.container}>
       <h1>Hi! I'm Drew.</h1>
